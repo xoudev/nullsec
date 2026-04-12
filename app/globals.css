@@ -1,0 +1,234 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────
+   NULLSEC design tokens — exactly 4 colours, no gradients.
+   Palette & typography defined once here via Tailwind v4 @theme.
+   ───────────────────────────────────────────────────────── */
+@theme {
+  /* Colours */
+  --color-void:  #0A0A0B; /* near-black background */
+  --color-bone:  #F2EFE8; /* off-white foreground  */
+  --color-blood: #E63946; /* red — accent only      */
+  --color-ash:   #707070; /* mid-grey metadata      */
+
+  /* Font stacks — variables are injected by next/font on <html> */
+  --font-display: var(--font-instrument-serif), "Georgia", serif;
+  --font-sans:    var(--font-inter), system-ui, sans-serif;
+  --font-mono:    var(--font-jetbrains-mono), "Courier New", monospace;
+
+  /* Spacing / sizing extensions */
+  --spacing-18: 4.5rem;
+  --spacing-22: 5.5rem;
+}
+
+/* ─── Base ─── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  background-color: #0A0A0B; /* --color-void fallback before Tailwind loads */
+  color: #F2EFE8;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--color-void);
+  color: var(--color-bone);
+  font-family: var(--font-sans);
+  min-height: 100dvh;
+  overflow-x: hidden;
+  overscroll-behavior: none;
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar { width: 2px; }
+::-webkit-scrollbar-track { background: var(--color-void); }
+::-webkit-scrollbar-thumb { background: var(--color-ash); }
+
+/* ─── Selection ─── */
+::selection {
+  background-color: var(--color-blood);
+  color: var(--color-bone);
+}
+
+/* ─── Focus ─── */
+:focus-visible {
+  outline: 1px solid var(--color-blood);
+  outline-offset: 3px;
+}
+
+/* ─── Skip link (keyboard accessibility) ─── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 200;
+  background: var(--color-blood);
+  color: var(--color-bone);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+.skip-link:focus { top: 1rem; }
+
+/* ─── ScanHUD: hidden on small screens to avoid overlap ─── */
+.scan-hud { display: none; }
+@media (min-width: 768px) { .scan-hud { display: block; } }
+
+/* ─── Hover utility classes (used by server-component pages) ─── */
+.hover-to-bone {
+  color: var(--color-ash);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.hover-to-bone:hover { color: var(--color-bone); }
+
+.hover-to-blood {
+  color: var(--color-bone);
+  transition: color 0.2s ease;
+}
+.hover-to-blood:hover { color: var(--color-blood); }
+
+/* ─── Article two-column grid ─── */
+.article-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2rem, 4vw, 3rem);
+  align-items: start;
+}
+
+@media (min-width: 768px) {
+  .article-grid {
+    grid-template-columns: 1fr clamp(17rem, 29%, 24rem);
+    gap: clamp(5rem, 8vw, 9rem);
+  }
+  .article-sidebar {
+    position: sticky;
+    top: clamp(2rem, 4vw, 3rem);
+  }
+}
+
+/* ─── Toolkit mobile horizontal scroll ─── */
+.toolkit-track-scroll {
+  /* hide scrollbar visually; keep interaction */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.toolkit-track-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* ─── Terminal header: hide centred title on very narrow screens ─── */
+@media (max-width: 480px) {
+  .terminal-header-title { display: none; }
+}
+
+/* ─── Custom cursor — hide native pointer on fine-pointer devices ─── */
+@media (pointer: fine) {
+  *, *::before, *::after { cursor: none; }
+}
+
+/* ─── Preloader boot prompt blink ─── */
+@keyframes preloader-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+
+/* ─── Dispatches section — full-width layout with ghost numbers ─── */
+.dispatch-row {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2rem);
+  padding: clamp(1.5rem, 3vw, 2.5rem) 0;
+  text-decoration: none;
+}
+
+.dispatch-number {
+  font-family: var(--font-jetbrains-mono);
+  font-size: clamp(4rem, 8vw, 8rem);
+  color: var(--color-ash);
+  opacity: 0.15;
+  line-height: 1;
+  flex-shrink: 0;
+  letter-spacing: -0.02em;
+  transition: opacity 0.4s ease-out;
+  user-select: none;
+}
+
+.dispatch-title {
+  color: var(--color-bone);
+  transition: transform 0.4s ease-out, color 0.2s ease;
+}
+
+.dispatch-row:hover .dispatch-number {
+  opacity: 0.40;
+}
+
+.dispatch-row:hover .dispatch-title {
+  transform: translateX(12px);
+  color: var(--color-blood);
+}
+
+@media (max-width: 767px) {
+  .dispatch-number { display: none; }
+  .dispatch-row:hover .dispatch-title { transform: none; }
+}
+
+/* ─── Clearance section — two-column layout ─── */
+.clearance-grid {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: clamp(3rem, 5vw, 5rem);
+  align-items: start;
+}
+
+.clearance-radar-col {
+  position: sticky;
+  top: 50vh;
+  transform: translateY(-50%);
+}
+
+@media (max-width: 767px) {
+  .clearance-grid {
+    grid-template-columns: 1fr;
+  }
+  .clearance-entries-col { order: 2; }
+  .clearance-radar-col {
+    order: 1;
+    position: static;
+    transform: none;
+    margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  }
+}
+
+/* ─── Clearance section — PENDING pulse ─── */
+@keyframes clearance-pulse {
+  0%, 100% { border-left-color: var(--color-blood); }
+  50%       { border-left-color: rgba(138,3,3,0.25); }
+}
+
+.clearance-pending {
+  animation: clearance-pulse 2.4s ease-in-out infinite;
+}
+
+@media (max-width: 767px) {
+  .clearance-pending { animation: none; }
+}
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  .clearance-pending { animation: none; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
