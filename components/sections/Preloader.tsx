@@ -79,14 +79,21 @@ export function Preloader({ onComplete }: PreloaderProps) {
       return () => { tl.kill(); };
     }
 
+    // Hard fallback — if GSAP silently fails, force completion after 6s.
+    const fallback = setTimeout(() => {
+      if (overlayRef.current) overlayRef.current.style.display = "none";
+      onComplete();
+    }, 6000);
+
+    const complete = () => {
+      clearTimeout(fallback);
+      if (overlayRef.current) overlayRef.current.style.display = "none";
+      void playAmbient("/sound.wav");
+      onComplete();
+    };
+
     const counter = { val: 0 };
-    const tl = gsap.timeline({
-      onComplete: () => {
-        if (overlayRef.current) overlayRef.current.style.display = "none";
-        void playAmbient("/sound.wav"); // ambient starts only now — no overlap with loading.aiff
-        onComplete();
-      },
-    });
+    const tl = gsap.timeline({ onComplete: complete });
 
     // Phase 1 (0–2.2s): counter ticks up + log lines reveal one by one.
     tl.to(counter, {
@@ -134,7 +141,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
     // Phase 4 (3.1s): overlay fades to void.
     tl.to(overlayRef.current, { opacity: 0, duration: 0.3, ease: "power1.in" }, 3.1);
 
-    return () => { tl.kill(); };
+    return () => { tl.kill(); clearTimeout(fallback); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [booting, prefersReduced]);
 
