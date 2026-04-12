@@ -34,7 +34,7 @@ export const profile = {
   available: "Sept 2026",
   tagline: "Securing what others overlook.",
   bio: "I don't build fortresses. I map the blind spots.",
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://nullsec.vercel.app",
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://nullsec.fr",
 
   // ── Languages ─────────────────────────────────────────────────────────────
   languages: [

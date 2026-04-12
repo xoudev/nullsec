@@ -29,31 +29,38 @@ const jetbrainsMono = JetBrains_Mono({
 
 /* ─── Metadata ─── */
 export const metadata: Metadata = {
+  metadataBase: new URL(profile.siteUrl),
   title: {
-    default: "NULLSEC — Jordan",
+    default: `NULLSEC — ${profile.fullName} · Cybersecurity portfolio`,
     template: "%s · NULLSEC",
   },
-  description: profile.tagline,
-  metadataBase: new URL(profile.siteUrl),
+  description: `Cybersecurity portfolio by ${profile.fullName} — apprentice security engineer in GRC, blue team detection, and zero trust. ${profile.tagline}`,
+  keywords: ["cybersecurity", "GRC", "blue team", "zero trust", "portfolio", "security engineer", "ISO 27001", "EBIOS RM"],
+  authors: [{ name: profile.fullName, url: profile.siteUrl }],
+  creator: profile.fullName,
   openGraph: {
-    type: "website",
-    locale: "en_FR",
-    url: profile.siteUrl,
+    type:     "website",
+    locale:   "en_US",
+    url:      profile.siteUrl,
     siteName: "NULLSEC",
-    title: "NULLSEC — Jordan",
-    description: profile.tagline,
+    title:    `NULLSEC — ${profile.fullName} · Cybersecurity portfolio`,
+    description: `Cybersecurity portfolio by ${profile.fullName} — apprentice security engineer in GRC, blue team detection, and zero trust. ${profile.tagline}`,
   },
   twitter: {
-    card: "summary_large_image",
-    title: "NULLSEC — Jordan",
-    description: profile.tagline,
+    card:        "summary_large_image",
+    title:       `NULLSEC — ${profile.fullName} · Cybersecurity portfolio`,
+    description: `Cybersecurity portfolio by ${profile.fullName} — apprentice security engineer in GRC, blue team detection, and zero trust. ${profile.tagline}`,
   },
   robots: {
-    index: true,
+    index:  true,
     follow: true,
-    googleBot: { index: true, follow: true },
+    googleBot: {
+      index:              true,
+      follow:             true,
+      "max-image-preview": "large",
+      "max-snippet":      -1,
+    },
   },
-  authors: [{ name: profile.name }],
 };
 
 /* ─── JSON-LD Person schema ─── */

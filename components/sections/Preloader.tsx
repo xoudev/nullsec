@@ -37,11 +37,14 @@ export function Preloader({ onComplete }: PreloaderProps) {
 
   // Called from user gesture — unlocks AudioContext before starting the sequence.
   const triggerBoot = useCallback(() => {
-    unlockAudio();
-    void playFirst("/loading.mp3");  // MP3 first (universal), then format fallbacks
-    void preloadSound("/click.wav"); // pre-decode so click sound is ready immediately after
+    try {
+      unlockAudio();
+      void playFirst("/loading.mp3");
+      void preloadSound("/click.wav");
+    } catch {
+      // Audio is optional — boot regardless of AudioContext availability.
+    }
     setBooting(true);
-    // Ambient starts only after the boot animation ends — see tl onComplete below.
   }, []);
 
   // Reduced motion: skip the waiting screen, auto-boot without audio.
