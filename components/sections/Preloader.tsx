@@ -52,14 +52,16 @@ export function Preloader({ onComplete }: PreloaderProps) {
     if (prefersReduced && !booting) setBooting(true);
   }, [prefersReduced, booting]);
 
-  // Global Enter / Space listener — fires boot from anywhere on the page.
+  // Global key listener — any key fires boot.
   useEffect(() => {
     if (booting) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Enter" || e.key === " ") triggerBoot();
-    };
+    const onKey = () => triggerBoot();
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.removeEventListener("keydown", onKey);
+    };
   }, [booting, triggerBoot]);
 
   // Boot animation — runs once booting becomes true.
@@ -141,6 +143,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
       ref={overlayRef}
       aria-label="Loading NULLSEC"
       role="status"
+      onClick={!booting ? triggerBoot : undefined}
       style={{
         position: "fixed",
         inset: 0,
@@ -150,6 +153,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
         flexDirection: "column",
         padding: "clamp(1.5rem, 4vw, 3rem)",
         overflow: "hidden",
+        cursor: "default",
       }}
     >
       {/* Top-left label */}
