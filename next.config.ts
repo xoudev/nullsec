@@ -43,10 +43,6 @@ const nextConfig: NextConfig = {
   // Browsers verify the hash before executing any bundle — tampered CDN files
   // are rejected. This is the correct CSP hardening approach for static sites
   // (nonces require dynamic rendering and break static generation).
-  experimental: {
-    sri: { algorithm: "sha256" },
-  },
-
   async headers() {
     return [
       {
