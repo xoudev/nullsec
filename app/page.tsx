@@ -9,6 +9,7 @@ import { SectionToolkit } from "@/components/sections/SectionToolkit";
 import { SectionClearance } from "@/components/sections/SectionClearance";
 import { SectionAbout } from "@/components/sections/SectionAbout";
 import { SectionDispatches } from "@/components/sections/SectionDispatches";
+import { SectionOffDuty } from "@/components/sections/SectionOffDuty";
 import { SectionHandshake } from "@/components/sections/SectionHandshake";
 
 // Key stored in sessionStorage — survives client-side navigation,
@@ -45,6 +46,7 @@ export default function Home() {
         <SectionClearance />
         <SectionAbout />
         <SectionDispatches />
+        <SectionOffDuty />
         <SectionHandshake />
       </main>
     </>

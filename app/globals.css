@@ -154,6 +154,63 @@ body {
   .toolkit-cell { min-height: 0; }
 }
 
+/* ─── Off-duty (passions) — featured hero + editorial rows ─── */
+.offduty-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: clamp(20rem, 40vw, 31rem);
+  border: 1px solid rgba(107, 107, 107, 0.25);
+}
+.offduty-hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center right;
+  filter: grayscale(1) brightness(0.5) contrast(1.05);
+}
+.offduty-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    rgba(10, 10, 11, 0.92) 0%,
+    rgba(10, 10, 11, 0.6) 45%,
+    rgba(10, 10, 11, 0.25) 100%
+  );
+}
+.offduty-corner {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: var(--color-blood);
+  border-style: solid;
+  border-width: 0;
+  z-index: 2;
+}
+
+.offduty-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  padding: clamp(1.5rem, 3vw, 2.25rem) 0;
+  border-top: 1px solid rgba(107, 107, 107, 0.2);
+}
+.offduty-title { transition: transform 0.35s ease, color 0.2s ease; }
+.offduty-arrow { display: inline-block; transition: transform 0.35s ease; }
+.offduty-tags { transition: color 0.2s ease; }
+.offduty-row:hover .offduty-title { transform: translateX(8px); }
+.offduty-row:hover .offduty-arrow { transform: translateX(8px); }
+.offduty-row:hover .offduty-tags { color: var(--color-bone); }
+
+@media (max-width: 767px) {
+  .offduty-row { grid-template-columns: auto 1fr; }
+  .offduty-tags { display: none; }
+  .offduty-row:hover .offduty-title { transform: none; }
+}
+
 /* ─── Terminal header: hide centred title on very narrow screens ─── */
 @media (max-width: 480px) {
   .terminal-header-title { display: none; }
