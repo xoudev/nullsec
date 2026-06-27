@@ -5,6 +5,7 @@ import { profile } from "@/profile";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { ScanHUD } from "@/components/ScanHUD";
 import { CustomCursor } from "@/components/CustomCursor";
+import { AudioBootstrap } from "@/components/AudioBootstrap";
 
 /* ─── Fonts ─── */
 const instrumentSerif = Instrument_Serif({
@@ -97,6 +98,7 @@ export default function RootLayout({
           Skip to main content
         </a>
         <SmoothScroll>
+          <AudioBootstrap />
           <CustomCursor />
           <ScanHUD />
           {children}

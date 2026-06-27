@@ -5,6 +5,7 @@
 let ctx: AudioContext | null = null;
 let gain: GainNode | null = null;
 let ambientSource: AudioBufferSourceNode | null = null;
+let ambientStarted = false; // guards against stacking a second ambient loop
 let muted = false;
 let volume = 20;   // 0–100
 
@@ -108,9 +109,11 @@ export async function playFirst(...srcs: string[]): Promise<void> {
  */
 export async function playAmbient(src: string): Promise<void> {
   if (!ctx || !gain) return;
+  if (ambientStarted) return; // already looping — don't stack a second source
+  ambientStarted = true;
   try {
     const res = await fetch(src);
-    if (!res.ok) return;
+    if (!res.ok) { ambientStarted = false; return; }
     const decoded = await ctx.decodeAudioData(await res.arrayBuffer());
     ambientSource?.stop();
     ambientSource = ctx.createBufferSource();
@@ -119,7 +122,8 @@ export async function playAmbient(src: string): Promise<void> {
     ambientSource.connect(gain);
     ambientSource.start();
   } catch {
-    // Ambient sound is optional — swallow all errors silently.
+    // Ambient sound is optional — let a later call retry.
+    ambientStarted = false;
   }
 }
 
