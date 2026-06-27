@@ -163,6 +163,11 @@ body {
   position: relative;
   overflow: hidden;
   border-top: 1px solid rgba(107, 107, 107, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: clamp(6.5rem, 12vw, 8.5rem);
+  transition: min-height 0.55s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .offduty-row-bg {
   position: absolute;
@@ -178,6 +183,7 @@ body {
 }
 /* Only real hover devices reveal the backdrop (no sticky-hover on touch). */
 @media (hover: hover) {
+  .offduty-row:hover { min-height: clamp(17rem, 30vw, 23rem); }
   .offduty-row:hover .offduty-row-bg { opacity: 1; }
 }
 
@@ -188,7 +194,7 @@ body {
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: clamp(1rem, 3vw, 2.5rem);
-  padding: clamp(1.5rem, 3vw, 2.25rem) 0;
+  padding: clamp(0.5rem, 1.5vw, 1rem) 0;
 }
 .offduty-title { transition: transform 0.35s ease, color 0.2s ease; }
 .offduty-arrow { display: inline-block; transition: transform 0.35s ease; }
