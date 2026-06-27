@@ -154,36 +154,25 @@ body {
   .toolkit-cell { min-height: 0; }
 }
 
-/* ─── Off-duty (passions) — featured hero + editorial rows ─── */
-.offduty-hero {
-  position: relative;
-  display: flex;
-  flex-direction: column;
+/* ─── Off-duty (passions) — editorial rows over a crossfading backdrop ─── */
+.offduty-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
   overflow: hidden;
-  min-height: clamp(20rem, 40vw, 31rem);
-  border: 1px solid rgba(107, 107, 107, 0.25);
 }
-.offduty-hero-bg {
+.offduty-bg-img {
   filter: grayscale(1) brightness(0.5) contrast(1.05);
 }
-.offduty-hero-overlay {
+.offduty-bg-veil {
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    100deg,
-    rgba(10, 10, 11, 0.92) 0%,
-    rgba(10, 10, 11, 0.6) 45%,
-    rgba(10, 10, 11, 0.25) 100%
+    180deg,
+    rgba(10, 10, 11, 0.62) 0%,
+    rgba(10, 10, 11, 0.42) 42%,
+    rgba(10, 10, 11, 0.62) 100%
   );
-}
-.offduty-corner {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  border-color: var(--color-blood);
-  border-style: solid;
-  border-width: 0;
-  z-index: 2;
 }
 
 .offduty-row {

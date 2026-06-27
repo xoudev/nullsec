@@ -1,97 +1,65 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { gsap } from "@/lib/gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { offDutyFeatured, offDutyRows, offDutyEntryCount } from "@/content/offduty";
+import { offDutyRows, offDutyEntryCount } from "@/content/offduty";
 
 const MONO = "var(--font-jetbrains-mono)";
 
 export function SectionOffDuty() {
   const sectionRef = useRef<HTMLElement>(null);
-  const heroRef = useRef<HTMLDivElement>(null);
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const previewRef = useRef<HTMLDivElement>(null);
-  const [previewSrc, setPreviewSrc] = useState<string | null>(null);
+  const bgRefs = useRef<(HTMLDivElement | null)[]>([]);
   const prefersReduced = useReducedMotion();
 
-  // ── Scroll-reveal ──
+  // ── Scroll-reveal of the rows ──
   useEffect(() => {
-    const hero = heroRef.current;
     const rows = rowRefs.current.filter(Boolean) as HTMLElement[];
 
     if (prefersReduced) {
-      if (hero) gsap.set(hero, { opacity: 1, y: 0 });
       rows.forEach((el) => gsap.set(el, { opacity: 1, y: 0 }));
       return;
     }
 
-    if (hero) gsap.set(hero, { opacity: 0, y: 40 });
     rows.forEach((el) => gsap.set(el, { opacity: 0, y: 30 }));
-
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
-          const t = entry.target as HTMLElement;
-          if (t === hero) {
-            gsap.to(hero, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" });
-          } else {
-            const i = rows.indexOf(t);
-            gsap.to(t, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", delay: i * 0.06 });
-          }
-          observer.unobserve(t);
+          const i = rows.indexOf(entry.target as HTMLElement);
+          gsap.to(entry.target, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", delay: i * 0.06 });
+          observer.unobserve(entry.target);
         });
       },
-      { threshold: 0.12, rootMargin: "0px 0px -50px 0px" },
+      { threshold: 0.15, rootMargin: "0px 0px -50px 0px" },
     );
-
-    if (hero) observer.observe(hero);
     rows.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, [prefersReduced]);
 
-  // ── Hover-reveal: a floating image follows the cursor over a row ──
+  // ── Hover a row → crossfade its image into the section background ──
   useEffect(() => {
-    const preview = previewRef.current;
-    // Reduced motion (incl. a runtime flip while hovering): hide and bail.
-    if (prefersReduced) {
-      if (preview) gsap.set(preview, { opacity: 0 });
-      return;
-    }
+    if (prefersReduced) return;
     if (window.matchMedia("(pointer: coarse)").matches) return;
-    if (!preview) return;
-
-    gsap.set(preview, { xPercent: -50, yPercent: -50, opacity: 0, scale: 0.92, willChange: "transform, opacity" });
-    const px = gsap.quickTo(preview, "x", { duration: 0.4, ease: "power3" });
-    const py = gsap.quickTo(preview, "y", { duration: 0.4, ease: "power3" });
-
-    let active = false;
-    // Seed to viewport centre so a first hover with no prior mousemove
-    // (e.g. scrolling a row under a stationary cursor) never snaps to (0,0).
-    let lastX = window.innerWidth / 2;
-    let lastY = window.innerHeight / 2;
-    const onMove = (e: MouseEvent) => {
-      lastX = e.clientX;
-      lastY = e.clientY;
-      if (active) { px(lastX); py(lastY); }
-    };
-    window.addEventListener("mousemove", onMove);
 
     const rows = rowRefs.current.filter(Boolean) as HTMLElement[];
+    const bgs = bgRefs.current;
+    bgs.forEach((el) => el && gsap.set(el, { willChange: "opacity" }));
+
     const enters: Array<() => void> = [];
     const leaves: Array<() => void> = [];
     rows.forEach((row, i) => {
       const enter = () => {
-        active = true;
-        setPreviewSrc(offDutyRows[i].image);
-        gsap.set(preview, { x: lastX, y: lastY });
-        gsap.to(preview, { opacity: 1, scale: 1, duration: 0.4, ease: "power3", overwrite: "auto" });
+        offDutyRows.forEach((_, k) => {
+          const el = bgRefs.current[k];
+          if (el) gsap.to(el, { opacity: k === i ? 1 : 0, duration: 0.6, ease: "power2.out", overwrite: "auto" });
+        });
       };
       const leave = () => {
-        active = false;
-        gsap.to(preview, { opacity: 0, scale: 0.92, duration: 0.3, ease: "power3", overwrite: "auto" });
+        const el = bgRefs.current[i];
+        if (el) gsap.to(el, { opacity: 0, duration: 0.5, ease: "power2.out", overwrite: "auto" });
       };
       enters.push(enter);
       leaves.push(leave);
@@ -100,12 +68,11 @@ export function SectionOffDuty() {
     });
 
     return () => {
-      window.removeEventListener("mousemove", onMove);
       rows.forEach((row, i) => {
         row.removeEventListener("mouseenter", enters[i]);
         row.removeEventListener("mouseleave", leaves[i]);
       });
-      gsap.killTweensOf(preview);
+      bgs.forEach((el) => el && gsap.killTweensOf(el));
     };
   }, [prefersReduced]);
 
@@ -115,208 +82,112 @@ export function SectionOffDuty() {
       data-section-id="07"
       aria-label="Off-duty — interests"
       style={{
+        position: "relative",
+        overflow: "hidden",
         backgroundColor: "var(--color-void)",
         padding: "clamp(4rem, 8vw, 8rem) clamp(1.5rem, 4vw, 3rem)",
       }}
     >
-      {/* Header */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "baseline",
-          gap: "1rem",
-          marginBottom: "clamp(2rem, 4vw, 3rem)",
-        }}
-      >
-        <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.65rem", color: "var(--color-blood)", letterSpacing: "0.1em" }}>
-          {"07 // OFF-DUTY"}
-        </span>
-        <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-ash)", letterSpacing: "0.1em", whiteSpace: "nowrap" }}>
-          {`${String(offDutyEntryCount).padStart(2, "0")} ENTRIES · 00 LICENSES`}
-        </span>
-      </div>
-
-      {/* ── Featured: Moto ── */}
-      <div
-        ref={heroRef}
-        className="offduty-hero"
-        style={{ marginBottom: "clamp(2.5rem, 5vw, 4rem)" }}
-      >
-        <Image
-          src={offDutyFeatured.image}
-          alt=""
-          fill
-          sizes="100vw"
-          className="offduty-hero-bg"
-          style={{ objectFit: "cover", objectPosition: "center right" }}
-        />
-        <div className="offduty-hero-overlay" aria-hidden="true" />
-
-        {/* HUD corner ticks */}
-        <span className="offduty-corner" style={{ top: 10, left: 10, borderTopWidth: 1.5, borderLeftWidth: 1.5 }} />
-        <span className="offduty-corner" style={{ top: 10, right: 10, borderTopWidth: 1.5, borderRightWidth: 1.5 }} />
-        <span className="offduty-corner" style={{ bottom: 10, left: 10, borderBottomWidth: 1.5, borderLeftWidth: 1.5 }} />
-        <span className="offduty-corner" style={{ bottom: 10, right: 10, borderBottomWidth: 1.5, borderRightWidth: 1.5 }} />
-
-        {/* Content */}
-        <div
-          style={{
-            position: "relative",
-            zIndex: 1,
-            flex: 1,
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            gap: "clamp(2rem, 5vw, 4rem)",
-            padding: "clamp(1.5rem, 3.5vw, 2.75rem)",
-          }}
-        >
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "1rem" }}>
-            <span style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-bone)", letterSpacing: "0.15em" }}>
-              {"01 / "}{offDutyFeatured.label}
-            </span>
-            <span style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-ash)", letterSpacing: "0.12em" }}>
-              {offDutyFeatured.coord}
-            </span>
-          </div>
-
-          <div>
-            <h3
-              style={{
-                fontFamily: "var(--font-instrument-serif)",
-                fontStyle: "italic",
-                fontSize: "clamp(2.2rem, 5.5vw, 4.25rem)",
-                lineHeight: 0.95,
-                letterSpacing: "-0.02em",
-                color: "var(--color-bone)",
-                margin: "0 0 clamp(1rem, 2vw, 1.5rem)",
-              }}
-            >
-              {offDutyFeatured.headline.map((line, i) => (
-                <span key={i}>
-                  {line}
-                  {i < offDutyFeatured.headline.length - 1 && <br />}
-                </span>
-              ))}
-            </h3>
-            <p
-              style={{
-                fontFamily: MONO,
-                fontSize: "clamp(0.66rem, 1vw, 0.75rem)",
-                lineHeight: 1.7,
-                color: "rgba(242,239,232,0.6)",
-                letterSpacing: "0.04em",
-                margin: 0,
-                maxWidth: "32ch",
-              }}
-            >
-              {offDutyFeatured.note}
-            </p>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-end",
-              flexWrap: "wrap",
-              gap: "0.75rem 1.5rem",
-              fontFamily: MONO,
-              fontSize: "0.58rem",
-              letterSpacing: "0.12em",
-            }}
-          >
-            <span style={{ display: "inline-flex", alignItems: "center", gap: "0.6rem", color: "var(--color-ash)" }}>
-              <span aria-hidden="true" style={{ width: 7, height: 7, backgroundColor: "var(--color-blood)", flexShrink: 0 }} />
-              {offDutyFeatured.tagline}
-            </span>
-            <span style={{ color: "rgba(242,239,232,0.78)" }}>{offDutyFeatured.spec}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Rows ── */}
-      <div>
+      {/* Crossfading background — one darkened image per row, faded in on hover */}
+      <div className="offduty-bg" aria-hidden="true">
         {offDutyRows.map((row, i) => (
           <div
             key={row.title}
-            ref={(el) => { rowRefs.current[i] = el; }}
-            className="offduty-row"
+            ref={(el) => { bgRefs.current[i] = el; }}
+            style={{ position: "absolute", inset: 0, opacity: 0 }}
           >
-            <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.7rem", color: "var(--color-ash)", letterSpacing: "0.05em", minWidth: "1.5rem" }}>
-              {String(i + 2).padStart(2, "0")}
-            </span>
-
-            <div>
-              <h3
-                className="offduty-title"
-                style={{
-                  fontFamily: "var(--font-inter)",
-                  fontWeight: 800,
-                  textTransform: "uppercase",
-                  fontSize: "clamp(1.5rem, 3.4vw, 2.5rem)",
-                  lineHeight: 1.05,
-                  letterSpacing: "-0.01em",
-                  color: "var(--color-bone)",
-                  margin: "0 0 0.5rem",
-                }}
-              >
-                {row.title}
-              </h3>
-              <p style={{ fontFamily: MONO, fontSize: "clamp(0.64rem, 0.95vw, 0.72rem)", color: "var(--color-ash)", letterSpacing: "0.03em", margin: 0 }}>
-                {row.subtitle}
-              </p>
-            </div>
-
-            <span className="offduty-tags" aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-ash)", letterSpacing: "0.08em", whiteSpace: "nowrap" }}>
-              {row.tags.join("  ·  ")}
-              {"   "}
-              <span className="offduty-arrow">→</span>
-            </span>
+            <Image
+              src={row.image}
+              alt=""
+              fill
+              sizes="100vw"
+              className="offduty-bg-img"
+              style={{ objectFit: "cover", objectPosition: "center" }}
+            />
           </div>
         ))}
-        <div style={{ borderTop: "1px solid rgba(107,107,107,0.2)", height: 0 }} />
+        <div className="offduty-bg-veil" />
       </div>
 
-      {/* Footer */}
-      <div
-        aria-hidden="true"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginTop: "clamp(1.5rem, 3vw, 2.5rem)",
-          fontFamily: MONO,
-          fontSize: "0.6rem",
-          color: "rgba(107,107,107,0.5)",
-          letterSpacing: "0.08em",
-        }}
-      >
-        <span>{"// OFF-DUTY"}</span>
-        <span>{"// ENV prod.nullsec"}</span>
-      </div>
+      {/* Foreground content */}
+      <div style={{ position: "relative", zIndex: 1 }}>
+        {/* Header */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "baseline",
+            gap: "1rem",
+            marginBottom: "clamp(2.5rem, 5vw, 4rem)",
+          }}
+        >
+          <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.65rem", color: "var(--color-blood)", letterSpacing: "0.1em" }}>
+            {"07 // OFF-DUTY"}
+          </span>
+          <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-ash)", letterSpacing: "0.1em", whiteSpace: "nowrap" }}>
+            {`${String(offDutyEntryCount).padStart(2, "0")} ENTRIES · 00 LICENSES`}
+          </span>
+        </div>
 
-      {/* Floating hover preview — follows the cursor over a row */}
-      <div
-        ref={previewRef}
-        aria-hidden="true"
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          zIndex: 9000,
-          width: "clamp(220px, 26vw, 360px)",
-          aspectRatio: "3 / 2",
-          overflow: "hidden",
-          border: "1px solid rgba(107,107,107,0.3)",
-          backgroundColor: "var(--color-void)",
-          pointerEvents: "none",
-          opacity: 0,
-        }}
-      >
-        {previewSrc && (
-          <Image src={previewSrc} alt="" fill sizes="(max-width: 768px) 60vw, 360px" style={{ objectFit: "cover" }} />
-        )}
+        {/* Rows */}
+        <div>
+          {offDutyRows.map((row, i) => (
+            <div
+              key={row.title}
+              ref={(el) => { rowRefs.current[i] = el; }}
+              className="offduty-row"
+            >
+              <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.7rem", color: "var(--color-ash)", letterSpacing: "0.05em", minWidth: "1.5rem" }}>
+                {String(i + 1).padStart(2, "0")}
+              </span>
+
+              <div>
+                <h3
+                  className="offduty-title"
+                  style={{
+                    fontFamily: "var(--font-inter)",
+                    fontWeight: 800,
+                    textTransform: "uppercase",
+                    fontSize: "clamp(1.5rem, 3.4vw, 2.5rem)",
+                    lineHeight: 1.05,
+                    letterSpacing: "-0.01em",
+                    color: "var(--color-bone)",
+                    margin: "0 0 0.5rem",
+                  }}
+                >
+                  {row.title}
+                </h3>
+                <p style={{ fontFamily: MONO, fontSize: "clamp(0.64rem, 0.95vw, 0.72rem)", color: "var(--color-ash)", letterSpacing: "0.03em", margin: 0 }}>
+                  {row.subtitle}
+                </p>
+              </div>
+
+              <span className="offduty-tags" aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-ash)", letterSpacing: "0.08em", whiteSpace: "nowrap" }}>
+                {row.tags.join("  ·  ")}
+                {"   "}
+                <span className="offduty-arrow">→</span>
+              </span>
+            </div>
+          ))}
+          <div style={{ borderTop: "1px solid rgba(107,107,107,0.2)", height: 0 }} />
+        </div>
+
+        {/* Footer */}
+        <div
+          aria-hidden="true"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginTop: "clamp(1.5rem, 3vw, 2.5rem)",
+            fontFamily: MONO,
+            fontSize: "0.6rem",
+            color: "rgba(107,107,107,0.5)",
+            letterSpacing: "0.08em",
+          }}
+        >
+          <span>{"// OFF-DUTY"}</span>
+          <span>{"// ENV prod.nullsec"}</span>
+        </div>
       </div>
     </section>
   );
