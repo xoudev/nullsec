@@ -129,32 +129,39 @@ export function SectionExperience() {
                   paddingLeft: "clamp(1rem, 2vw, 1.5rem)",
                 }}
               >
-                <h3
-                  style={{
-                    fontFamily: "var(--font-inter)",
-                    fontWeight: 700,
-                    fontSize: "clamp(1.15rem, 2.2vw, 1.7rem)",
-                    lineHeight: 1.2,
-                    letterSpacing: "-0.01em",
-                    color: "var(--color-bone)",
-                    margin: "0 0 0.4rem",
-                  }}
-                >
-                  {xp.title}
-                </h3>
-                <div
-                  style={{
-                    fontFamily: MONO,
-                    fontSize: "0.68rem",
-                    color: "var(--color-blood)",
-                    letterSpacing: "0.06em",
-                    marginBottom: "clamp(0.9rem, 2vw, 1.25rem)",
-                  }}
-                >
-                  {xp.company}
+                {/* Title row — role + company left, ghost index anchoring the right */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1.5rem" }}>
+                  <div>
+                    <h3
+                      style={{
+                        fontFamily: "var(--font-inter)",
+                        fontWeight: 700,
+                        fontSize: "clamp(1.4rem, 2.6vw, 2.1rem)",
+                        lineHeight: 1.15,
+                        letterSpacing: "-0.01em",
+                        color: "var(--color-bone)",
+                        margin: "0 0 0.45rem",
+                      }}
+                    >
+                      {xp.title}
+                    </h3>
+                    <div
+                      style={{
+                        fontFamily: MONO,
+                        fontSize: "0.68rem",
+                        color: "var(--color-blood)",
+                        letterSpacing: "0.06em",
+                      }}
+                    >
+                      {xp.company}
+                    </div>
+                  </div>
+                  <span className="exp-ghost" aria-hidden="true">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
                 </div>
 
-                <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                <ul className="exp-focus">
                   {xp.focus.map((f) => (
                     <li key={f} style={{ display: "flex", alignItems: "baseline", gap: "0.7rem" }}>
                       <span
