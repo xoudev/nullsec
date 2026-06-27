@@ -1,117 +1,198 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { gsap } from "@/lib/gsap";
-import { useLenis } from "lenis/react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
+// Genuinely interactive targets only. Note the [tabindex='-1'] exclusion: the
+// page wraps <main>/<article> in tabindex=-1 for skip-link focus, and we must
+// not lock the reticle onto the whole page.
 const INTERACTIVE =
-  "a, button, [role='button'], input, textarea, select, label, [tabindex]";
+  "a, button, [role='button'], input, textarea, select, [tabindex]:not([tabindex='-1'])";
 
 export function CustomCursor() {
-  const ringRef = useRef<HTMLDivElement>(null);
+  const frameRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
+  const labelRef = useRef<HTMLSpanElement>(null);
   const prefersReduced = useReducedMotion();
-
-  // Velocity-driven scaleY stretch on the trailing ring — fires on every Lenis tick.
-  // useLenis must be called unconditionally (Rules of Hooks); guard inside.
-  useLenis((lenis) => {
-    if (!ringRef.current || prefersReduced) return;
-    const stretch = 1 + Math.min(Math.abs(lenis.velocity) * 0.035, 0.5);
-    gsap.to(ringRef.current, { scaleY: stretch, duration: 0.2, overwrite: "auto" });
-  });
 
   useEffect(() => {
     if (prefersReduced) return;
-    // Touch/stylus devices: skip the custom cursor entirely.
+    // Touch/stylus devices: no custom cursor.
     if (window.matchMedia("(pointer: coarse)").matches) return;
 
-    const ring = ringRef.current!;
+    const frame = frameRef.current!;
     const dot = dotRef.current!;
-    gsap.set([ring, dot], { xPercent: -50, yPercent: -50, opacity: 0 });
+    const label = labelRef.current!;
+    const BASE = 26;
 
-    // The dot tracks tightly; the ring lags behind for the trailing feel.
-    const dotX = gsap.quickTo(dot, "x", { duration: 0.12, ease: "power3" });
-    const dotY = gsap.quickTo(dot, "y", { duration: 0.12, ease: "power3" });
-    const ringX = gsap.quickTo(ring, "x", { duration: 0.55, ease: "power3" });
-    const ringY = gsap.quickTo(ring, "y", { duration: 0.55, ease: "power3" });
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
+    const mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    let lastX = mouse.x;
+    let lastY = mouse.y;
+    let speed = 0;
     let revealed = false;
+    let pressed = false;
+    let locked: Element | null = null;
+
+    // Animated state, lerped each frame.
+    const cur = {
+      x: mouse.x, y: mouse.y, w: BASE, h: BASE,
+      dx: mouse.x, dy: mouse.y, dotScale: 1, press: 1, opacity: 0,
+    };
+
+    const kindLabel = (el: Element): string => {
+      const custom = (el as HTMLElement).dataset?.cursor;
+      if (custom) return custom;
+      const tag = el.tagName.toLowerCase();
+      if (tag === "a") return (el as HTMLAnchorElement).target === "_blank" ? "open ↗" : "view →";
+      if (tag === "button" || el.getAttribute("role") === "button") return "click";
+      if (tag === "input" || tag === "textarea" || tag === "select") return "type";
+      return "→";
+    };
+
     const onMove = (e: MouseEvent) => {
-      if (!revealed) {
-        revealed = true;
-        gsap.to([ring, dot], { opacity: 1, duration: 0.3, overwrite: "auto" });
-      }
-      dotX(e.clientX);
-      dotY(e.clientY);
-      ringX(e.clientX);
-      ringY(e.clientY);
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      speed = Math.min(Math.hypot(mouse.x - lastX, mouse.y - lastY), 70);
+      lastX = mouse.x;
+      lastY = mouse.y;
+      revealed = true;
     };
 
     const onOver = (e: MouseEvent) => {
-      if ((e.target as Element)?.closest(INTERACTIVE)) {
-        gsap.to(ring, { width: 54, height: 54, borderWidth: 1, duration: 0.3, overwrite: "auto" });
-        gsap.to(dot, { scale: 0, duration: 0.25, overwrite: "auto" });
-      }
-    };
-    const onOut = (e: MouseEvent) => {
-      if ((e.target as Element)?.closest(INTERACTIVE)) {
-        gsap.to(ring, { width: 30, height: 30, borderWidth: 1.5, duration: 0.3, overwrite: "auto" });
-        gsap.to(dot, { scale: 1, duration: 0.25, overwrite: "auto" });
+      const hit = (e.target as Element)?.closest(INTERACTIVE) ?? null;
+      if (hit === locked) return;
+      locked = hit;
+      if (hit) {
+        label.textContent = kindLabel(hit);
+        label.style.opacity = "1";
+      } else {
+        label.style.opacity = "0";
       }
     };
 
-    // Click feedback — pull the ring in, release on mouseup.
-    const onDown = () => gsap.to(ring, { width: 22, height: 22, duration: 0.18, overwrite: "auto" });
-    const onUp = () => gsap.to(ring, { width: 30, height: 30, duration: 0.3, overwrite: "auto" });
+    const onDown = () => { pressed = true; };
+    const onUp = () => { pressed = false; };
+    const onDocLeave = () => { revealed = false; };
 
-    // Fade out when the pointer leaves the window, back in on return.
-    const onDocLeave = () => gsap.to([ring, dot], { opacity: 0, duration: 0.2, overwrite: "auto" });
-    const onDocEnter = () => gsap.to([ring, dot], { opacity: 1, duration: 0.2, overwrite: "auto" });
+    let raf = 0;
+    const tick = () => {
+      let tx: number, ty: number, tw: number, th: number;
+      if (locked && locked.isConnected) {
+        // Re-measure every frame so the lock stays glued during smooth scroll.
+        const r = locked.getBoundingClientRect();
+        const pad = 8;
+        tx = r.left + r.width / 2;
+        ty = r.top + r.height / 2;
+        tw = r.width + pad * 2;
+        th = r.height + pad * 2;
+      } else {
+        if (locked) { locked = null; label.style.opacity = "0"; }
+        const grow = 1 + speed * 0.01; // subtle reaction to pointer speed
+        tx = mouse.x;
+        ty = mouse.y;
+        tw = BASE * grow;
+        th = BASE * grow;
+      }
+      speed *= 0.9;
+
+      const ease = locked ? 0.2 : 0.24;
+      cur.x = lerp(cur.x, tx, ease);
+      cur.y = lerp(cur.y, ty, ease);
+      cur.w = lerp(cur.w, tw, 0.2);
+      cur.h = lerp(cur.h, th, 0.2);
+      cur.press = lerp(cur.press, pressed ? 0.82 : 1, 0.25);
+      cur.dotScale = lerp(cur.dotScale, locked ? 0 : 1, 0.25);
+      cur.dx = lerp(cur.dx, mouse.x, 0.4);
+      cur.dy = lerp(cur.dy, mouse.y, 0.4);
+      cur.opacity = lerp(cur.opacity, revealed ? 1 : 0, 0.15);
+
+      frame.style.transform =
+        `translate(${cur.x}px, ${cur.y}px) translate(-50%, -50%) scale(${cur.press})`;
+      frame.style.width = `${cur.w}px`;
+      frame.style.height = `${cur.h}px`;
+      frame.style.opacity = `${cur.opacity}`;
+
+      dot.style.transform =
+        `translate(${cur.dx}px, ${cur.dy}px) translate(-50%, -50%) scale(${cur.dotScale})`;
+      dot.style.opacity = `${cur.opacity}`;
+
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
 
     window.addEventListener("mousemove", onMove);
     document.addEventListener("mouseover", onOver);
-    document.addEventListener("mouseout", onOut);
     window.addEventListener("mousedown", onDown);
     window.addEventListener("mouseup", onUp);
     document.documentElement.addEventListener("mouseleave", onDocLeave);
-    document.documentElement.addEventListener("mouseenter", onDocEnter);
 
     return () => {
+      cancelAnimationFrame(raf);
       window.removeEventListener("mousemove", onMove);
       document.removeEventListener("mouseover", onOver);
-      document.removeEventListener("mouseout", onOut);
       window.removeEventListener("mousedown", onDown);
       window.removeEventListener("mouseup", onUp);
       document.documentElement.removeEventListener("mouseleave", onDocLeave);
-      document.documentElement.removeEventListener("mouseenter", onDocEnter);
     };
   }, [prefersReduced]);
 
   if (prefersReduced) return null;
 
+  // Corner-bracket reticle: a transparent box whose only marks are 4 blood
+  // corners. Small = a tight crosshair; expanded = a target lock framing the
+  // hovered element.
+  const corner: React.CSSProperties = {
+    position: "absolute",
+    width: 9,
+    height: 9,
+    borderColor: "var(--color-blood)",
+    borderStyle: "solid",
+    borderWidth: 0,
+  };
+
   return (
     <>
-      {/* Trailing ring — inverts against whatever is behind it (works on void AND bone). */}
       <div
-        ref={ringRef}
+        ref={frameRef}
         aria-hidden="true"
         style={{
           position: "fixed",
           top: 0,
           left: 0,
           zIndex: 9999,
-          width: 30,
-          height: 30,
-          borderRadius: "50%",
-          border: "1.5px solid var(--color-bone)",
-          mixBlendMode: "difference",
+          width: 26,
+          height: 26,
           pointerEvents: "none",
-          willChange: "transform, width, height",
+          willChange: "transform, width, height, opacity",
           opacity: 0,
         }}
-      />
-      {/* Inner dot — brand accent, no blend so it stays blood-red. */}
+      >
+        <span style={{ ...corner, top: 0, left: 0, borderTopWidth: 1.5, borderLeftWidth: 1.5 }} />
+        <span style={{ ...corner, top: 0, right: 0, borderTopWidth: 1.5, borderRightWidth: 1.5 }} />
+        <span style={{ ...corner, bottom: 0, left: 0, borderBottomWidth: 1.5, borderLeftWidth: 1.5 }} />
+        <span style={{ ...corner, bottom: 0, right: 0, borderBottomWidth: 1.5, borderRightWidth: 1.5 }} />
+        <span
+          ref={labelRef}
+          style={{
+            position: "absolute",
+            top: "100%",
+            left: 0,
+            marginTop: "0.5rem",
+            fontFamily: "var(--font-jetbrains-mono)",
+            fontSize: "0.55rem",
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            color: "var(--color-blood)",
+            whiteSpace: "nowrap",
+            opacity: 0,
+            transition: "opacity 0.2s ease",
+          }}
+        />
+      </div>
+
+      {/* Inner dot — brand accent, always blood-red. */}
       <div
         ref={dotRef}
         aria-hidden="true"
@@ -125,7 +206,7 @@ export function CustomCursor() {
           borderRadius: "50%",
           backgroundColor: "var(--color-blood)",
           pointerEvents: "none",
-          willChange: "transform",
+          willChange: "transform, opacity",
           opacity: 0,
         }}
       />
