@@ -8,6 +8,7 @@ import { SectionFieldwork } from "@/components/sections/SectionFieldwork";
 import { SectionToolkit } from "@/components/sections/SectionToolkit";
 import { SectionClearance } from "@/components/sections/SectionClearance";
 import { SectionAbout } from "@/components/sections/SectionAbout";
+import { SectionExperience } from "@/components/sections/SectionExperience";
 import { SectionDispatches } from "@/components/sections/SectionDispatches";
 import { SectionOffDuty } from "@/components/sections/SectionOffDuty";
 import { SectionHandshake } from "@/components/sections/SectionHandshake";
@@ -45,6 +46,7 @@ export default function Home() {
         <SectionToolkit />
         <SectionClearance />
         <SectionAbout />
+        <SectionExperience />
         <SectionDispatches />
         <SectionOffDuty />
         <SectionHandshake />

@@ -154,6 +154,19 @@ body {
   .toolkit-cell { min-height: 0; }
 }
 
+/* ─── Experience — timeline entries (period | content) ─── */
+.exp-entry {
+  display: grid;
+  grid-template-columns: clamp(8rem, 15vw, 13rem) 1fr;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  align-items: start;
+  padding: clamp(1.75rem, 3.5vw, 2.75rem) 0;
+  border-top: 1px solid rgba(107, 107, 107, 0.2);
+}
+@media (max-width: 767px) {
+  .exp-entry { grid-template-columns: 1fr; gap: 0.85rem; }
+}
+
 /* ─── Off-duty (passions) — each row reveals its own image behind it ─── */
 .offduty-bg-img {
   filter: grayscale(1) brightness(0.5) contrast(1.05);

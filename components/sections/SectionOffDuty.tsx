@@ -41,7 +41,7 @@ export function SectionOffDuty() {
   return (
     <section
       ref={sectionRef}
-      data-section-id="07"
+      data-section-id="08"
       aria-label="Off-duty — interests"
       style={{
         backgroundColor: "var(--color-void)",
@@ -59,7 +59,7 @@ export function SectionOffDuty() {
         }}
       >
         <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.65rem", color: "var(--color-blood)", letterSpacing: "0.1em" }}>
-          {"07 // OFF-DUTY"}
+          {"08 // OFF-DUTY"}
         </span>
         <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-ash)", letterSpacing: "0.1em", whiteSpace: "nowrap" }}>
           {`${String(offDutyEntryCount).padStart(2, "0")} ENTRIES · 00 LICENSES`}

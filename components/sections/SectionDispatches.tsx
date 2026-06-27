@@ -48,7 +48,7 @@ export function SectionDispatches() {
   return (
     <section
       ref={sectionRef}
-      data-section-id="06"
+      data-section-id="07"
       aria-label="Dispatches"
       style={{
         backgroundColor: "var(--color-void)",
@@ -66,7 +66,7 @@ export function SectionDispatches() {
           marginBottom:  "clamp(3rem, 6vw, 5rem)",
         }}
       >
-        06 // DISPATCHES
+        07 // DISPATCHES
       </div>
 
       <ul style={{ listStyle: "none", padding: 0, margin: 0 }} aria-label="Writing">

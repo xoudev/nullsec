@@ -255,7 +255,7 @@ export function SectionHandshake() {
   return (
     <section
       ref={sectionRef}
-      data-section-id="08"
+      data-section-id="09"
       aria-label="Contact — Terminal"
       style={{
         backgroundColor: "var(--color-void)",
@@ -276,7 +276,7 @@ export function SectionHandshake() {
           marginBottom: "clamp(1.5rem, 3vw, 2.5rem)",
         }}
       >
-        {"08 // HANDSHAKE"}
+        {"09 // HANDSHAKE"}
       </div>
 
       {/* ── Terminal window frame ── */}
