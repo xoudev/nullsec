@@ -80,7 +80,7 @@ export function SectionExperience() {
         From shipping features to securing them.
       </h2>
 
-      {/* Entries */}
+      {/* Entries — meta (left) + responsibilities (right) */}
       <div>
         {profile.experience.map((xp, i) => {
           const current = i === 0;
@@ -91,36 +91,7 @@ export function SectionExperience() {
               className="exp-entry"
               style={{ willChange: "transform, opacity" }}
             >
-              {/* Period */}
-              <div>
-                <div
-                  style={{
-                    fontFamily: MONO,
-                    fontSize: "0.62rem",
-                    color: "var(--color-ash)",
-                    letterSpacing: "0.08em",
-                    textTransform: "uppercase",
-                    lineHeight: 1.5,
-                  }}
-                >
-                  {xp.period}
-                </div>
-                {current && (
-                  <div
-                    style={{
-                      fontFamily: MONO,
-                      fontSize: "0.55rem",
-                      color: "var(--color-blood)",
-                      letterSpacing: "0.12em",
-                      marginTop: "0.5rem",
-                    }}
-                  >
-                    {"// CURRENT"}
-                  </div>
-                )}
-              </div>
-
-              {/* Content */}
+              {/* Left: meta */}
               <div
                 style={{
                   borderLeft: current
@@ -129,60 +100,58 @@ export function SectionExperience() {
                   paddingLeft: "clamp(1rem, 2vw, 1.5rem)",
                 }}
               >
-                {/* Title row — role + company left, ghost index anchoring the right */}
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1.5rem" }}>
-                  <div>
-                    <h3
-                      style={{
-                        fontFamily: "var(--font-inter)",
-                        fontWeight: 700,
-                        fontSize: "clamp(1.4rem, 2.6vw, 2.1rem)",
-                        lineHeight: 1.15,
-                        letterSpacing: "-0.01em",
-                        color: "var(--color-bone)",
-                        margin: "0 0 0.45rem",
-                      }}
-                    >
-                      {xp.title}
-                    </h3>
-                    <div
-                      style={{
-                        fontFamily: MONO,
-                        fontSize: "0.68rem",
-                        color: "var(--color-blood)",
-                        letterSpacing: "0.06em",
-                      }}
-                    >
-                      {xp.company}
-                    </div>
-                  </div>
-                  <span className="exp-ghost" aria-hidden="true">
-                    {String(i + 1).padStart(2, "0")}
+                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "0.75rem", marginBottom: "0.9rem" }}>
+                  <span style={{ fontFamily: MONO, fontSize: "0.62rem", color: "var(--color-ash)", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+                    {xp.period}
                   </span>
+                  {current && (
+                    <span style={{ fontFamily: MONO, fontSize: "0.55rem", color: "var(--color-blood)", letterSpacing: "0.12em" }}>
+                      {"// CURRENT"}
+                    </span>
+                  )}
                 </div>
 
-                <ul className="exp-focus">
-                  {xp.focus.map((f) => (
-                    <li key={f} style={{ display: "flex", alignItems: "baseline", gap: "0.7rem" }}>
-                      <span
-                        aria-hidden="true"
-                        style={{ width: 5, height: 5, borderRadius: "50%", backgroundColor: "var(--color-blood)", flexShrink: 0, transform: "translateY(-0.15em)" }}
-                      />
-                      <span
-                        style={{
-                          fontFamily: MONO,
-                          fontSize: "clamp(0.66rem, 0.95vw, 0.74rem)",
-                          color: "rgba(242,239,232,0.7)",
-                          letterSpacing: "0.02em",
-                          lineHeight: 1.6,
-                        }}
-                      >
-                        {f}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+                <h3
+                  style={{
+                    fontFamily: "var(--font-instrument-serif)",
+                    fontSize: "clamp(1.5rem, 3vw, 2.4rem)",
+                    fontWeight: 400,
+                    lineHeight: 1.12,
+                    letterSpacing: "-0.01em",
+                    color: "var(--color-bone)",
+                    margin: 0,
+                  }}
+                >
+                  {xp.title}
+                </h3>
+
+                <div style={{ fontFamily: MONO, fontSize: "0.68rem", color: "var(--color-blood)", letterSpacing: "0.06em", marginTop: "0.6rem" }}>
+                  {xp.company}
+                </div>
               </div>
+
+              {/* Right: responsibilities */}
+              <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "0.7rem" }}>
+                {xp.focus.map((f) => (
+                  <li key={f} style={{ display: "flex", alignItems: "baseline", gap: "0.7rem" }}>
+                    <span
+                      aria-hidden="true"
+                      style={{ width: 5, height: 5, borderRadius: "50%", backgroundColor: "var(--color-blood)", flexShrink: 0, transform: "translateY(-0.15em)" }}
+                    />
+                    <span
+                      style={{
+                        fontFamily: MONO,
+                        fontSize: "clamp(0.68rem, 0.95vw, 0.78rem)",
+                        color: "rgba(242,239,232,0.74)",
+                        letterSpacing: "0.02em",
+                        lineHeight: 1.65,
+                      }}
+                    >
+                      {f}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
           );
         })}
