@@ -174,8 +174,9 @@ export default async function WorkPage({
         {/* Sticky sidebar */}
         <aside className="article-sidebar" aria-label="Project metadata">
           {/* Project image — small, contained, void bg so white logos read cleanly.
-              Omitted when the project has no asset yet (image is optional). */}
-          {item.image && (
+              No asset yet → a typographic placeholder cover generated from the
+              project's own index + title (never a fabricated screenshot). */}
+          {item.image ? (
             <div
               style={{
                 backgroundColor: "var(--color-void)",
@@ -199,6 +200,66 @@ export default async function WorkPage({
                   objectFit: "contain",
                 }}
               />
+            </div>
+          ) : (
+            <div
+              aria-hidden="true"
+              style={{
+                position: "relative",
+                overflow: "hidden",
+                backgroundColor: "var(--color-void)",
+                border: "1px solid rgba(107,107,107,0.18)",
+                minHeight: "clamp(120px, 22vw, 168px)",
+                padding: "1.1rem 1.25rem",
+                marginBottom: "clamp(1.5rem, 2.5vw, 2rem)",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+              }}
+            >
+              <span
+                style={{
+                  position: "relative",
+                  zIndex: 1,
+                  fontFamily: "var(--font-jetbrains-mono)",
+                  fontSize: "0.6rem",
+                  color: "var(--color-blood)",
+                  letterSpacing: "0.12em",
+                }}
+              >
+                {item.index} {"//"}
+              </span>
+
+              {/* Oversized ghost index — the cover's only graphic. */}
+              <span
+                style={{
+                  position: "absolute",
+                  right: "-0.5rem",
+                  bottom: "-2.2rem",
+                  fontFamily: "var(--font-instrument-serif)",
+                  fontStyle: "italic",
+                  fontSize: "clamp(6rem, 16vw, 9rem)",
+                  lineHeight: 1,
+                  color: "rgba(107,107,107,0.10)",
+                  letterSpacing: "-0.03em",
+                  userSelect: "none",
+                }}
+              >
+                {item.index}
+              </span>
+
+              <span
+                style={{
+                  position: "relative",
+                  zIndex: 1,
+                  fontFamily: "var(--font-jetbrains-mono)",
+                  fontSize: "0.62rem",
+                  color: "var(--color-ash)",
+                  letterSpacing: "0.06em",
+                }}
+              >
+                {`// ${item.title.toLowerCase()}`}
+              </span>
             </div>
           )}
 

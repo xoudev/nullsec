@@ -30,8 +30,13 @@ export function SectionFieldwork() {
 
   // Staggered scroll-entrance
   useEffect(() => {
-    if (prefersReduced) return;
     const rows = rowRefs.current.filter(Boolean) as HTMLElement[];
+    // Reduced motion (including a runtime flip to "reduce"): force rows visible
+    // and skip the reveal, so none stay stuck at opacity 0 below the fold.
+    if (prefersReduced) {
+      rows.forEach((el) => gsap.set(el, { opacity: 1, y: 0 }));
+      return;
+    }
     rows.forEach((el) => gsap.set(el, { opacity: 0, y: 48 }));
 
     const observer = new IntersectionObserver(
