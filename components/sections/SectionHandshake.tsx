@@ -40,16 +40,16 @@ function runCommand(raw: string): OutputLine[] {
     case "whoami":
       return [
         { type: "output", text: `${profile.fullName} · ${profile.age} · ${profile.city}` },
-        { type: "output", text: "ISMS apprentice @ Arvato · Guardia CS · 3rd year" },
+        { type: "output", text: "ISMS / GRC apprentice @ Arvato · Guardia · 3rd year" },
         { type: "output", text: profile.bio },
         { type: "output", text: `next availability: ${profile.available}` },
       ];
 
     case "hire":
       return [
-        { type: "output", text: "currently: ISMS apprentice @ Arvato, Oct 2025 — Sept 2026." },
+        { type: "output", text: "currently: ISMS / GRC apprentice @ Arvato, Oct 2025 — Sept 2026." },
         { type: "output", text: "not available until Sept 2026." },
-        { type: "output", text: "after that: open to a new 24-month apprenticeship (2026 – 2028)." },
+        { type: "output", text: "next: Mastère offensive/defensive (alternance), 2026 — 2028 — open to host companies." },
         { type: "output", text: "domains: GRC · Blue Team · DevSecOps." },
         { type: "output", text: `contact: ${profile.email}` },
       ];
@@ -86,10 +86,10 @@ function runCommand(raw: string): OutputLine[] {
     case "certs":
     case "certifications":
       return [
-        { type: "output" as const, text: "certifications (all in preparation):" },
+        { type: "output" as const, text: "certifications:" },
         ...profile.certifications.map((c) => ({
           type: "output" as const,
-          text: `  ${c.issuer} — ${c.name}`,
+          text: `  ${c.name} — ${c.status}`,
         })),
       ];
 
@@ -98,6 +98,7 @@ function runCommand(raw: string): OutputLine[] {
       return [
         { type: "output" as const, text: `cybersecurity  ${s.cybersecurity.slice(0, 6).join(" · ")}` },
         { type: "output" as const, text: `               ${s.cybersecurity.slice(6).join(" · ")}` },
+        { type: "output" as const, text: `offensive      ${s.offensive.join(" · ")}` },
         { type: "output" as const, text: `dev            ${s.development.join(" · ")}` },
         { type: "output" as const, text: `re             ${s.reverseEngineering.join(" · ")}` },
         { type: "output" as const, text: `infra          ${s.infrastructure.join(" · ")}` },
@@ -521,7 +522,7 @@ export function SectionHandshake() {
           letterSpacing: "0.06em",
         }}
       >
-        {"// jordan.sys — securing what others overlook."}
+        {"// xoudev — securing what others overlook."}
       </div>
     </section>
   );

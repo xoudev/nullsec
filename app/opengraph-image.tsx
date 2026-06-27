@@ -33,7 +33,7 @@ export default async function Image() {
             letterSpacing: "0.08em",
           }}
         >
-          {"// jordan.sys"}
+          {"// xoudev"}
         </div>
 
         {/* Centre — title + rule */}

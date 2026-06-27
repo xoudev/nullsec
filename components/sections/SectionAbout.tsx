@@ -94,15 +94,15 @@ export function SectionAbout() {
                 margin:       "0 0 1.9rem",
               }}
             >
-              Three years through computer science and then cybersecurity. The
-              development internships came first — interfaces, performance
-              work, a migration from WordPress to static HTML. They were
-              useful for understanding how systems get built under time
-              pressure, which turns out to be directly relevant to
-              understanding how they fail. The security focus came after, at
-              Guardia, and sharpened into a specific interest: the space
-              between compliance documentation and operational reality, where
-              most security programmes produce activity rather than outcomes.
+              Two years through computer science at EPSI — DevOps, systems and
+              networks — before cybersecurity at Guardia. The early work was
+              infrastructure and build pipelines, which turns out to be the
+              most direct preparation for security there is: you cannot reason
+              about how a system fails until you have built one under time
+              pressure and watched it strain. The security focus sharpened into
+              a specific interest at Guardia — the space between compliance
+              documentation and operational reality, where most security
+              programmes produce activity rather than outcomes.
             </p>
             <p
               style={{
@@ -113,16 +113,19 @@ export function SectionAbout() {
                 margin:     0,
               }}
             >
-              The apprenticeship at Arvato is in ISMS management — security
-              policy, IS audits, risk and incident processes. The work is
-              governance-layer: translating frameworks into decisions an
-              organisation can actually execute, then maintaining the evidence
-              that it did. The domains I am building toward are GRC, blue
-              team operations, and DevSecOps. The overlap between them is not
-              an accident. Policy without operational instrumentation is
-              assumption. Detection without governance accountability is noise
-              that no one owns. The connective tissue between them is where
-              security actually lives.
+              The apprenticeship at Arvato is second-line GRC inside Internal
+              Control: EBIOS RM risk analyses, ISO 27001 and ISREG alignment,
+              PSSI and policy drafting, supplier assessments, vulnerability
+              management. The work is governance-layer — translating frameworks
+              into decisions an organisation can actually execute, then keeping
+              the evidence that it did. What I am building toward is a hybrid
+              profile: enough GRC to be credible on governance, enough technical
+              depth for detection engineering and pipeline security. A Mastère
+              in offensive and defensive cybersecurity starts in September 2026.
+              The throughline is secure by design — policy without operational
+              instrumentation is assumption, detection without governance
+              accountability is noise no one owns, and the connective tissue
+              between them is where security actually lives.
             </p>
           </div>
 
@@ -132,7 +135,8 @@ export function SectionAbout() {
               [
                 ["LOCATION",   `${profile.city}, ${profile.country}`],
                 ["SCHOOL",     "Guardia Cybersecurity School"],
-                ["CURRENT",    "ISMS Apprentice @ Arvato"],
+                ["CURRENT",    "ISMS / GRC Apprentice @ Arvato"],
+                ["NEXT",       "MSc Offensive / Defensive — Sept 2026"],
                 ["FOCUS",      "GRC · Blue Team · DevSecOps"],
                 ["AVAILABLE",  profile.available],
               ] as const

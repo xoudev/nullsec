@@ -4,7 +4,7 @@ export const profile = {
   // ── Identity ──────────────────────────────────────────────────────────────
   name: "Jordan",
   fullName: "Jordan Turnaco",
-  handle: "jordan.sys",
+  handle: "xoudev",
   age: 21,
   city: "Paris",
   country: "France",
@@ -46,17 +46,23 @@ export const profile = {
   // ── Education ─────────────────────────────────────────────────────────────
   education: [
     {
-      degree: "Bachelor Cybersecurity — 3rd year",
+      // RNCP 37796 — "Gestionnaire de la sécurité des données, des réseaux et des systèmes". Starts 14 Sept 2026.
+      degree: "Mastère Expert Cybersecurity — Offensive / Defensive (RNCP 37796)",
+      school: "Guardia Cybersecurity School",
+      period: "2026 – 2028",
+    },
+    {
+      degree: "Bachelor Cybersecurity — 3rd year (RNCP level 6)",
       school: "Guardia Cybersecurity School",
       period: "2025 – 2026",
     },
     {
-      degree: "Bachelor Computer Science — 2nd year",
+      degree: "Computer Science — 2nd year · DevOps, systems & networks",
       school: "EPSI",
       period: "2024 – 2025",
     },
     {
-      degree: "Bachelor Computer Science — 1st year",
+      degree: "Computer Science — 1st year · DevOps, systems & networks",
       school: "EPSI",
       period: "2023 – 2024",
     },
@@ -64,25 +70,22 @@ export const profile = {
 
   // ── Certifications ────────────────────────────────────────────────────────
   certifications: [
-    { name: "CC — Certified in Cybersecurity", issuer: "ISC2", status: "in preparation" },
-    { name: "Introduction to the Threat Landscape 3.0", issuer: "Fortinet", status: "in preparation" },
-    { name: "Getting Started in Cybersecurity 3.0", issuer: "Fortinet", status: "in preparation" },
-    { name: "Technical Introduction to Cybersecurity 3.0", issuer: "Fortinet", status: "in preparation" },
-    { name: "CSNA", issuer: "Stormshield", status: "in preparation" },
-    { name: "CCNA 1", issuer: "Cisco", status: "in preparation" },
+    { name: "CSNA — Stormshield Network Administrator", issuer: "Stormshield", status: "obtained · Mar 2026 · 80%" },
   ],
 
   // ── Experience ────────────────────────────────────────────────────────────
   experience: [
     {
-      title: "ISMS Apprentice",
+      title: "ISMS / GRC Apprentice — Internal Control",
       company: "Arvato",
       period: "Oct 2025 — Sept 2026",
       focus: [
-        "ISMS management and improvement",
-        "Security policy implementation",
-        "IS audit and compliance",
-        "Risk and incident management",
+        "EBIOS RM risk analyses (GRC, second line)",
+        "ISO 27001 / ISREG alignment",
+        "PSSI and security-policy drafting",
+        "Third-party / supplier security assessments",
+        "Vulnerability management via JIRA (CVSS · SLA)",
+        "ISMS documentation & on-site sitewalk audits (logistics sites)",
       ],
     },
     {
@@ -110,27 +113,31 @@ export const profile = {
   // ── Skills ────────────────────────────────────────────────────────────────
   skills: {
     cybersecurity: [
-      "Zero Trust Architecture", "ISMS", "GRC", "ISO 27001", "NIS2",
-      "EBIOS RM", "Security audit", "Risk management", "Incident management",
-      "Wireshark", "Burp Suite", "Metasploit", "Nmap", "OWASP",
-      "Kali Linux", "OSINT",
+      "Zero Trust Architecture", "ISMS", "GRC", "ISO 27001", "ISREG", "NIS2",
+      "EBIOS RM", "MITRE ATT&CK", "Risk management", "Incident management",
+      "Vulnerability management (CVSS · SLA)", "PSSI / security policies",
+      "Security audit", "Stormshield / firewalling",
+    ],
+    offensive: [
+      "Burp Suite", "Metasploit", "Kali Linux", "Wireshark",
+      "Nmap", "cURL", "OSINT",
     ],
     development: [
-      "Python", "JavaScript", "PHP", "Dart", "C", "C#", "Java",
-      "React", "Next.js", "Vue.js", "MySQL",
+      "TypeScript", "Next.js 15", "React", "Turborepo", "Supabase",
+      "PostgreSQL (RLS)", "Prisma", "Tailwind", "GSAP", "Lenis",
+      "Typst", "Remotion + ElevenLabs", "Python", "C#",
     ],
     reverseEngineering: [
-      "Ghidra", "Static analysis", "Dynamic analysis",
-      "STM32 analysis", "Hardware analysis", "Embedded systems",
+      "Static analysis", "Dynamic analysis", "Side-channel",
+      "STM32 analysis", "Ghidra", "Hardware analysis",
     ],
     infrastructure: [
-      "Network segmentation", "VLANs", "Firewalls", "VPN",
-      "Active Directory", "Linux administration", "VMware",
-      "pfSense", "Cisco",
+      "Proxmox (homelab)", "Docker / containers", "Linux (CachyOS)",
+      "Network segmentation", "VLANs", "Firewalls", "VPN", "pfSense",
     ],
     devSecOps: [
-      "Docker", "Kubernetes", "Jenkins", "GitLab CI/CD",
-      "Ansible", "Terraform", "SonarQube", "Snyk",
+      "CI/CD", "Docker", "Kubernetes", "Ansible",
+      "Secure pipelines", "Least privilege", "Detection engineering",
     ],
   },
 } as const;

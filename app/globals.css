@@ -60,6 +60,19 @@ body {
   outline-offset: 3px;
 }
 
+/* ─── Visually-hidden (screen-reader only) ─── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ─── Skip link (keyboard accessibility) ─── */
 .skip-link {
   position: absolute;
@@ -114,14 +127,31 @@ body {
   }
 }
 
-/* ─── Toolkit mobile horizontal scroll ─── */
-.toolkit-track-scroll {
-  /* hide scrollbar visually; keep interaction */
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+/* ─── Toolkit — competence domains, brutalist checkerboard ─── */
+.toolkit-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
-.toolkit-track-scroll::-webkit-scrollbar {
-  display: none;
+/* Alternate which side the bone title panel sits on, row by row. */
+.toolkit-row[data-title-side="right"] .toolkit-title   { order: 2; }
+.toolkit-row[data-title-side="right"] .toolkit-entries { order: 1; }
+
+.toolkit-cell {
+  padding: clamp(1.5rem, 3vw, 2.75rem);
+  min-height: clamp(8.5rem, 15vw, 12rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.toolkit-title   { background-color: var(--color-bone); }
+.toolkit-entries { background-color: var(--color-void); }
+
+@media (max-width: 767px) {
+  /* Collapse to one column; title always leads its entries. */
+  .toolkit-row { grid-template-columns: 1fr; }
+  .toolkit-row[data-title-side="right"] .toolkit-title   { order: 0; }
+  .toolkit-row[data-title-side="right"] .toolkit-entries { order: 1; }
+  .toolkit-cell { min-height: 0; }
 }
 
 /* ─── Terminal header: hide centred title on very narrow screens ─── */

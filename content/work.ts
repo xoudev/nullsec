@@ -5,14 +5,46 @@ export type WorkItem = {
   year: string;
   tags: string[];
   excerpt: string;
-  body: string[]; // paragraphs of editorial copy
-  image: string;  // path relative to /public
+  body: string[];   // paragraphs of editorial copy
+  image?: string;   // optional path relative to /public — omit when no asset exists yet
+  liveUrl?: string; // optional public / live site link
 };
 
 export const work: WorkItem[] = [
   {
-    slug: "zero-trust-architecture",
+    slug: "cyberlearn",
     index: "001",
+    title: "CYBERLEARN",
+    image: "/Log_blanc_large.png",
+    liveUrl: "https://cyberlearn.fr",
+    year: "2025",
+    tags: ["Turborepo", "Next.js 15", "Supabase", "Prisma", "PostgreSQL RLS", "Remotion"],
+    excerpt:
+      "The platform I keep coming back to. A full-stack cybersecurity learning environment where the hard part was never writing the lessons — it was making progress feel earned and keeping a multi-tenant database honest about who is allowed to read what.",
+    body: [
+      "CyberLearn is the project everything else orbits. It is a Turborepo monorepo on Next.js 15, with Supabase and Prisma underneath — a French-first platform for learning cybersecurity that is built as a product, not a demo. The interesting engineering was never the lesson content. It was the data model, the authorisation boundary, and the systems that decide what a learner sees and when.",
+      "Authorisation is enforced in PostgreSQL through Row-Level Security, not in the application layer. The reasoning is the same one the rest of my work keeps arriving at: the application is not the only thing that can reach the database, so the application cannot be the only thing that enforces access. RLS hardening pushes the trust boundary down to the row, where it survives a compromised API route, a misused service key, or a query written by someone who forgot the tenant check. Getting the policies right — and proving they fail closed — was the part that took longest and mattered most.",
+      "On top of that sits a gamification layer: streaks, quests, leagues, cosmetics, and an end-of-period \"wrapped\". The design constraint was to reward consistency without turning learning into a slot machine — motivation systems that respect the learner's time rather than farming it. The content side runs a video pipeline built on Remotion and ElevenLabs, turning written scripts into narrated lessons, because content production is the real bottleneck for any learning platform and automating it is what makes a catalogue maintainable by one person.",
+      "The catalogue itself was reorganised into structured DevOps and DevSecOps tracks — sequenced paths rather than a flat list of topics. A learning platform is a schema problem disguised as a content problem: the decisions about progression, prerequisites, and how completion unlocks the next thing constrain everything the product can become later. Most of those decisions had to be made once and be correct, because migrating progression logic under live users is a cost that prototype environments never reveal.",
+    ],
+  },
+  {
+    slug: "nullsec",
+    index: "002",
+    title: "NULLSEC",
+    year: "2025",
+    tags: ["Next.js 16", "GSAP", "Lenis", "Tailwind v4", "Typst"],
+    excerpt:
+      "The site you are reading. An editorial-brutalist portfolio built under deliberate constraint — four colours, no gradients, three typefaces — where the content is typed data and the CVs are compiled from source.",
+    body: [
+      "NULLSEC is this site. The brief I set myself was a constraint, not a moodboard: four colours, no gradients, three typefaces, and motion that earns its place. Constraints are a design forcing-function — they remove the decisions that do not matter so the ones that do become obvious. The result is editorial rather than decorative, which is the right register for security work.",
+      "Motion runs on GSAP and Lenis. Every animation is guarded by a reduced-motion check and torn down through GSAP's context cleanup, so the site degrades gracefully instead of breaking for anyone who has opted out or arrived on hardware that cannot keep up. Smooth scroll that fights the browser is worse than none at all; the discipline is in the cleanup paths, not the keyframes.",
+      "Content is data. The profile, projects, certifications, and writing all live in typed TypeScript modules as a single source of truth, and the pages are generated from them — adding a project means editing a file, never touching a component. The CVs are authored in Typst, CV-as-code: versioned, diffable, reproducible PDFs that rebuild from source instead of being maintained by hand in a word processor.",
+    ],
+  },
+  {
+    slug: "zero-trust-architecture",
+    index: "003",
     title: "ZERO TRUST ARCHITECTURE",
     image: "/ZeroTrust.png",
     year: "2025",
@@ -28,7 +60,7 @@ export const work: WorkItem[] = [
   },
   {
     slug: "space-grc-mission",
-    index: "002",
+    index: "004",
     title: "SPACE GRC MISSION",
     image: "/GuardianSpace.png",
     year: "2025",
@@ -44,7 +76,7 @@ export const work: WorkItem[] = [
   },
   {
     slug: "cryptographic-audit",
-    index: "003",
+    index: "005",
     title: "CRYPTOGRAPHIC AUDIT",
     image: "/stm32-blue-pill.jpg",
     year: "2025",
@@ -59,19 +91,31 @@ export const work: WorkItem[] = [
     ],
   },
   {
-    slug: "cyberlearn",
-    index: "004",
-    title: "CYBERLEARN",
-    image: "/Log_blanc_large.png",
-    year: "2024",
-    tags: ["Next.js", "Firebase", "Full-Stack", "Product", "Education"],
+    slug: "tower-defense-game",
+    index: "006",
+    title: "TOWER DEFENSE GAME",
+    year: "2026",
+    tags: ["Unity", "C#", "Tower Defense", "Fantasy / D&D", "VFX as code", "UI/UX"],
     excerpt:
-      "French cybersecurity students were learning from paywalled English content or shallow translated overviews. That gap is why CyberLearn exists — a production platform built to fill it, not to demonstrate that it could be built.",
+      "A fantasy, Dungeons & Dragons-flavoured tower-defense built — currently at pre-prototype, with my work spanning development, UI/UX, and VFX authored as code in C#.",
     body: [
-      "French cybersecurity students learning from paywalled English content or shallow translated overviews. That gap is why CyberLearn exists — not as a proof of concept, but as a production platform built to fill a specific, verifiable absence. Fifty-plus lessons, a hundred interactive exercises, flashcard-based spaced repetition, a badge and certification system that gives learners verifiable evidence of what they have completed. Bilingual French and English from the start, not retrofitted. Live at cyberlearn-neon.vercel.app with a companion mobile app.",
-      "Next.js on the frontend, Firebase for authentication and persistent data — user progress, flashcard state, completion records. The bilingual architecture was designed into the content schema at the beginning: translated content keys, not translated pages, so the same component tree serves both languages without duplication. The mobile app shares the same backend; progress synchronises across environments without a second source of truth. The schema decisions made in month one constrained what the badge and certification system could do in month three. That coupling is the part of product development that project briefs do not prepare you for.",
-      "Building to a brief ends when the deliverable is accepted. Building a product ends when users stop needing it — a different terminus with different demands. The progression logic required writing rules for a system that did not yet exist: which completion thresholds unlock which badges, how certifications are issued, what the learner sees when they are close to a threshold versus far from it. The Firebase schema had to anticipate query patterns that would not be visible until real users arrived and did things you had not anticipated. Most of these decisions were made once and needed to be correct, because migrating a live database schema under active users carries costs that prototype environments never reveal.",
-      "The platform is live, used, and maintained. The code is public. What it demonstrates is not that the stack works — Next.js and Firebase are well-documented, and the stack is conventional. What it demonstrates is that a production deployment imposes a different quality of decision-making: you are accountable for the accuracy of what you are teaching, the reliability of the system while learners are in it, and the data of real people. Those constraints produce better engineering than deadlines do, because the cost of a wrong decision is immediate and belongs to someone other than you.",
+      "A tower-defense game with a fantasy, Dungeons & Dragons-flavoured art direction, built in Unity . It is at the pre-prototype stage — the moment where the core loop and the feel are being proven before anything gets polished. My role spans development, UI/UX, and visual effects.",
+      "The part I care most about is VFX as code: effects driven and parameterised in C# rather than hand-placed in the editor, so they are reproducible, tweakable, and version-controlled like any other source. Treating effects as code instead of artefacts you click into existence is the same discipline that keeps infrastructure and detection logic maintainable.",
+      "Game development is an unusual entry on a security portfolio, but the transferable part is real: performance budgets, deterministic systems, and a UI that has to communicate state clearly under pressure. Building it with a team — under a shared art direction and a deadline — is also where most of the actual engineering happens.",
+    ],
+  },
+  {
+    slug: "homelab-proxmox",
+    index: "007",
+    title: "HOMELAB · PROXMOX",
+    year: "2026",
+    tags: ["Proxmox", "Wazuh", "Self-hosted", "Linux", "Networking"],
+    excerpt:
+      "A small Proxmox homelab on a laptop — Ryzen 7, 16 GB, 512 GB NVMe — running real workloads: game servers for friends, a Wazuh stack, and a provisioning box for testing.",
+    body: [
+      "The homelab is where the infrastructure and detection skills get rehearsed on something low-stakes and genuinely real. It runs Proxmox on a single laptop — a Ryzen 7 (7000-series), 16 GB of RAM, a 512 GB NVMe — deliberately modest, because the constraint is the lesson: you learn more squeezing real services onto limited hardware than you do with headroom to waste.",
+      "It hosts a Cobblemon Minecraft server and other game servers for friends, exposed to the internet through a playit.gg tunnel so nothing at home has to be port-forwarded or directly reachable. Alongside the game servers runs a Wazuh stack — so the same box that serves friends is also where I practise detection engineering against real logs — and a provisioning server used to stand up and tear down test environments on demand.",
+      "Running services other people depend on, even for a game, teaches what coursework cannot: uptime, backups, and the immediate cost of a misconfiguration when someone is actually using the thing. It is also where least privilege, segmentation, and zero-trust thinking stop being slides and become muscle memory — applied to a network I own, can break, and have to fix.",
     ],
   },
 ];

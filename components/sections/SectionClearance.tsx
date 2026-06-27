@@ -217,6 +217,11 @@ export function SectionClearance() {
                   <span style={{ color: statusColor(item.status), flexShrink: 0 }}>
                     [{item.status}]
                   </span>
+                  {item.score && (
+                    <span style={{ color: "var(--color-blood)", flexShrink: 0 }}>
+                      {item.score}
+                    </span>
+                  )}
                   <span style={{ color: "var(--color-ash)", flexShrink: 0 }}>
                     {item.date}
                   </span>

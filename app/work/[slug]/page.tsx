@@ -173,31 +173,56 @@ export default async function WorkPage({
 
         {/* Sticky sidebar */}
         <aside className="article-sidebar" aria-label="Project metadata">
-          {/* Project image — small, contained, void bg so white logos read cleanly */}
-          <div
-            style={{
-              backgroundColor: "var(--color-void)",
-              border: "1px solid rgba(107,107,107,0.18)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: "1.25rem",
-              marginBottom: "clamp(1.5rem, 2.5vw, 2rem)",
-            }}
-          >
-            <Image
-              src={item.image}
-              alt=""
-              width={320}
-              height={180}
+          {/* Project image — small, contained, void bg so white logos read cleanly.
+              Omitted when the project has no asset yet (image is optional). */}
+          {item.image && (
+            <div
               style={{
-                maxWidth: "100%",
-                height: "auto",
-                maxHeight: "140px",
-                objectFit: "contain",
+                backgroundColor: "var(--color-void)",
+                border: "1px solid rgba(107,107,107,0.18)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "1.25rem",
+                marginBottom: "clamp(1.5rem, 2.5vw, 2rem)",
               }}
-            />
-          </div>
+            >
+              <Image
+                src={item.image}
+                alt=""
+                width={320}
+                height={180}
+                style={{
+                  maxWidth: "100%",
+                  height: "auto",
+                  maxHeight: "140px",
+                  objectFit: "contain",
+                }}
+              />
+            </div>
+          )}
+
+          {/* Live link — only when the project has a public site */}
+          {item.liveUrl && (
+            <a
+              href={item.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                fontFamily: "var(--font-jetbrains-mono)",
+                fontSize: "0.7rem",
+                color: "var(--color-blood)",
+                letterSpacing: "0.08em",
+                textDecoration: "none",
+                marginBottom: "clamp(1.5rem, 2.5vw, 2rem)",
+              }}
+            >
+              {"[ live → ]"}
+            </a>
+          )}
 
           {/* Pull quote */}
           <blockquote
