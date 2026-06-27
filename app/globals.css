@@ -154,34 +154,41 @@ body {
   .toolkit-cell { min-height: 0; }
 }
 
-/* ─── Off-duty (passions) — editorial rows over a crossfading backdrop ─── */
-.offduty-bg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-}
+/* ─── Off-duty (passions) — each row reveals its own image behind it ─── */
 .offduty-bg-img {
   filter: grayscale(1) brightness(0.5) contrast(1.05);
 }
-.offduty-bg-veil {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(10, 10, 11, 0.62) 0%,
-    rgba(10, 10, 11, 0.42) 42%,
-    rgba(10, 10, 11, 0.62) 100%
-  );
-}
 
 .offduty-row {
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(107, 107, 107, 0.2);
+}
+.offduty-row-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.offduty-row-bg .offduty-bg-veil {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 11, 0.5);
+}
+/* Only real hover devices reveal the backdrop (no sticky-hover on touch). */
+@media (hover: hover) {
+  .offduty-row:hover .offduty-row-bg { opacity: 1; }
+}
+
+.offduty-row-inner {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: clamp(1rem, 3vw, 2.5rem);
   padding: clamp(1.5rem, 3vw, 2.25rem) 0;
-  border-top: 1px solid rgba(107, 107, 107, 0.2);
 }
 .offduty-title { transition: transform 0.35s ease, color 0.2s ease; }
 .offduty-arrow { display: inline-block; transition: transform 0.35s ease; }
@@ -191,7 +198,7 @@ body {
 .offduty-row:hover .offduty-tags { color: var(--color-bone); }
 
 @media (max-width: 767px) {
-  .offduty-row { grid-template-columns: auto 1fr; }
+  .offduty-row-inner { grid-template-columns: auto 1fr; }
   .offduty-tags { display: none; }
   .offduty-row:hover .offduty-title { transform: none; }
 }
