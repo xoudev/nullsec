@@ -164,10 +164,6 @@ body {
   border: 1px solid rgba(107, 107, 107, 0.25);
 }
 .offduty-hero-bg {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center right;
   filter: grayscale(1) brightness(0.5) contrast(1.05);
 }
 .offduty-hero-overlay {

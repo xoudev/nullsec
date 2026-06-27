@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { gsap } from "@/lib/gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { offDutyFeatured, offDutyRows, offDutyEntryCount } from "@/content/offduty";
@@ -11,13 +12,15 @@ export function SectionOffDuty() {
   const sectionRef = useRef<HTMLElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const previewRef = useRef<HTMLDivElement>(null);
+  const [previewSrc, setPreviewSrc] = useState<string | null>(null);
   const prefersReduced = useReducedMotion();
 
+  // ── Scroll-reveal ──
   useEffect(() => {
     const hero = heroRef.current;
     const rows = rowRefs.current.filter(Boolean) as HTMLElement[];
 
-    // Reduced motion (incl. runtime flip): everything visible, no reveal.
     if (prefersReduced) {
       if (hero) gsap.set(hero, { opacity: 1, y: 0 });
       rows.forEach((el) => gsap.set(el, { opacity: 1, y: 0 }));
@@ -49,6 +52,63 @@ export function SectionOffDuty() {
     return () => observer.disconnect();
   }, [prefersReduced]);
 
+  // ── Hover-reveal: a floating image follows the cursor over a row ──
+  useEffect(() => {
+    const preview = previewRef.current;
+    // Reduced motion (incl. a runtime flip while hovering): hide and bail.
+    if (prefersReduced) {
+      if (preview) gsap.set(preview, { opacity: 0 });
+      return;
+    }
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+    if (!preview) return;
+
+    gsap.set(preview, { xPercent: -50, yPercent: -50, opacity: 0, scale: 0.92, willChange: "transform, opacity" });
+    const px = gsap.quickTo(preview, "x", { duration: 0.4, ease: "power3" });
+    const py = gsap.quickTo(preview, "y", { duration: 0.4, ease: "power3" });
+
+    let active = false;
+    // Seed to viewport centre so a first hover with no prior mousemove
+    // (e.g. scrolling a row under a stationary cursor) never snaps to (0,0).
+    let lastX = window.innerWidth / 2;
+    let lastY = window.innerHeight / 2;
+    const onMove = (e: MouseEvent) => {
+      lastX = e.clientX;
+      lastY = e.clientY;
+      if (active) { px(lastX); py(lastY); }
+    };
+    window.addEventListener("mousemove", onMove);
+
+    const rows = rowRefs.current.filter(Boolean) as HTMLElement[];
+    const enters: Array<() => void> = [];
+    const leaves: Array<() => void> = [];
+    rows.forEach((row, i) => {
+      const enter = () => {
+        active = true;
+        setPreviewSrc(offDutyRows[i].image);
+        gsap.set(preview, { x: lastX, y: lastY });
+        gsap.to(preview, { opacity: 1, scale: 1, duration: 0.4, ease: "power3", overwrite: "auto" });
+      };
+      const leave = () => {
+        active = false;
+        gsap.to(preview, { opacity: 0, scale: 0.92, duration: 0.3, ease: "power3", overwrite: "auto" });
+      };
+      enters.push(enter);
+      leaves.push(leave);
+      row.addEventListener("mouseenter", enter);
+      row.addEventListener("mouseleave", leave);
+    });
+
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      rows.forEach((row, i) => {
+        row.removeEventListener("mouseenter", enters[i]);
+        row.removeEventListener("mouseleave", leaves[i]);
+      });
+      gsap.killTweensOf(preview);
+    };
+  }, [prefersReduced]);
+
   return (
     <section
       ref={sectionRef}
@@ -69,17 +129,11 @@ export function SectionOffDuty() {
           marginBottom: "clamp(2rem, 4vw, 3rem)",
         }}
       >
-        <span
-          aria-hidden="true"
-          style={{ fontFamily: MONO, fontSize: "0.65rem", color: "var(--color-blood)", letterSpacing: "0.1em" }}
-        >
+        <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.65rem", color: "var(--color-blood)", letterSpacing: "0.1em" }}>
           {"07 // OFF-DUTY"}
         </span>
-        <span
-          aria-hidden="true"
-          style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-ash)", letterSpacing: "0.1em", whiteSpace: "nowrap" }}
-        >
-          {`0${offDutyEntryCount} ENTRIES · 00 LICENSES`}
+        <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-ash)", letterSpacing: "0.1em", whiteSpace: "nowrap" }}>
+          {`${String(offDutyEntryCount).padStart(2, "0")} ENTRIES · 00 LICENSES`}
         </span>
       </div>
 
@@ -87,12 +141,15 @@ export function SectionOffDuty() {
       <div
         ref={heroRef}
         className="offduty-hero"
-        style={{ marginBottom: "clamp(2.5rem, 5vw, 4rem)", willChange: "transform, opacity" }}
+        style={{ marginBottom: "clamp(2.5rem, 5vw, 4rem)" }}
       >
-        <div
+        <Image
+          src={offDutyFeatured.image}
+          alt=""
+          fill
+          sizes="100vw"
           className="offduty-hero-bg"
-          aria-hidden="true"
-          style={{ backgroundImage: `url(${offDutyFeatured.image})` }}
+          style={{ objectFit: "cover", objectPosition: "center right" }}
         />
         <div className="offduty-hero-overlay" aria-hidden="true" />
 
@@ -115,7 +172,6 @@ export function SectionOffDuty() {
             padding: "clamp(1.5rem, 3.5vw, 2.75rem)",
           }}
         >
-          {/* top row */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "1rem" }}>
             <span style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-bone)", letterSpacing: "0.15em" }}>
               {"01 / "}{offDutyFeatured.label}
@@ -125,7 +181,6 @@ export function SectionOffDuty() {
             </span>
           </div>
 
-          {/* middle — headline + note */}
           <div>
             <h3
               style={{
@@ -160,7 +215,6 @@ export function SectionOffDuty() {
             </p>
           </div>
 
-          {/* bottom row */}
           <div
             style={{
               display: "flex",
@@ -189,12 +243,8 @@ export function SectionOffDuty() {
             key={row.title}
             ref={(el) => { rowRefs.current[i] = el; }}
             className="offduty-row"
-            style={{ willChange: "transform, opacity" }}
           >
-            <span
-              aria-hidden="true"
-              style={{ fontFamily: MONO, fontSize: "0.7rem", color: "var(--color-ash)", letterSpacing: "0.05em", minWidth: "1.5rem" }}
-            >
+            <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.7rem", color: "var(--color-ash)", letterSpacing: "0.05em", minWidth: "1.5rem" }}>
               {String(i + 2).padStart(2, "0")}
             </span>
 
@@ -214,24 +264,12 @@ export function SectionOffDuty() {
               >
                 {row.title}
               </h3>
-              <p
-                style={{
-                  fontFamily: MONO,
-                  fontSize: "clamp(0.64rem, 0.95vw, 0.72rem)",
-                  color: "var(--color-ash)",
-                  letterSpacing: "0.03em",
-                  margin: 0,
-                }}
-              >
+              <p style={{ fontFamily: MONO, fontSize: "clamp(0.64rem, 0.95vw, 0.72rem)", color: "var(--color-ash)", letterSpacing: "0.03em", margin: 0 }}>
                 {row.subtitle}
               </p>
             </div>
 
-            <span
-              className="offduty-tags"
-              aria-hidden="true"
-              style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-ash)", letterSpacing: "0.08em", whiteSpace: "nowrap" }}
-            >
+            <span className="offduty-tags" aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-ash)", letterSpacing: "0.08em", whiteSpace: "nowrap" }}>
               {row.tags.join("  ·  ")}
               {"   "}
               <span className="offduty-arrow">→</span>
@@ -256,6 +294,29 @@ export function SectionOffDuty() {
       >
         <span>{"// OFF-DUTY"}</span>
         <span>{"// ENV prod.nullsec"}</span>
+      </div>
+
+      {/* Floating hover preview — follows the cursor over a row */}
+      <div
+        ref={previewRef}
+        aria-hidden="true"
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          zIndex: 9000,
+          width: "clamp(220px, 26vw, 360px)",
+          aspectRatio: "3 / 2",
+          overflow: "hidden",
+          border: "1px solid rgba(107,107,107,0.3)",
+          backgroundColor: "var(--color-void)",
+          pointerEvents: "none",
+          opacity: 0,
+        }}
+      >
+        {previewSrc && (
+          <Image src={previewSrc} alt="" fill sizes="(max-width: 768px) 60vw, 360px" style={{ objectFit: "cover" }} />
+        )}
       </div>
     </section>
   );
