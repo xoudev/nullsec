@@ -2,8 +2,19 @@
 
 import { useEffect, useRef, useMemo } from "react";
 import { gsap } from "@/lib/gsap";
+import { useT } from "@/lib/i18n";
 import { radarAxes } from "@/content/clearances";
-import type { Clearance, RadarValues } from "@/content/clearances";
+import type { Clearance, RadarValues, RadarAxis } from "@/content/clearances";
+
+// ── French axis labels (visible text only; data keys stay English) ──
+const AXIS_LABELS_FR: Record<RadarAxis, string> = {
+  GOVERNANCE: "GOUVERNANCE",
+  NETWORK:    "RÉSEAU",
+  DEFENSE:    "DÉFENSE",
+  RISK:       "RISQUE",
+  AUDIT:      "AUDIT",
+  COMPLIANCE: "CONFORMITÉ",
+};
 
 // ── Geometry constants ──────────────────────────────────────────
 const CX = 250;         // viewBox centre x
@@ -68,6 +79,7 @@ interface Props {
 }
 
 export function ClearanceRadar({ clearances, activeCertIndex, prefersReduced }: Props) {
+  const { tr } = useT();
   const polygonRef = useRef<SVGPolygonElement>(null);
   const circleRefs = useRef<(SVGCircleElement | null)[]>([]);
   const labelRef   = useRef<HTMLDivElement>(null);
@@ -190,7 +202,7 @@ export function ClearanceRadar({ clearances, activeCertIndex, prefersReduced }: 
           letterSpacing: "0.1em",
         }}
       >
-        {ax}
+        {tr(ax, AXIS_LABELS_FR[ax])}
       </text>
     );
   });

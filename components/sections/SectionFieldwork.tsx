@@ -5,6 +5,7 @@ import Link from "next/link";
 import { gsap } from "@/lib/gsap";
 import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useT } from "@/lib/i18n";
 import { work } from "@/content/work";
 
 export function SectionFieldwork() {
@@ -16,6 +17,7 @@ export function SectionFieldwork() {
   const yearRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const tagRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const prefersReduced = useReducedMotion();
+  const { t } = useT();
 
   // Lock initial GSAP state so killTweensOf always has a clean baseline
   useEffect(() => {
@@ -145,7 +147,7 @@ export function SectionFieldwork() {
                 ref={(el) => { rowRefs.current[i] = el; }}
                 onMouseEnter={() => handleRowEnter(i)}
                 onMouseLeave={() => handleRowLeave(i)}
-                aria-label={`${item.title} — ${item.year}`}
+                aria-label={`${t(item.title)}, ${item.year}`}
                 style={{
                   position: "relative",
                   zIndex: 1,
@@ -185,7 +187,7 @@ export function SectionFieldwork() {
                       letterSpacing: "0.04em",
                     }}
                   >
-                    {item.title}
+                    {t(item.title)}
                   </span>
                   <span
                     className="hidden md:block"
@@ -197,7 +199,7 @@ export function SectionFieldwork() {
                       letterSpacing: "0.02em",
                     }}
                   >
-                    {item.excerpt}
+                    {t(item.excerpt)}
                   </span>
                 </div>
 

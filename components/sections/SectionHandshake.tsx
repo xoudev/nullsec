@@ -5,54 +5,61 @@ import { gsap } from "@/lib/gsap";
 import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { profile } from "@/profile";
+import { useT } from "@/lib/i18n";
 
 type OutputLine = {
   type: "input" | "output" | "error" | "system";
   text: string;
 };
 
-const WELCOME: OutputLine[] = [
-  { type: "system", text: "NULLSEC terminal v1.0.0" },
-  { type: "system", text: `connected to ${profile.siteUrl}` },
-  { type: "system", text: 'type "help" to see available commands.' },
-];
+type I18n = ReturnType<typeof useT>;
+type T = I18n["t"];
+type Tr = I18n["tr"];
 
-function runCommand(raw: string): OutputLine[] {
+function buildWelcome(tr: Tr): OutputLine[] {
+  return [
+    { type: "system", text: "NULLSEC terminal v1.0.0" },
+    { type: "system", text: tr(`connected to ${profile.siteUrl}`, `connecté à ${profile.siteUrl}`) },
+    { type: "system", text: tr('type "help" to see available commands.', 'tapez « help » pour voir les commandes disponibles.') },
+  ];
+}
+
+function runCommand(raw: string, t: T, tr: Tr): OutputLine[] {
   const cmd = raw.trim().toLowerCase();
   switch (cmd) {
     case "help":
       return [
-        { type: "output", text: "available commands:" },
-        { type: "output", text: "  whoami   — identity and status" },
-        { type: "output", text: "  about    — same as whoami" },
-        { type: "output", text: "  xp       — work experience" },
-        { type: "output", text: "  edu      — education" },
-        { type: "output", text: "  certs    — certifications" },
-        { type: "output", text: "  skills   — skill domains" },
-        { type: "output", text: "  langs    — languages" },
-        { type: "output", text: "  hire     — apprenticeship info" },
-        { type: "output", text: "  email    — contact email" },
-        { type: "output", text: "  pgp      — pgp public key" },
-        { type: "output", text: "  cv       — curriculum vitae" },
-        { type: "output", text: "  clear    — reset terminal" },
+        { type: "output", text: tr("available commands:", "commandes disponibles :") },
+        { type: "output", text: tr("  whoami   — identity and status", "  whoami   : identité et statut") },
+        { type: "output", text: tr("  about    — same as whoami", "  about    : équivalent de whoami") },
+        { type: "output", text: tr("  xp       — work experience", "  xp       : expérience professionnelle") },
+        { type: "output", text: tr("  edu      — education", "  edu      : formation") },
+        { type: "output", text: tr("  certs    — certifications", "  certs    : certifications") },
+        { type: "output", text: tr("  skills   — skill domains", "  skills   : domaines de compétences") },
+        { type: "output", text: tr("  langs    — languages", "  langs    : langues") },
+        { type: "output", text: tr("  hire     — apprenticeship info", "  hire     : informations alternance") },
+        { type: "output", text: tr("  email    — contact email", "  email    : email de contact") },
+        { type: "output", text: tr("  pgp      — pgp public key", "  pgp      : clé publique pgp") },
+        { type: "output", text: tr("  cv       — curriculum vitae", "  cv       : curriculum vitae") },
+        { type: "output", text: tr("  clear    — reset terminal", "  clear    : réinitialiser le terminal") },
       ];
 
     case "about":
     case "whoami":
       return [
         { type: "output", text: `${profile.fullName} · ${profile.age} · ${profile.city}` },
-        { type: "output", text: "ISMS / GRC apprentice @ Arvato · Guardia · 3rd year" },
-        { type: "output", text: profile.bio },
-        { type: "output", text: `next availability: ${profile.available}` },
+        { type: "output", text: tr("ISMS / GRC apprentice @ Arvato · Guardia · 3rd year", "Alternant ISMS / GRC @ Arvato · Guardia · 3e année") },
+        { type: "output", text: t(profile.bio) },
+        { type: "output", text: tr(`next availability: ${profile.available}`, `prochaine disponibilité : ${profile.available}`) },
       ];
 
     case "hire":
       return [
-        { type: "output", text: "currently: ISMS / GRC apprentice @ Arvato, Oct 2025 — Sept 2026." },
-        { type: "output", text: "not available for full-time until Sept 2028." },
-        { type: "output", text: "next: Mastère offensive/defensive (alternance), 2026 — 2028 — open to host companies." },
-        { type: "output", text: "domains: GRC · Blue Team · DevSecOps." },
-        { type: "output", text: `contact: ${profile.email}` },
+        { type: "output", text: tr("currently: ISMS / GRC apprentice @ Arvato, Oct 2025 — Sept 2026.", "actuellement : alternant ISMS / GRC @ Arvato, Oct 2025 à Sept 2026.") },
+        { type: "output", text: tr("not available for full-time until Sept 2028.", "non disponible en temps plein avant Sept 2028.") },
+        { type: "output", text: tr("next: Mastère offensive/defensive (alternance), 2026 — 2028 — open to host companies.", "ensuite : Mastère offensif/défensif (alternance), 2026 à 2028, ouvert aux entreprises d'accueil.") },
+        { type: "output", text: tr("domains: GRC · Blue Team · DevSecOps.", "domaines : GRC · Blue Team · DevSecOps.") },
+        { type: "output", text: tr(`contact: ${profile.email}`, `contact : ${profile.email}`) },
       ];
 
     case "email":
@@ -61,36 +68,36 @@ function runCommand(raw: string): OutputLine[] {
     case "pgp":
       return profile.pgpKey
         ? [{ type: "output", text: profile.pgpKey }]
-        : [{ type: "output", text: "pgp key not yet uploaded." }];
+        : [{ type: "output", text: tr("pgp key not yet uploaded.", "clé pgp pas encore publiée.") }];
 
     case "cv":
       return [
-        { type: "output", text: `cv available at ${profile.siteUrl}/cv.pdf` },
+        { type: "output", text: tr(`cv available at ${profile.siteUrl}/cv.pdf`, `cv disponible sur ${profile.siteUrl}/cv.pdf`) },
         { type: "output", text: "Jordan Turnaco · ISMS · GRC · DevSecOps" },
       ];
 
     case "xp":
     case "experience":
       return profile.experience.flatMap((e, i) => [
-        { type: "output" as const, text: `[${i + 1}] ${e.title} — ${e.company}` },
+        { type: "output" as const, text: tr(`[${i + 1}] ${t(e.title)} — ${e.company}`, `[${i + 1}] ${t(e.title)} · ${e.company}`) },
         { type: "output" as const, text: `    ${e.period}` },
-        ...e.focus.map((f) => ({ type: "output" as const, text: `    · ${f}` })),
+        ...t<readonly string[]>(e.focus).map((f) => ({ type: "output" as const, text: `    · ${f}` })),
       ]);
 
     case "edu":
     case "education":
       return profile.education.map((e) => ({
         type: "output" as const,
-        text: `${e.period}  ${e.school} — ${e.degree}`,
+        text: tr(`${e.period}  ${e.school} — ${t(e.degree)}`, `${e.period}  ${e.school} · ${t(e.degree)}`),
       }));
 
     case "certs":
     case "certifications":
       return [
-        { type: "output" as const, text: "certifications:" },
+        { type: "output" as const, text: tr("certifications:", "certifications :") },
         ...profile.certifications.map((c) => ({
           type: "output" as const,
-          text: `  ${c.name} — ${c.status}`,
+          text: tr(`  ${c.name} — ${c.status}`, `  ${c.name} · ${c.status}`),
         })),
       ];
 
@@ -111,7 +118,7 @@ function runCommand(raw: string): OutputLine[] {
     case "languages":
       return profile.languages.map((l) => ({
         type: "output" as const,
-        text: `${l.lang.padEnd(10)} ${l.level}`,
+        text: `${t(l.lang).padEnd(10)} ${t(l.level)}`,
       }));
 
     case "clear":
@@ -120,7 +127,7 @@ function runCommand(raw: string): OutputLine[] {
     case "sudo rm -rf /":
     case "sudo rm -rf /*":
     case "sudo rm -rf / --no-preserve-root":
-      return [{ type: "error", text: "nice try." }];
+      return [{ type: "error", text: tr("nice try.", "bien tenté.") }];
 
     case "":
       return [];
@@ -129,7 +136,7 @@ function runCommand(raw: string): OutputLine[] {
       return [
         {
           type: "error",
-          text: `command not found: ${raw.trim()}. type "help".`,
+          text: tr(`command not found: ${raw.trim()}. type "help".`, `commande introuvable : ${raw.trim()}. tapez « help ».`),
         },
       ];
   }
@@ -172,6 +179,12 @@ export function SectionHandshake() {
   const [output, setOutput] = useState<OutputLine[]>([]);
   const [inputVal, setInputVal] = useState("");
   const prefersReduced = useReducedMotion();
+  const { t, tr } = useT();
+
+  // Keep the latest locale helpers reachable from effects/handlers without
+  // re-running the boot sequence on locale change.
+  const i18nRef = useRef({ t, tr });
+  i18nRef.current = { t, tr };
 
   const focusInput = useCallback(() => inputRef.current?.focus(), []);
 
@@ -186,7 +199,7 @@ export function SectionHandshake() {
   useEffect(() => {
     if (prefersReduced) {
       // Show the welcome output immediately; soft-fade the terminal window in.
-      setOutput(WELCOME);
+      setOutput(buildWelcome(i18nRef.current.tr));
       return softReveal([windowRef.current]);
     }
 
@@ -208,7 +221,7 @@ export function SectionHandshake() {
         }
 
         // Staggered welcome lines
-        WELCOME.forEach((line, i) => {
+        buildWelcome(i18nRef.current.tr).forEach((line, i) => {
           timers.push(
             setTimeout(() => {
               setOutput((prev) => [...prev, line]);
@@ -231,12 +244,12 @@ export function SectionHandshake() {
     const raw = inputVal;
     setInputVal("");
 
-    const result = runCommand(raw);
+    const result = runCommand(raw, t, tr);
     const isClear = result.some((l) => l.text === "__CLEAR__");
 
     setOutput((prev) =>
       isClear
-        ? WELCOME
+        ? buildWelcome(tr)
         : [...prev, { type: "input" as const, text: raw }, ...result]
     );
   };
@@ -258,7 +271,7 @@ export function SectionHandshake() {
     <section
       ref={sectionRef}
       data-section-id="09"
-      aria-label="Contact — Terminal"
+      aria-label={tr("Contact — Terminal", "Contact : terminal")}
       style={{
         backgroundColor: "var(--color-void)",
         padding: "clamp(3rem, 6vw, 6rem) clamp(1.5rem, 4vw, 3rem)",
@@ -383,7 +396,7 @@ export function SectionHandshake() {
           <div
             ref={terminalRef}
             role="log"
-            aria-label="Interactive terminal"
+            aria-label={tr("Interactive terminal", "Terminal interactif")}
             aria-live="polite"
             style={{
               height: "100%",
@@ -424,7 +437,7 @@ export function SectionHandshake() {
             <form
               onSubmit={handleSubmit}
               style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
-              aria-label="Terminal input"
+              aria-label={tr("Terminal input", "Saisie du terminal")}
             >
               <label
                 htmlFor="terminal-input"
@@ -446,7 +459,7 @@ export function SectionHandshake() {
                 autoCorrect="off"
                 autoCapitalize="none"
                 spellCheck={false}
-                aria-label="Terminal command input"
+                aria-label={tr("Terminal command input", "Saisie de commande du terminal")}
                 style={{
                   flex: 1,
                   background: "transparent",
@@ -524,7 +537,7 @@ export function SectionHandshake() {
           letterSpacing: "0.06em",
         }}
       >
-        {"// xoudev — securing what others overlook."}
+        {tr("// xoudev — securing what others overlook.", "// xoudev · sécuriser ce que les autres négligent.")}
       </div>
     </section>
   );

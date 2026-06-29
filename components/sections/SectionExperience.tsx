@@ -5,6 +5,7 @@ import { gsap } from "@/lib/gsap";
 import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { profile } from "@/profile";
+import { useT } from "@/lib/i18n";
 
 const MONO = "var(--font-jetbrains-mono)";
 
@@ -12,6 +13,7 @@ export function SectionExperience() {
   const sectionRef = useRef<HTMLElement>(null);
   const entryRefs = useRef<(HTMLDivElement | null)[]>([]);
   const prefersReduced = useReducedMotion();
+  const { t, tr } = useT();
 
   useEffect(() => {
     const entries = entryRefs.current.filter(Boolean) as HTMLElement[];
@@ -61,7 +63,7 @@ export function SectionExperience() {
           {"06 // EXPERIENCE"}
         </span>
         <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-ash)", letterSpacing: "0.1em", whiteSpace: "nowrap" }}>
-          {`${String(profile.experience.length).padStart(2, "0")} ROLES · 2024 — 2026`}
+          {`${String(profile.experience.length).padStart(2, "0")} ${tr("ROLES", "RÔLES")} · 2024 — 2026`}
         </span>
       </div>
 
@@ -78,7 +80,7 @@ export function SectionExperience() {
           maxWidth: "20ch",
         }}
       >
-        From shipping features to securing them.
+        {tr("From shipping features to securing them.", "Livrer des fonctionnalités, puis les sécuriser.")}
       </h2>
 
       {/* Entries — meta (left) + responsibilities (right) */}
@@ -106,7 +108,7 @@ export function SectionExperience() {
                 <span style={{ fontFamily: MONO, fontSize: "0.62rem", color: "var(--color-ash)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
                   {xp.period}
                   {current && (
-                    <span style={{ color: "var(--color-blood)", marginLeft: "0.9rem" }}>{"// CURRENT"}</span>
+                    <span style={{ color: "var(--color-blood)", marginLeft: "0.9rem" }}>{tr("// CURRENT", "// ACTUEL")}</span>
                   )}
                 </span>
                 <span style={{ fontFamily: MONO, fontSize: "0.65rem", color: "var(--color-blood)", letterSpacing: "0.08em" }}>
@@ -126,12 +128,12 @@ export function SectionExperience() {
                   margin: "0 0 clamp(1.1rem, 2.2vw, 1.6rem)",
                 }}
               >
-                {xp.title}
+                {t(xp.title)}
               </h3>
 
               {/* Responsibilities — flow inline, wrapping across the full width */}
               <div style={{ display: "flex", flexWrap: "wrap", gap: "0.55rem 1.75rem" }}>
-                {xp.focus.map((f) => (
+                {t<readonly string[]>(xp.focus).map((f) => (
                   <span
                     key={f}
                     style={{

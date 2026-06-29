@@ -6,8 +6,7 @@ import { gsap } from "@/lib/gsap";
 import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { toolkitDomains, toolkitEntryCount } from "@/content/toolkit";
-
-const DEFAULT_HINT = "// hover an entry for its proof";
+import { useT } from "@/lib/i18n";
 
 // Initial clip for the bone title panel's reveal, depending on which side it sits.
 // Percent units throughout so GSAP interpolates the wipe cleanly.
@@ -58,6 +57,8 @@ export function SectionToolkit() {
   const indexRefs = useRef<(HTMLDivElement | null)[]>([]);
   const scrambleCancels = useRef<(() => void)[]>([]);
   const prefersReduced = useReducedMotion();
+  const { t, tr } = useT();
+  const defaultHint = tr("// hover an entry for its proof", "// survolez une entrée pour sa preuve");
 
   // [domainIndex, entryIndex] of the entry currently hovered/focused — drives proof reveal.
   const [active, setActive] = useState<[number, number] | null>(null);
@@ -140,7 +141,7 @@ export function SectionToolkit() {
     const h = titleTextRefs.current[d];
     if (!h) return;
     scrambleCancels.current[d]?.();
-    scrambleCancels.current[d] = runScramble(h, toolkitDomains[d].title);
+    scrambleCancels.current[d] = runScramble(h, t(toolkitDomains[d].title));
   };
   const leaveTitle = (d: number) => {
     const idx = indexRefs.current[d];
@@ -176,7 +177,7 @@ export function SectionToolkit() {
             letterSpacing: "0.1em",
           }}
         >
-          {"03 // TOOLKIT"}
+          {tr("03 // TOOLKIT", "03 // OUTILLAGE")}
         </span>
         <span
           aria-hidden="true"
@@ -188,7 +189,10 @@ export function SectionToolkit() {
             whiteSpace: "nowrap",
           }}
         >
-          {`${toolkitEntryCount} ENTRIES — ${String(toolkitDomains.length).padStart(2, "0")} DOMAINS`}
+          {tr(
+            `${toolkitEntryCount} ENTRIES — ${String(toolkitDomains.length).padStart(2, "0")} DOMAINS`,
+            `${toolkitEntryCount} ENTRÉES · ${String(toolkitDomains.length).padStart(2, "0")} DOMAINES`,
+          )}
         </span>
       </div>
 
@@ -205,7 +209,7 @@ export function SectionToolkit() {
           maxWidth: "16ch",
         }}
       >
-        Nothing here without a trace.
+        {tr("Nothing here without a trace.", "Rien ici sans laisser de trace.")}
       </h2>
 
       {/* Top rule */}
@@ -223,12 +227,12 @@ export function SectionToolkit() {
           const activeEntry =
             active && active[0] === d ? domain.entries[active[1]] : null;
           const hint = activeEntry?.proof
-            ? `// ${activeEntry.proof}${activeEntry.proofHref ? "  →" : ""}`
-            : DEFAULT_HINT;
+            ? `// ${t(activeEntry.proof)}${activeEntry.proofHref ? "  →" : ""}`
+            : defaultHint;
 
           return (
             <div
-              key={domain.title}
+              key={t(domain.title)}
               ref={(el) => { rowRefs.current[d] = el; }}
               className="toolkit-row"
               data-title-side={side}
@@ -267,14 +271,14 @@ export function SectionToolkit() {
                     margin: 0,
                   }}
                 >
-                  {domain.title}
+                  {t(domain.title)}
                 </h3>
               </div>
 
               {/* Entries panel (void) */}
               <div className="toolkit-cell toolkit-entries">
                 <ul
-                  aria-label={domain.title}
+                  aria-label={t(domain.title)}
                   style={{
                     listStyle: "none",
                     margin: 0,
@@ -313,7 +317,7 @@ export function SectionToolkit() {
                           <Link
                             href={entry.proofHref}
                             ref={setRef}
-                            aria-label={entry.proof ? `${entry.label} — ${entry.proof}` : entry.label}
+                            aria-label={entry.proof ? `${entry.label}: ${t(entry.proof)}` : entry.label}
                             onMouseEnter={enter}
                             onMouseLeave={leave}
                             onFocus={enter}
@@ -333,7 +337,7 @@ export function SectionToolkit() {
                             {/* Proof reaches the accessible tree even though the
                                 animated hint line is aria-hidden. */}
                             {entry.proof && (
-                              <span className="sr-only"> — {entry.proof}</span>
+                              <span className="sr-only">: {t(entry.proof)}</span>
                             )}
                           </span>
                         )}

@@ -1,3 +1,5 @@
+import type { Localized } from "@/lib/i18n";
+
 export const radarAxes = [
   "GOVERNANCE",
   "NETWORK",
@@ -20,7 +22,7 @@ export type Clearance = {
   issuer: string;
   credentialId: string | null;
   credentialUrl: string | null; // links to issuer verification page; null = no link
-  validates: string;            // one-line summary of what the cert covers
+  validates: Localized<string>; // one-line summary of what the cert covers
   radar: RadarValues;           // axis values 0–100
   score?: string;               // optional exam score for an obtained cert, e.g. "80%"
 };
@@ -34,7 +36,10 @@ export const clearances: Clearance[] = [
     issuer: "STORMSHIELD",
     credentialId: null,
     credentialUrl: null,
-    validates: "stormshield network security, firewall administration, policy management",
+    validates: {
+      en: "stormshield network security, firewall administration, policy management",
+      fr: "sécurité réseau Stormshield, administration de pare-feu, gestion des politiques",
+    },
     score: "80%",
     radar: {
       GOVERNANCE: 20,

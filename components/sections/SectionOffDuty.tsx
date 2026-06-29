@@ -5,6 +5,7 @@ import Image from "next/image";
 import { gsap } from "@/lib/gsap";
 import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useT } from "@/lib/i18n";
 import { offDutyRows, offDutyEntryCount } from "@/content/offduty";
 
 const MONO = "var(--font-jetbrains-mono)";
@@ -13,6 +14,7 @@ export function SectionOffDuty() {
   const sectionRef = useRef<HTMLElement>(null);
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
   const prefersReduced = useReducedMotion();
+  const { t, tr } = useT();
 
   // ── Scroll-reveal of the rows ──
   useEffect(() => {
@@ -63,7 +65,7 @@ export function SectionOffDuty() {
           {"08 // OFF-DUTY"}
         </span>
         <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-ash)", letterSpacing: "0.1em", whiteSpace: "nowrap" }}>
-          {`${String(offDutyEntryCount).padStart(2, "0")} ENTRIES · 00 LICENSES`}
+          {`${String(offDutyEntryCount).padStart(2, "0")} ${tr("ENTRIES · 00 LICENSES", "ENTRÉES · 00 LICENCES")}`}
         </span>
       </div>
 
@@ -71,7 +73,7 @@ export function SectionOffDuty() {
       <div>
         {offDutyRows.map((row, i) => (
           <div
-            key={row.title}
+            key={row.image}
             ref={(el) => { rowRefs.current[i] = el; }}
             className="offduty-row"
           >
@@ -108,15 +110,15 @@ export function SectionOffDuty() {
                     margin: "0 0 0.5rem",
                   }}
                 >
-                  {row.title}
+                  {t(row.title)}
                 </h3>
                 <p style={{ fontFamily: MONO, fontSize: "clamp(0.64rem, 0.95vw, 0.72rem)", color: "var(--color-ash)", letterSpacing: "0.03em", margin: 0 }}>
-                  {row.subtitle}
+                  {t(row.subtitle)}
                 </p>
               </div>
 
               <span className="offduty-tags" aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-ash)", letterSpacing: "0.08em", whiteSpace: "nowrap" }}>
-                {row.tags.join("  ·  ")}
+                {t(row.tags).join("  ·  ")}
                 {"   "}
                 <span className="offduty-arrow">→</span>
               </span>
