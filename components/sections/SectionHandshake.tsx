@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { gsap } from "@/lib/gsap";
+import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { profile } from "@/profile";
 
@@ -184,8 +185,9 @@ export function SectionHandshake() {
   // Boot sequence — plays once when section enters viewport
   useEffect(() => {
     if (prefersReduced) {
+      // Show the welcome output immediately; soft-fade the terminal window in.
       setOutput(WELCOME);
-      return;
+      return softReveal([windowRef.current]);
     }
 
     const timers: ReturnType<typeof setTimeout>[] = [];

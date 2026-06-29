@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { gsap } from "@/lib/gsap";
+import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { dispatches } from "@/content/dispatches";
 
@@ -21,8 +22,9 @@ export function SectionDispatches() {
 
   // Staggered entrance via IntersectionObserver
   useEffect(() => {
-    if (prefersReduced) return;
     const items = itemRefs.current.filter(Boolean) as HTMLElement[];
+    // Reduced motion: soft opacity fade-in, no slide/stagger travel.
+    if (prefersReduced) return softReveal(items);
     items.forEach((el) => gsap.set(el, { opacity: 0, y: 50 }));
 
     const observer = new IntersectionObserver(

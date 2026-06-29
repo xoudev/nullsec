@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { gsap } from "@/lib/gsap";
+import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { offDutyRows, offDutyEntryCount } from "@/content/offduty";
 
@@ -18,8 +19,8 @@ export function SectionOffDuty() {
     const rows = rowRefs.current.filter(Boolean) as HTMLElement[];
 
     if (prefersReduced) {
-      rows.forEach((el) => gsap.set(el, { opacity: 1, y: 0 }));
-      return;
+      rows.forEach((el) => gsap.set(el, { y: 0 }));
+      return softReveal(rows);
     }
 
     rows.forEach((el) => gsap.set(el, { opacity: 0, y: 30 }));

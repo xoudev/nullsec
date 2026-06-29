@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
+import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { profile } from "@/profile";
 
@@ -16,8 +17,8 @@ export function SectionExperience() {
     const entries = entryRefs.current.filter(Boolean) as HTMLElement[];
 
     if (prefersReduced) {
-      entries.forEach((el) => gsap.set(el, { opacity: 1, y: 0 }));
-      return;
+      entries.forEach((el) => gsap.set(el, { y: 0 }));
+      return softReveal(entries);
     }
 
     entries.forEach((el) => gsap.set(el, { opacity: 0, y: 30 }));

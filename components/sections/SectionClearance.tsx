@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { gsap, loadScrollTrigger } from "@/lib/gsap";
+import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { clearances } from "@/content/clearances";
 import type { ClearanceStatus } from "@/content/clearances";
@@ -62,7 +63,11 @@ export function SectionClearance() {
         : { height: 0,      opacity: 0 });
     });
 
-    if (prefersReduced) return;
+    if (prefersReduced) {
+      // Soft opacity fade-in for the clearance entries — no horizontal slide.
+      const entries = entryRefs.current.filter(Boolean) as HTMLElement[];
+      return softReveal(entries);
+    }
 
     entryRefs.current.forEach((el) => {
       if (el) gsap.set(el, { x: -40, opacity: 0 });
