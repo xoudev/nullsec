@@ -31,7 +31,7 @@ export const profile = {
 
   // ── Site ──────────────────────────────────────────────────────────────────
   cvUrl: "/cv.pdf",
-  available: "Sept 2026",
+  available: "Sept 2028",
   tagline: "Securing what others overlook.",
   bio: "I don't build fortresses. I map the blind spots.",
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://nullsec.fr",

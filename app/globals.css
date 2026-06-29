@@ -192,6 +192,15 @@ body {
   .offduty-row:hover { min-height: clamp(17rem, 30vw, 23rem); }
   .offduty-row:hover .offduty-row-bg { opacity: 1; }
 }
+/* Touch devices have no hover — the imagery would otherwise never show. Reveal
+   each backdrop by default, with a lighter treatment than the desktop hover
+   (it's always-on here, not a transient reveal) so darker photos still read. */
+@media (hover: none) {
+  .offduty-row { min-height: clamp(11rem, 38vw, 15rem); }
+  .offduty-row-bg { opacity: 1; }
+  .offduty-bg-img { filter: grayscale(1) brightness(0.72) contrast(1.05); }
+  .offduty-row-bg .offduty-bg-veil { background: rgba(10, 10, 11, 0.45); }
+}
 
 .offduty-row-inner {
   position: relative;

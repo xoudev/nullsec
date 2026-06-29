@@ -49,7 +49,7 @@ function runCommand(raw: string): OutputLine[] {
     case "hire":
       return [
         { type: "output", text: "currently: ISMS / GRC apprentice @ Arvato, Oct 2025 — Sept 2026." },
-        { type: "output", text: "not available until Sept 2026." },
+        { type: "output", text: "not available for full-time until Sept 2028." },
         { type: "output", text: "next: Mastère offensive/defensive (alternance), 2026 — 2028 — open to host companies." },
         { type: "output", text: "domains: GRC · Blue Team · DevSecOps." },
         { type: "output", text: `contact: ${profile.email}` },
