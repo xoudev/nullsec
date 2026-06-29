@@ -162,11 +162,22 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
             {"// "}{profile.handle}
             {" · "}{profile.age}
             {" · "}{profile.city.toLowerCase()}
-            {" · open sept 2026"}
+            {" · open "}{profile.available.toLowerCase()}
           </div>
           <div>{"// GRC · BLUE TEAM · DEVSECOPS"}</div>
           <div style={{ marginTop: "0.4rem" }}>
             {"// "}{profile.tagline}
+          </div>
+          <div style={{ marginTop: "0.6rem" }}>
+            <a
+              href={profile.cvUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-cursor="open ↗"
+              style={{ color: "var(--color-blood)", textDecoration: "none", letterSpacing: "0.06em" }}
+            >
+              {"// CV ↗"}
+            </a>
           </div>
         </div>
 

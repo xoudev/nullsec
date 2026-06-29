@@ -217,7 +217,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
               _
             </span>
             {isTouch
-              ? "[ TAP TO MOUNT /DEV/IDENTITY ]"
+              ? "[ TAP TO ENTER ]"
               : "[ PRESS ENTER TO MOUNT /DEV/IDENTITY ]"}
           </button>
         </div>

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLenis } from "@/hooks/useLenis";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { profile } from "@/profile";
 import {
   getMuted, onMuteChange, toggleMute,
   getVolume, onVolumeChange, setVolume,
@@ -119,6 +120,25 @@ export function ScanHUD() {
         <span ref={latRef}>{"0ms"}</span>
       </div>
       <div>{"// ENV    prod.nullsec"}</div>
+
+      {/* Persistent CV link — mouse convenience; the hero CV link is the
+          keyboard/AT-accessible one (this HUD is aria-hidden). */}
+      <a
+        href={profile.cvUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-cursor="open ↗"
+        tabIndex={-1}
+        style={{
+          display: "block",
+          color: "var(--color-bone)",
+          textDecoration: "none",
+          letterSpacing: "inherit",
+          pointerEvents: "auto",
+        }}
+      >
+        {"// CV     [ OPEN ↗ ]"}
+      </a>
 
       {/* Volume row — ASCII bar with a transparent range input on top for interaction */}
       <div
