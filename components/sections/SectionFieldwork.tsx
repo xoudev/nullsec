@@ -74,8 +74,8 @@ export function SectionFieldwork() {
     // Kill any in-flight tweens before starting new ones
     if (bg) { gsap.killTweensOf(bg); gsap.to(bg, { clipPath: "inset(0 0% 0 0)", duration: 0.55, ease: "expo.inOut" }); }
     if (title) { gsap.killTweensOf(title); gsap.to(title, { color: "var(--color-void)", duration: 0.28, ease: "power2.out" }); }
-    if (year) { gsap.killTweensOf(year); gsap.to(year, { color: "rgba(10,10,11,0.45)", duration: 0.28, ease: "power2.out" }); }
-    if (tag) { gsap.killTweensOf(tag); gsap.to(tag, { color: "rgba(10,10,11,0.45)", duration: 0.28, ease: "power2.out" }); }
+    if (year) { gsap.killTweensOf(year); gsap.to(year, { color: "rgba(10,10,11,0.7)", duration: 0.28, ease: "power2.out" }); }
+    if (tag) { gsap.killTweensOf(tag); gsap.to(tag, { color: "rgba(10,10,11,0.7)", duration: 0.28, ease: "power2.out" }); }
     if (idx) { gsap.killTweensOf(idx); gsap.to(idx, { color: "var(--color-blood)", duration: 0.18, ease: "power2.out" }); }
   };
 
@@ -195,7 +195,6 @@ export function SectionFieldwork() {
                       color: "var(--color-ash)",
                       lineHeight: 1.55,
                       letterSpacing: "0.02em",
-                      opacity: 0.75,
                     }}
                   >
                     {item.excerpt}

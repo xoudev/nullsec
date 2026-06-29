@@ -304,7 +304,7 @@ export function SectionClearance() {
                     style={{
                       fontFamily:    "var(--font-jetbrains-mono)",
                       fontSize:      "0.6rem",
-                      color:         "rgba(107,107,107,0.7)",
+                      color:         "var(--color-ash)",
                       letterSpacing: "0.04em",
                       paddingTop:    "0.3rem",
                     }}
