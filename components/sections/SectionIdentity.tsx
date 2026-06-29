@@ -20,14 +20,7 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
   const arrowRef   = useRef<HTMLDivElement>(null);
   const prefersReduced = useReducedMotion();
   const animated = useRef(false);
-  const { t, tr, locale } = useT();
-  // French hero copy ("Je cartographie / les angles morts.") is far longer than
-  // the English ("I map the / blind spots."), so it overflows and clips at the
-  // English-tuned size. Scale the display type down for FR.
-  const heroSize =
-    locale === "fr"
-      ? "clamp(2.2rem, 7.5vw, 12rem)"
-      : "clamp(4rem, 11vw, 18rem)";
+  const { t, tr } = useT();
 
   useEffect(() => {
     if (!booted || animated.current) return;
@@ -105,7 +98,7 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
 
       {/* Title */}
       <div
-        style={{ overflow: "hidden", position: "relative", zIndex: 2 }}
+        style={{ position: "relative", zIndex: 2 }}
         aria-label={tr("I map the blind spots.", "Je cartographie les angles morts.")}
       >
         <div
@@ -114,7 +107,7 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
           style={{
             fontFamily:    "var(--font-instrument-serif)",
             fontStyle:     "italic",
-            fontSize:      heroSize,
+            fontSize:      "clamp(4rem, 11vw, 18rem)",
             lineHeight:    0.85,
             color:         "var(--color-bone)",
             letterSpacing: "-0.02em",
@@ -129,7 +122,7 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
           style={{
             fontFamily:    "var(--font-instrument-serif)",
             fontStyle:     "italic",
-            fontSize:      heroSize,
+            fontSize:      "clamp(4rem, 11vw, 18rem)",
             lineHeight:    0.85,
             color:         "var(--color-bone)",
             letterSpacing: "-0.02em",
