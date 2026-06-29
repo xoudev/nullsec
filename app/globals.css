@@ -6,10 +6,10 @@
    ───────────────────────────────────────────────────────── */
 @theme {
   /* Colours */
-  --color-void:  #0A0A0B; /* near-black background */
+  --color-void:  #0F0F12; /* soft dark background, lifted from #0A0A0B — keeps blood accent ≥4.5:1 AA */
   --color-bone:  #F2EFE8; /* off-white foreground  */
   --color-blood: #E63946; /* red — accent only      */
-  --color-ash:   #707070; /* mid-grey metadata      */
+  --color-ash:   #8A8A8A; /* mid-grey metadata — lifted from #707070 to clear WCAG AA (≈5.4:1 on void) */
 
   /* Font stacks — variables are injected by next/font on <html> */
   --font-display: var(--font-instrument-serif), "Georgia", serif;
@@ -27,7 +27,7 @@
 }
 
 html {
-  background-color: #0A0A0B; /* --color-void fallback before Tailwind loads */
+  background-color: #0F0F12; /* --color-void fallback before Tailwind loads */
   color: #F2EFE8;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

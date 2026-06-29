@@ -144,7 +144,7 @@ export function SectionToolkit() {
   };
   const leaveTitle = (d: number) => {
     const idx = indexRefs.current[d];
-    if (idx) idx.style.color = "rgba(10,10,11,0.45)";
+    if (idx) idx.style.color = "rgba(10,10,11,0.72)";
   };
 
   return (
@@ -247,7 +247,7 @@ export function SectionToolkit() {
                   style={{
                     fontFamily: "var(--font-jetbrains-mono)",
                     fontSize: "0.6rem",
-                    color: "rgba(10,10,11,0.45)",
+                    color: "rgba(10,10,11,0.72)",
                     letterSpacing: "0.12em",
                     marginBottom: "0.85rem",
                     transition: "color 0.2s ease",
@@ -353,7 +353,7 @@ export function SectionToolkit() {
                     letterSpacing: "0.04em",
                     color: activeEntry?.proof
                       ? "rgba(242,239,232,0.78)"
-                      : "rgba(107,107,107,0.7)",
+                      : "var(--color-ash)",
                     transition: "color 0.18s ease",
                   }}
                 >
@@ -380,7 +380,7 @@ export function SectionToolkit() {
           marginTop: "clamp(1.25rem, 2.5vw, 2rem)",
           fontFamily: "var(--font-jetbrains-mono)",
           fontSize: "0.6rem",
-          color: "rgba(107,107,107,0.5)",
+          color: "var(--color-ash)",
           letterSpacing: "0.08em",
         }}
       >

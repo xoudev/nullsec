@@ -165,7 +165,7 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
             {" · open sept 2026"}
           </div>
           <div>{"// GRC · BLUE TEAM · DEVSECOPS"}</div>
-          <div style={{ marginTop: "0.4rem", opacity: 0.6 }}>
+          <div style={{ marginTop: "0.4rem" }}>
             {"// "}{profile.tagline}
           </div>
         </div>

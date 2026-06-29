@@ -165,7 +165,7 @@ export function SectionExperience() {
           marginTop: "clamp(1.5rem, 3vw, 2.5rem)",
           fontFamily: MONO,
           fontSize: "0.6rem",
-          color: "rgba(107,107,107,0.5)",
+          color: "var(--color-ash)",
           letterSpacing: "0.08em",
         }}
       >

@@ -353,7 +353,7 @@ export function SectionHandshake() {
             style={{
               fontFamily: "var(--font-jetbrains-mono)",
               fontSize: "0.58rem",
-              color: "rgba(107,107,107,0.35)",
+              color: "var(--color-ash)",
               letterSpacing: "0.05em",
             }}
           >
@@ -520,7 +520,7 @@ export function SectionHandshake() {
           marginTop: "clamp(1.5rem, 3vw, 2rem)",
           fontFamily: "var(--font-jetbrains-mono)",
           fontSize: "0.6rem",
-          color: "rgba(107,107,107,0.4)",
+          color: "var(--color-ash)",
           letterSpacing: "0.06em",
         }}
       >
