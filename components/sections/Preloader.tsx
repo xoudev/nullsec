@@ -160,7 +160,6 @@ export function Preloader({ onComplete }: PreloaderProps) {
         flexDirection: "column",
         padding: "clamp(1.5rem, 4vw, 3rem)",
         overflow: "hidden",
-        cursor: "default",
       }}
     >
       {/* Top-left label */}

@@ -361,7 +361,7 @@ export function SectionHandshake() {
 
         {/* ── Content wrapper: scanlines + scroll ── */}
         <div
-          style={{ position: "relative", flex: 1, overflow: "hidden", cursor: "text" }}
+          style={{ position: "relative", flex: 1, overflow: "hidden" }}
           onClick={focusInput}
         >
           {/* Scanline texture — fixed overlay, non-interactive */}

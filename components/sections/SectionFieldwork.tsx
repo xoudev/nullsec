@@ -154,7 +154,6 @@ export function SectionFieldwork() {
                   padding: "clamp(1.5rem, 3.5vw, 2.5rem) 0",
                   borderTop: "1px solid rgba(107,107,107,0.2)",
                   textDecoration: "none",
-                  cursor: "pointer",
                 }}
               >
                 {/* Index */}
