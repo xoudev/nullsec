@@ -21,10 +21,11 @@ export const toolkitDomains: ToolkitDomain[] = [
     entries: [
       { label: "EBIOS RM", proof: "Risk analyses · Arvato + Space GRC Mission", proofHref: "/work/space-grc-mission" },
       { label: "ISO 27001", proof: "ISMS alignment · Arvato + Space GRC Mission", proofHref: "/work/space-grc-mission" },
-      { label: "ISREG", proof: "Compliance alignment · Arvato" },
+      { label: "NIS2", proof: "NIS2 compliance · Arvato" },
       { label: "MITRE ATT&CK", proof: "Threat modelling & detection mapping" },
       { label: "Vulnerability Mgmt (CVSS)", proof: "Vuln management via JIRA · Arvato" },
       { label: "PSSI & Policy", proof: "Security-policy drafting · Arvato" },
+      { label: "Training & Awareness", proof: "Creation of training · Arvato" },
     ],
   },
   {
@@ -32,6 +33,7 @@ export const toolkitDomains: ToolkitDomain[] = [
     entries: [
       { label: "Stormshield", proof: "CSNA certified · firewalling" },
       { label: "Wazuh", proof: "SIEM in the homelab", proofHref: "/work/homelab-proxmox" },
+      { label: "Zabbix", proof: "Monitoring in the homelab", proofHref: "/work/homelab-proxmox" },
       { label: "Wireshark", proof: "Traffic analysis · labs & CTF" },
       { label: "Log & Traffic Analysis", proof: "Detection engineering · homelab", proofHref: "/work/homelab-proxmox" },
     ],
