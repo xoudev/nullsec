@@ -248,7 +248,7 @@ export function DispatchArticle({
 
       {/* Dispatch navigation */}
       <nav
-        aria-label={tr("Adjacent dispatches", "Dépêches adjacentes")}
+        aria-label={tr("Adjacent dispatches", "Autres dépêches")}
         style={{
           display: "flex",
           justifyContent: "space-between",

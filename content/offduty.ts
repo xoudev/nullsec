@@ -14,31 +14,31 @@ export type OffDutyRow = {
 export const offDutyRows: OffDutyRow[] = [
   {
     title: { en: "MOTO", fr: "MOTO" },
-    subtitle: { en: "same focus, different throttle.", fr: "même concentration, autre accélération." },
+    subtitle: { en: "same focus, different throttle.", fr: "même concentration, juste une autre poignée de gaz." },
     tags: { en: ["SUPERSPORT", "#71", "NO LICENSE"], fr: ["SUPERSPORT", "#71", "SANS PERMIS"] },
     image: "/off-duty/moto.png",
   },
   {
     title: { en: "DRAWING", fr: "DESSIN" },
-    subtitle: { en: "pencils, ink, and the occasional tablet.", fr: "crayons, encre, et parfois la tablette." },
+    subtitle: { en: "pencils, ink, and the occasional tablet.", fr: "au crayon, à l'encre, et de temps en temps sur tablette." },
     tags: { en: ["SKETCH", "INK", "LINEWORK"], fr: ["CROQUIS", "ENCRE", "TRAIT"] },
     image: "/off-duty/drawing.png",
   },
   {
     title: { en: "MANGA & ANIME", fr: "MANGA & ANIME" },
-    subtitle: { en: "raised on panels, arcs and late episodes.", fr: "bercé aux planches, aux arcs et aux épisodes tardifs." },
+    subtitle: { en: "raised on panels, arcs and late episodes.", fr: "biberonné aux planches, aux grands arcs narratifs et aux épisodes enchaînés trop tard le soir." },
     tags: { en: ["MANGA", "ANIME", "STORY"], fr: ["MANGA", "ANIME", "RÉCIT"] },
     image: "/off-duty/Anime.jpg",
   },
   {
     title: { en: "TECHNOLOGY", fr: "TECHNOLOGIE" },
-    subtitle: { en: "where the day job and the hobby blur.", fr: "là où le métier et le loisir se confondent." },
+    subtitle: { en: "where the day job and the hobby blur.", fr: "là où le boulot et la passion finissent par se confondre." },
     tags: { en: ["HARDWARE", "HOMELAB", "OPEN-SOURCE"], fr: ["MATÉRIEL", "HOMELAB", "OPEN-SOURCE"] },
     image: "/off-duty/tech.jpg",
   },
   {
     title: { en: "GAMING", fr: "GAMING" },
-    subtitle: { en: "competitive when it counts, chill when it does not.", fr: "compétitif quand il faut, tranquille sinon." },
+    subtitle: { en: "competitive when it counts, chill when it does not.", fr: "à fond quand ça compte, peinard le reste du temps." },
     tags: { en: ["FPS", "STRATEGY", "CO-OP"], fr: ["FPS", "STRATÉGIE", "CO-OP"] },
     image: "/off-duty/Gaming.jpg",
   },

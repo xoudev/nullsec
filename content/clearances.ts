@@ -38,7 +38,7 @@ export const clearances: Clearance[] = [
     credentialUrl: null,
     validates: {
       en: "stormshield network security, firewall administration, policy management",
-      fr: "sécurité réseau Stormshield, administration de pare-feu, gestion des politiques",
+      fr: "sécurité réseau Stormshield, administration des pare-feu, gestion des politiques de filtrage",
     },
     score: "80%",
     radar: {

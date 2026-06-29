@@ -149,7 +149,7 @@ export function WorkArticle({
         {/* Sticky sidebar */}
         <aside
           className="article-sidebar"
-          aria-label={tr("Project metadata", "Métadonnées du projet")}
+          aria-label={tr("Project metadata", "Fiche technique du projet")}
         >
           {/* Project image — small, contained, void bg so white logos read cleanly.
               No asset yet → a typographic placeholder cover generated from the
@@ -378,7 +378,7 @@ export function WorkArticle({
 
       {/* Project navigation */}
       <nav
-        aria-label={tr("Adjacent projects", "Projets adjacents")}
+        aria-label={tr("Adjacent projects", "Navigation entre les projets")}
         style={{
           display: "flex",
           justifyContent: "space-between",

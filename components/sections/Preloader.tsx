@@ -177,7 +177,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
           marginBottom: "auto",
         }}
       >
-        {tr("// BOOT SEQUENCE", "// SÉQUENCE DE DÉMARRAGE")}
+        {tr("// BOOT SEQUENCE", "// SÉQUENCE D'AMORÇAGE")}
       </div>
 
       {/* Waiting prompt — shown before user triggers boot */}
@@ -193,7 +193,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
         >
           <button
             onClick={triggerBoot}
-            aria-label={tr("Start — press Enter or click to boot", "Démarrer : appuyez sur Entrée ou cliquez")}
+            aria-label={tr("Start — press Enter or click to boot", "Lancer le démarrage : appuyez sur Entrée ou cliquez")}
             style={{
               background: "none",
               border: "none",
@@ -220,7 +220,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
             </span>
             {isTouch
               ? tr("[ TAP TO ENTER ]", "[ TOUCHEZ POUR ENTRER ]")
-              : tr("[ PRESS ENTER TO MOUNT /DEV/IDENTITY ]", "[ APPUYEZ SUR ENTRÉE POUR MONTER /DEV/IDENTITY ]")}
+              : tr("[ PRESS ENTER TO MOUNT /DEV/IDENTITY ]", "[ ENTRÉE POUR MONTER /DEV/IDENTITY ]")}
           </button>
         </div>
       )}

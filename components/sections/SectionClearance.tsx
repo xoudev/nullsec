@@ -278,7 +278,7 @@ export function SectionClearance() {
                   {item.issuer}
                   {item.credentialId && (
                     <>
-                      {` · ${tr("Credential ID", "Identifiant du certificat")}: `}
+                      {` · ${tr("Credential ID", "Identifiant de la certification")}: `}
                       {item.credentialUrl ? (
                         <a
                           href={item.credentialUrl}

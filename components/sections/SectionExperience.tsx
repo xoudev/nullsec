@@ -80,7 +80,7 @@ export function SectionExperience() {
           maxWidth: "20ch",
         }}
       >
-        {tr("From shipping features to securing them.", "Livrer des fonctionnalités, puis les sécuriser.")}
+        {tr("From shipping features to securing them.", "D'abord livrer le produit, ensuite le sécuriser.")}
       </h2>
 
       {/* Entries — meta (left) + responsibilities (right) */}
@@ -108,7 +108,7 @@ export function SectionExperience() {
                 <span style={{ fontFamily: MONO, fontSize: "0.62rem", color: "var(--color-ash)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
                   {xp.period}
                   {current && (
-                    <span style={{ color: "var(--color-blood)", marginLeft: "0.9rem" }}>{tr("// CURRENT", "// ACTUEL")}</span>
+                    <span style={{ color: "var(--color-blood)", marginLeft: "0.9rem" }}>{tr("// CURRENT", "// EN COURS")}</span>
                   )}
                 </span>
                 <span style={{ fontFamily: MONO, fontSize: "0.65rem", color: "var(--color-blood)", letterSpacing: "0.08em" }}>
