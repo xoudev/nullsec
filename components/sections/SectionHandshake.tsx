@@ -20,7 +20,7 @@ function buildWelcome(tr: Tr): OutputLine[] {
   return [
     { type: "system", text: "NULLSEC terminal v1.0.0" },
     { type: "system", text: tr(`connected to ${profile.siteUrl}`, `connecté à ${profile.siteUrl}`) },
-    { type: "system", text: tr('type "help" to see available commands.', 'tapez « help » pour voir les commandes disponibles.') },
+    { type: "system", text: tr('type "help" to see available commands.', 'tapez « help » pour lister les commandes disponibles.') },
   ];
 }
 
@@ -31,17 +31,17 @@ function runCommand(raw: string, t: T, tr: Tr): OutputLine[] {
       return [
         { type: "output", text: tr("available commands:", "commandes disponibles :") },
         { type: "output", text: tr("  whoami   — identity and status", "  whoami   : identité et statut") },
-        { type: "output", text: tr("  about    — same as whoami", "  about    : équivalent de whoami") },
-        { type: "output", text: tr("  xp       — work experience", "  xp       : expérience professionnelle") },
+        { type: "output", text: tr("  about    — same as whoami", "  about    : idem whoami") },
+        { type: "output", text: tr("  xp       — work experience", "  xp       : parcours professionnel") },
         { type: "output", text: tr("  edu      — education", "  edu      : formation") },
         { type: "output", text: tr("  certs    — certifications", "  certs    : certifications") },
         { type: "output", text: tr("  skills   — skill domains", "  skills   : domaines de compétences") },
         { type: "output", text: tr("  langs    — languages", "  langs    : langues") },
-        { type: "output", text: tr("  hire     — apprenticeship info", "  hire     : informations alternance") },
-        { type: "output", text: tr("  email    — contact email", "  email    : email de contact") },
+        { type: "output", text: tr("  hire     — apprenticeship info", "  hire     : infos alternance") },
+        { type: "output", text: tr("  email    — contact email", "  email    : adresse de contact") },
         { type: "output", text: tr("  pgp      — pgp public key", "  pgp      : clé publique pgp") },
         { type: "output", text: tr("  cv       — curriculum vitae", "  cv       : curriculum vitae") },
-        { type: "output", text: tr("  clear    — reset terminal", "  clear    : réinitialiser le terminal") },
+        { type: "output", text: tr("  clear    — reset terminal", "  clear    : vider le terminal") },
       ];
 
     case "about":
@@ -50,14 +50,14 @@ function runCommand(raw: string, t: T, tr: Tr): OutputLine[] {
         { type: "output", text: `${profile.fullName} · ${profile.age} · ${profile.city}` },
         { type: "output", text: tr("ISMS / GRC apprentice @ Arvato · Guardia · 3rd year", "Alternant ISMS / GRC @ Arvato · Guardia · 3e année") },
         { type: "output", text: t(profile.bio) },
-        { type: "output", text: tr(`next availability: ${profile.available}`, `prochaine disponibilité : ${profile.available}`) },
+        { type: "output", text: tr(`next availability: ${profile.available}`, `disponible à partir de : ${profile.available}`) },
       ];
 
     case "hire":
       return [
-        { type: "output", text: tr("currently: ISMS / GRC apprentice @ Arvato, Oct 2025 — Sept 2026.", "actuellement : alternant ISMS / GRC @ Arvato, Oct 2025 à Sept 2026.") },
-        { type: "output", text: tr("not available for full-time until Sept 2028.", "non disponible en temps plein avant Sept 2028.") },
-        { type: "output", text: tr("next: Mastère offensive/defensive (alternance), 2026 — 2028 — open to host companies.", "ensuite : Mastère offensif/défensif (alternance), 2026 à 2028, ouvert aux entreprises d'accueil.") },
+        { type: "output", text: tr("currently: ISMS / GRC apprentice @ Arvato, Oct 2025 — Sept 2026.", "en poste : alternance ISMS / GRC @ Arvato, oct. 2025 à sept. 2026.") },
+        { type: "output", text: tr("not available for full-time until Sept 2028.", "pas de CDI envisageable avant sept. 2028.") },
+        { type: "output", text: tr("next: Mastère offensive/defensive (alternance), 2026 — 2028 — open to host companies.", "ensuite : Mastère offensif/défensif en alternance, 2026 à 2028 ; en quête d'une entreprise d'accueil.") },
         { type: "output", text: tr("domains: GRC · Blue Team · DevSecOps.", "domaines : GRC · Blue Team · DevSecOps.") },
         { type: "output", text: tr(`contact: ${profile.email}`, `contact : ${profile.email}`) },
       ];
@@ -68,11 +68,11 @@ function runCommand(raw: string, t: T, tr: Tr): OutputLine[] {
     case "pgp":
       return profile.pgpKey
         ? [{ type: "output", text: profile.pgpKey }]
-        : [{ type: "output", text: tr("pgp key not yet uploaded.", "clé pgp pas encore publiée.") }];
+        : [{ type: "output", text: tr("pgp key not yet uploaded.", "clé pgp pas encore mise en ligne.") }];
 
     case "cv":
       return [
-        { type: "output", text: tr(`cv available at ${profile.siteUrl}/cv.pdf`, `cv disponible sur ${profile.siteUrl}/cv.pdf`) },
+        { type: "output", text: tr(`cv available at ${profile.siteUrl}/cv.pdf`, `cv consultable sur ${profile.siteUrl}/cv.pdf`) },
         { type: "output", text: "Jordan Turnaco · ISMS · GRC · DevSecOps" },
       ];
 
@@ -127,7 +127,7 @@ function runCommand(raw: string, t: T, tr: Tr): OutputLine[] {
     case "sudo rm -rf /":
     case "sudo rm -rf /*":
     case "sudo rm -rf / --no-preserve-root":
-      return [{ type: "error", text: tr("nice try.", "bien tenté.") }];
+      return [{ type: "error", text: tr("nice try.", "joli essai.") }];
 
     case "":
       return [];
@@ -136,7 +136,7 @@ function runCommand(raw: string, t: T, tr: Tr): OutputLine[] {
       return [
         {
           type: "error",
-          text: tr(`command not found: ${raw.trim()}. type "help".`, `commande introuvable : ${raw.trim()}. tapez « help ».`),
+          text: tr(`command not found: ${raw.trim()}. type "help".`, `commande inconnue : ${raw.trim()}. tapez « help ».`),
         },
       ];
   }

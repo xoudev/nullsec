@@ -48,7 +48,7 @@ export const toolkitDomains: ToolkitDomain[] = [
         label: "MITRE ATT&CK",
         proof: {
           en: "Threat modelling & detection mapping",
-          fr: "Modélisation des menaces et cartographie de la détection",
+          fr: "Modélisation des menaces et cartographie des détections",
         },
       },
       {
@@ -138,14 +138,14 @@ export const toolkitDomains: ToolkitDomain[] = [
         label: "Kali",
         proof: {
           en: "Daily offensive toolkit",
-          fr: "Boîte à outils offensive au quotidien",
+          fr: "Arsenal offensif du quotidien",
         },
       },
       {
         label: "Nmap",
         proof: {
           en: "Recon & service mapping",
-          fr: "Reconnaissance et cartographie des services",
+          fr: "Reconnaissance et cartographie de services",
         },
       },
       {
@@ -159,7 +159,7 @@ export const toolkitDomains: ToolkitDomain[] = [
         label: "OSINT",
         proof: {
           en: "Footprinting & recon",
-          fr: "Empreinte et reconnaissance",
+          fr: "Prise d'empreinte et reconnaissance",
         },
       },
     ],
@@ -308,7 +308,7 @@ export const toolkitDomains: ToolkitDomain[] = [
         label: "Git",
         proof: {
           en: "Version control everywhere",
-          fr: "Gestion de versions partout",
+          fr: "Gestion de versions sur tous les projets",
         },
       },
     ],

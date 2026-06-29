@@ -58,7 +58,7 @@ export function SectionToolkit() {
   const scrambleCancels = useRef<(() => void)[]>([]);
   const prefersReduced = useReducedMotion();
   const { t, tr } = useT();
-  const defaultHint = tr("// hover an entry for its proof", "// survolez une entrée pour sa preuve");
+  const defaultHint = tr("// hover an entry for its proof", "// survolez une entrée pour afficher sa preuve");
 
   // [domainIndex, entryIndex] of the entry currently hovered/focused — drives proof reveal.
   const [active, setActive] = useState<[number, number] | null>(null);

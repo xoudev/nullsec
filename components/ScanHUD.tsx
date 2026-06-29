@@ -196,7 +196,7 @@ export function ScanHUD() {
       {/* Mute toggle */}
       <button
         onClick={toggleMute}
-        aria-label={muted ? tr("Unmute ambient sound", "Activer le son ambiant") : tr("Mute ambient sound", "Couper le son ambiant")}
+        aria-label={muted ? tr("Unmute ambient sound", "Rétablir le son ambiant") : tr("Mute ambient sound", "Couper le son ambiant")}
         style={{
           display: "block",
           background: "none",
