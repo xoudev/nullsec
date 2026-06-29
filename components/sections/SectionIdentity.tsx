@@ -6,6 +6,7 @@ import { splitChars } from "@/lib/splitText";
 import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { profile } from "@/profile";
+import { useT } from "@/lib/i18n";
 
 interface SectionIdentityProps {
   booted: boolean;
@@ -19,6 +20,7 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
   const arrowRef   = useRef<HTMLDivElement>(null);
   const prefersReduced = useReducedMotion();
   const animated = useRef(false);
+  const { t, tr } = useT();
 
   useEffect(() => {
     if (!booted || animated.current) return;
@@ -97,7 +99,7 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
       {/* Title */}
       <div
         style={{ overflow: "hidden", position: "relative", zIndex: 2 }}
-        aria-label="I map the blind spots."
+        aria-label={tr("I map the blind spots.", "Je cartographie les angles morts.")}
       >
         <div
           ref={line1Ref}
@@ -112,7 +114,7 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
             willChange:    "transform",
           }}
         >
-          I map the
+          {tr("I map the", "Je cartographie")}
         </div>
         <div
           ref={line2Ref}
@@ -127,7 +129,7 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
             willChange:    "transform",
           }}
         >
-          blind spots.
+          {tr("blind spots.", "les angles morts.")}
         </div>
       </div>
 
@@ -166,7 +168,7 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
           </div>
           <div>{"// GRC · BLUE TEAM · DEVSECOPS"}</div>
           <div style={{ marginTop: "0.4rem" }}>
-            {"// "}{profile.tagline}
+            {"// "}{t(profile.tagline)}
           </div>
           <div style={{ marginTop: "0.6rem" }}>
             <a

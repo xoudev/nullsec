@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLenis } from "@/hooks/useLenis";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useT } from "@/lib/i18n";
 import { profile } from "@/profile";
 import {
   getMuted, onMuteChange, toggleMute,
@@ -21,6 +22,7 @@ import {
  */
 export function ScanHUD() {
   const prefersReduced = useReducedMotion();
+  const { tr } = useT();
   const [muted, setMuted] = useState(getMuted);
   const [vol, setVol] = useState(getVolume);
 
@@ -110,7 +112,7 @@ export function ScanHUD() {
         letterSpacing: "0.05em",
       }}
     >
-      <div>{"// SCAN   ACTIVE"}</div>
+      <div>{tr("// SCAN   ACTIVE", "// SCAN   ACTIF")}</div>
       <div>
         {"// NODE   "}
         <span ref={nodeRef}>{"0x0000"}</span>
@@ -137,7 +139,7 @@ export function ScanHUD() {
           pointerEvents: "auto",
         }}
       >
-        {"// CV     [ OPEN ↗ ]"}
+        {tr("// CV     [ OPEN ↗ ]", "// CV     [ OUVRIR ↗ ]")}
       </a>
 
       {/* Volume row — ASCII bar with a transparent range input on top for interaction */}
@@ -194,7 +196,7 @@ export function ScanHUD() {
       {/* Mute toggle */}
       <button
         onClick={toggleMute}
-        aria-label={muted ? "Unmute ambient sound" : "Mute ambient sound"}
+        aria-label={muted ? tr("Unmute ambient sound", "Activer le son ambiant") : tr("Mute ambient sound", "Couper le son ambiant")}
         style={{
           display: "block",
           background: "none",
@@ -209,7 +211,7 @@ export function ScanHUD() {
           textAlign: "left",
         }}
       >
-        {`// SND    [ ${muted ? "UNMUTE" : "MUTE"} ]`}
+        {`// SND    [ ${muted ? tr("UNMUTE", "ACTIVER") : tr("MUTE", "COUPER")} ]`}
       </button>
     </div>
   );

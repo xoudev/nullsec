@@ -5,10 +5,11 @@ import Link from "next/link";
 import { gsap } from "@/lib/gsap";
 import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useT, type Locale } from "@/lib/i18n";
 import { dispatches } from "@/content/dispatches";
 
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-GB", {
+function formatDate(iso: string, locale: Locale): string {
+  return new Date(iso).toLocaleDateString(locale === "fr" ? "fr-FR" : "en-GB", {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -19,6 +20,7 @@ export function SectionDispatches() {
   const sectionRef = useRef<HTMLElement>(null);
   const itemRefs   = useRef<(HTMLLIElement | null)[]>([]);
   const prefersReduced = useReducedMotion();
+  const { t, locale } = useT();
 
   // Staggered entrance via IntersectionObserver
   useEffect(() => {
@@ -98,7 +100,7 @@ export function SectionDispatches() {
                     marginBottom:  "0.75rem",
                   }}
                 >
-                  <time dateTime={post.date}>{formatDate(post.date)}</time>
+                  <time dateTime={post.date}>{formatDate(post.date, locale)}</time>
                   <span>{post.readTime}</span>
                 </div>
 
@@ -115,7 +117,7 @@ export function SectionDispatches() {
                     letterSpacing: "-0.01em",
                   }}
                 >
-                  {post.title}
+                  {t(post.title)}
                 </h3>
 
                 {/* Excerpt */}
@@ -128,7 +130,7 @@ export function SectionDispatches() {
                     margin:     0,
                   }}
                 >
-                  {post.excerpt}
+                  {t(post.excerpt)}
                 </p>
               </div>
 

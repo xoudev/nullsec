@@ -5,11 +5,13 @@ import { gsap } from "@/lib/gsap";
 import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { profile } from "@/profile";
+import { useT } from "@/lib/i18n";
 
 export function SectionAbout() {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const prefersReduced = useReducedMotion();
+  const { t, tr } = useT();
 
   useEffect(() => {
     const el = contentRef.current;
@@ -58,7 +60,7 @@ export function SectionAbout() {
       <div ref={contentRef}>
         {/* Display quote */}
         <p
-          aria-label={profile.bio}
+          aria-label={t(profile.bio)}
           style={{
             fontFamily:    "var(--font-instrument-serif)",
             fontStyle:     "italic",
@@ -70,7 +72,7 @@ export function SectionAbout() {
             maxWidth:      "24ch",
           }}
         >
-          {profile.bio}
+          {t(profile.bio)}
         </p>
 
         {/* Divider */}
@@ -96,15 +98,10 @@ export function SectionAbout() {
                 margin:       "0 0 1.9rem",
               }}
             >
-              Two years through computer science at EPSI — DevOps, systems and
-              networks — before cybersecurity at Guardia. The early work was
-              infrastructure and build pipelines, which turns out to be the
-              most direct preparation for security there is: you cannot reason
-              about how a system fails until you have built one under time
-              pressure and watched it strain. The security focus sharpened into
-              a specific interest at Guardia — the space between compliance
-              documentation and operational reality, where most security
-              programmes produce activity rather than outcomes.
+              {tr(
+                "Two years through computer science at EPSI — DevOps, systems and networks — before cybersecurity at Guardia. The early work was infrastructure and build pipelines, which turns out to be the most direct preparation for security there is: you cannot reason about how a system fails until you have built one under time pressure and watched it strain. The security focus sharpened into a specific interest at Guardia — the space between compliance documentation and operational reality, where most security programmes produce activity rather than outcomes.",
+                "Deux années en informatique à l'EPSI (DevOps, systèmes et réseaux) avant la cybersécurité à Guardia. Les premiers travaux portaient sur l'infrastructure et les pipelines de build, ce qui se révèle être la préparation la plus directe à la sécurité : on ne peut raisonner sur la façon dont un système échoue tant qu'on n'en a pas construit un sous la pression du temps et observé ses tensions. Cet intérêt pour la sécurité s'est affiné en une orientation précise à Guardia : l'espace entre la documentation de conformité et la réalité opérationnelle, là où la plupart des programmes de sécurité produisent de l'activité plutôt que des résultats."
+              )}
             </p>
             <p
               style={{
@@ -115,19 +112,10 @@ export function SectionAbout() {
                 margin:     0,
               }}
             >
-              The apprenticeship at Arvato is second-line GRC inside Internal
-              Control: EBIOS RM risk analyses, ISO 27001 and ISREG alignment,
-              PSSI and policy drafting, supplier assessments, vulnerability
-              management. The work is governance-layer — translating frameworks
-              into decisions an organisation can actually execute, then keeping
-              the evidence that it did. What I am building toward is a hybrid
-              profile: enough GRC to be credible on governance, enough technical
-              depth for detection engineering and pipeline security. A Mastère
-              in offensive and defensive cybersecurity starts in September 2026.
-              The throughline is secure by design — policy without operational
-              instrumentation is assumption, detection without governance
-              accountability is noise no one owns, and the connective tissue
-              between them is where security actually lives.
+              {tr(
+                "The apprenticeship at Arvato is second-line GRC inside Internal Control: EBIOS RM risk analyses, ISO 27001 and ISREG alignment, PSSI and policy drafting, supplier assessments, vulnerability management. The work is governance-layer — translating frameworks into decisions an organisation can actually execute, then keeping the evidence that it did. What I am building toward is a hybrid profile: enough GRC to be credible on governance, enough technical depth for detection engineering and pipeline security. A Mastère in offensive and defensive cybersecurity starts in September 2026. The throughline is secure by design — policy without operational instrumentation is assumption, detection without governance accountability is noise no one owns, and the connective tissue between them is where security actually lives.",
+                "L'alternance chez Arvato relève de la GRC de seconde ligne au sein du Contrôle Interne : analyses de risques EBIOS RM, alignement ISO 27001 et ISREG, rédaction de la PSSI et des politiques, évaluations des fournisseurs, gestion des vulnérabilités. Le travail se situe à la couche gouvernance : traduire les référentiels en décisions qu'une organisation peut réellement exécuter, puis conserver la preuve qu'elle l'a fait. Ce que je construis, c'est un profil hybride : assez de GRC pour être crédible sur la gouvernance, assez de profondeur technique pour le detection engineering et la sécurité des pipelines. Un Mastère en cybersécurité offensive et défensive débute en septembre 2026. Le fil conducteur, c'est le secure by design : une politique sans instrumentation opérationnelle n'est qu'une hypothèse, une détection sans responsabilité de gouvernance n'est qu'un bruit dont personne n'est propriétaire, et le tissu qui les relie est l'endroit où la sécurité existe vraiment."
+              )}
             </p>
           </div>
 
@@ -135,12 +123,12 @@ export function SectionAbout() {
           <aside className="article-sidebar" aria-label="Profile facts">
             {(
               [
-                ["LOCATION",   `${profile.city}, ${profile.country}`],
-                ["SCHOOL",     "Guardia Cybersecurity School"],
-                ["CURRENT",    "ISMS / GRC Apprentice @ Arvato"],
-                ["NEXT",       "MSc Offensive / Defensive — Sept 2026"],
-                ["FOCUS",      "GRC · Blue Team · DevSecOps"],
-                ["AVAILABLE",  profile.available],
+                [tr("LOCATION", "LIEU"),     `${profile.city}, ${profile.country}`],
+                [tr("SCHOOL", "ÉCOLE"),      "Guardia Cybersecurity School"],
+                [tr("CURRENT", "ACTUEL"),    tr("ISMS / GRC Apprentice @ Arvato", "Alternant SMSI / GRC @ Arvato")],
+                [tr("NEXT", "SUITE"),        tr("MSc Offensive / Defensive — Sept 2026", "Mastère Offensif / Défensif, sept. 2026")],
+                [tr("FOCUS", "FOCUS"),       "GRC · Blue Team · DevSecOps"],
+                [tr("AVAILABLE", "DISPO"),   profile.available],
               ] as const
             ).map(([label, value]) => (
               <div key={label} style={{ marginBottom: "clamp(1.25rem, 2vw, 1.75rem)" }}>

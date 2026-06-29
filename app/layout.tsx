@@ -6,6 +6,8 @@ import { SmoothScroll } from "@/components/SmoothScroll";
 import { ScanHUD } from "@/components/ScanHUD";
 import { CustomCursor } from "@/components/CustomCursor";
 import { AudioBootstrap } from "@/components/AudioBootstrap";
+import { LocaleProvider } from "@/lib/i18n";
+import { LanguageToggle } from "@/components/LanguageToggle";
 
 /* ─── Fonts ─── */
 const instrumentSerif = Instrument_Serif({
@@ -93,16 +95,19 @@ export default function RootLayout({
         />
       </head>
       <body>
-        {/* Skip link — visible on :focus for keyboard users */}
-        <a href="#main-content" className="skip-link">
-          Skip to main content
-        </a>
-        <SmoothScroll>
-          <AudioBootstrap />
-          <CustomCursor />
-          <ScanHUD />
-          {children}
-        </SmoothScroll>
+        <LocaleProvider>
+          {/* Skip link — visible on :focus for keyboard users */}
+          <a href="#main-content" className="skip-link">
+            Skip to main content
+          </a>
+          <SmoothScroll>
+            <AudioBootstrap />
+            <CustomCursor />
+            <ScanHUD />
+            <LanguageToggle />
+            {children}
+          </SmoothScroll>
+        </LocaleProvider>
       </body>
     </html>
   );

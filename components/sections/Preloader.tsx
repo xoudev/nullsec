@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { gsap } from "@/lib/gsap";
 import { splitChars } from "@/lib/splitText";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useT } from "@/lib/i18n";
 import { unlockAudio, playAmbient, playFirst, preloadSound } from "@/lib/audio";
 
 const LOG_LINES = [
@@ -28,6 +29,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
   const logRefs = useRef<(HTMLDivElement | null)[]>([]);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const prefersReduced = useReducedMotion();
+  const { tr } = useT();
   const [booting, setBooting] = useState(false);
   const [isTouch, setIsTouch] = useState(false);
 
@@ -151,7 +153,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
   return (
     <div
       ref={overlayRef}
-      aria-label="Loading NULLSEC"
+      aria-label={tr("Loading NULLSEC", "Chargement de NULLSEC")}
       role="status"
       onClick={!booting ? triggerBoot : undefined}
       style={{
@@ -175,7 +177,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
           marginBottom: "auto",
         }}
       >
-        {"// BOOT SEQUENCE"}
+        {tr("// BOOT SEQUENCE", "// SÉQUENCE DE DÉMARRAGE")}
       </div>
 
       {/* Waiting prompt — shown before user triggers boot */}
@@ -191,7 +193,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
         >
           <button
             onClick={triggerBoot}
-            aria-label="Start — press Enter or click to boot"
+            aria-label={tr("Start — press Enter or click to boot", "Démarrer : appuyez sur Entrée ou cliquez")}
             style={{
               background: "none",
               border: "none",
@@ -217,8 +219,8 @@ export function Preloader({ onComplete }: PreloaderProps) {
               _
             </span>
             {isTouch
-              ? "[ TAP TO ENTER ]"
-              : "[ PRESS ENTER TO MOUNT /DEV/IDENTITY ]"}
+              ? tr("[ TAP TO ENTER ]", "[ TOUCHEZ POUR ENTRER ]")
+              : tr("[ PRESS ENTER TO MOUNT /DEV/IDENTITY ]", "[ APPUYEZ SUR ENTRÉE POUR MONTER /DEV/IDENTITY ]")}
           </button>
         </div>
       )}

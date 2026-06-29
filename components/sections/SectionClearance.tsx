@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap, loadScrollTrigger } from "@/lib/gsap";
 import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useT } from "@/lib/i18n";
 import { clearances } from "@/content/clearances";
 import type { ClearanceStatus } from "@/content/clearances";
 import { ClearanceRadar } from "@/components/sections/ClearanceRadar";
@@ -23,6 +24,7 @@ export function SectionClearance() {
   const ruleRefs      = useRef<(HTMLSpanElement | null)[]>([]);
   const validateRefs  = useRef<(HTMLDivElement | null)[]>([]);
   const prefersReduced = useReducedMotion();
+  const { t, tr } = useT();
 
   // ── Radar active cert (null = show aggregate) ───────────────────
   const [activeCertIndex, setActiveCertIndex] = useState<number | null>(null);
@@ -160,7 +162,7 @@ export function SectionClearance() {
           {"04 // CLEARANCE"}
         </div>
         <div
-          aria-label="Trust is earned, then documented."
+          aria-label={tr("Trust is earned, then documented.", "La confiance se mérite, puis se documente.")}
           style={{
             fontFamily:    "var(--font-instrument-serif)",
             fontStyle:     "italic",
@@ -170,9 +172,9 @@ export function SectionClearance() {
             letterSpacing: "-0.02em",
           }}
         >
-          Trust is earned,
+          {tr("Trust is earned,", "La confiance se mérite,")}
           <br />
-          then documented.
+          {tr("then documented.", "puis se documente.")}
         </div>
       </div>
 
@@ -276,7 +278,7 @@ export function SectionClearance() {
                   {item.issuer}
                   {item.credentialId && (
                     <>
-                      {" · Credential ID: "}
+                      {` · ${tr("Credential ID", "Identifiant du certificat")}: `}
                       {item.credentialUrl ? (
                         <a
                           href={item.credentialUrl}
@@ -297,7 +299,7 @@ export function SectionClearance() {
                 <div
                   ref={(el) => { validateRefs.current[i] = el; }}
                   style={{ overflow: "hidden" }}
-                  aria-label={`Validates: ${item.validates}`}
+                  aria-label={`${tr("Validates", "Valide")}: ${t(item.validates)}`}
                 >
                   <div
                     aria-hidden="true"
@@ -309,7 +311,7 @@ export function SectionClearance() {
                       paddingTop:    "0.3rem",
                     }}
                   >
-                    {`// validates: ${item.validates}`}
+                    {`// validates: ${t(item.validates)}`}
                   </div>
                 </div>
               </div>

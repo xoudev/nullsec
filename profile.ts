@@ -1,3 +1,5 @@
+import type { Localized } from "@/lib/i18n";
+
 // Single source of truth for all personal information.
 // Never hardcode these values anywhere else in the codebase.
 export const profile = {
@@ -32,37 +34,49 @@ export const profile = {
   // ── Site ──────────────────────────────────────────────────────────────────
   cvUrl: "/cv.pdf",
   available: "Sept 2028",
-  tagline: "Securing what others overlook.",
-  bio: "I don't build fortresses. I map the blind spots.",
+  tagline: { en: "Securing what others overlook.", fr: "Sécuriser ce que les autres négligent." },
+  bio: { en: "I don't build fortresses. I map the blind spots.", fr: "Je ne construis pas de forteresses. Je cartographie les angles morts." },
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://nullsec.fr",
 
   // ── Languages ─────────────────────────────────────────────────────────────
   languages: [
-    { lang: "French", level: "Native" },
-    { lang: "English", level: "C1" },
-    { lang: "Spanish", level: "B1" },
+    { lang: { en: "French", fr: "Français" }, level: { en: "Native", fr: "Natif" } },
+    { lang: { en: "English", fr: "Anglais" }, level: { en: "C1", fr: "C1" } },
+    { lang: { en: "Spanish", fr: "Espagnol" }, level: { en: "B1", fr: "B1" } },
   ],
 
   // ── Education ─────────────────────────────────────────────────────────────
   education: [
     {
       // RNCP 37796 — "Gestionnaire de la sécurité des données, des réseaux et des systèmes". Starts 14 Sept 2026.
-      degree: "Mastère Expert Cybersecurity — Offensive / Defensive (RNCP 37796)",
+      degree: {
+        en: "Mastère Expert Cybersecurity — Offensive / Defensive (RNCP 37796)",
+        fr: "Mastère Expert Cybersécurité : Offensif / Défensif (RNCP 37796)",
+      },
       school: "Guardia Cybersecurity School",
       period: "2026 – 2028",
     },
     {
-      degree: "Bachelor Cybersecurity — 3rd year (RNCP level 6)",
+      degree: {
+        en: "Bachelor Cybersecurity — 3rd year (RNCP level 6)",
+        fr: "Bachelor Cybersécurité : 3e année (RNCP niveau 6)",
+      },
       school: "Guardia Cybersecurity School",
       period: "2025 – 2026",
     },
     {
-      degree: "Computer Science — 2nd year · DevOps, systems & networks",
+      degree: {
+        en: "Computer Science — 2nd year · DevOps, systems & networks",
+        fr: "Informatique : 2e année · DevOps, systèmes et réseaux",
+      },
       school: "EPSI",
       period: "2024 – 2025",
     },
     {
-      degree: "Computer Science — 1st year · DevOps, systems & networks",
+      degree: {
+        en: "Computer Science — 1st year · DevOps, systems & networks",
+        fr: "Informatique : 1re année · DevOps, systèmes et réseaux",
+      },
       school: "EPSI",
       period: "2023 – 2024",
     },
@@ -76,37 +90,70 @@ export const profile = {
   // ── Experience ────────────────────────────────────────────────────────────
   experience: [
     {
-      title: "ISMS / GRC Apprentice — Internal Control",
+      title: {
+        en: "ISMS / GRC Apprentice — Internal Control",
+        fr: "Alternant ISMS / GRC : contrôle interne",
+      },
       company: "Arvato",
       period: "Oct 2025 — Sept 2026",
-      focus: [
-        "EBIOS RM risk analyses (GRC, second line)",
-        "ISO 27001 / ISREG alignment",
-        "PSSI and security-policy drafting",
-        "Third-party / supplier security assessments",
-        "Vulnerability management via JIRA (CVSS · SLA)",
-        "ISMS documentation & on-site sitewalk audits (logistics sites)",
-      ],
+      focus: {
+        en: [
+          "EBIOS RM risk analyses (GRC, second line)",
+          "ISO 27001 / ISREG alignment",
+          "PSSI and security-policy drafting",
+          "Third-party / supplier security assessments",
+          "Vulnerability management via JIRA (CVSS · SLA)",
+          "ISMS documentation & on-site sitewalk audits (logistics sites)",
+        ],
+        fr: [
+          "Analyses de risques EBIOS RM (GRC, deuxième ligne)",
+          "Alignement ISO 27001 / ISREG",
+          "Rédaction de la PSSI et des politiques de sécurité",
+          "Évaluations de la sécurité des tiers et fournisseurs",
+          "Gestion des vulnérabilités via JIRA (CVSS · SLA)",
+          "Documentation ISMS et audits de terrain sur site (sites logistiques)",
+        ],
+      },
     },
     {
-      title: "Flutter Development Intern",
+      title: {
+        en: "Flutter Development Intern",
+        fr: "Stagiaire développement Flutter",
+      },
       company: "AaliaTech",
       period: "Dec 2024 — Feb 2025",
-      focus: [
-        "Responsive Dart/Flutter interfaces",
-        "Firebase auth and storage",
-        "Performance optimisation and bug fixing",
-      ],
+      focus: {
+        en: [
+          "Responsive Dart/Flutter interfaces",
+          "Firebase auth and storage",
+          "Performance optimisation and bug fixing",
+        ],
+        fr: [
+          "Interfaces Dart/Flutter responsives",
+          "Authentification et stockage Firebase",
+          "Optimisation des performances et correction de bugs",
+        ],
+      },
     },
     {
-      title: "Web Developer Intern",
+      title: {
+        en: "Web Developer Intern",
+        fr: "Stagiaire développeur web",
+      },
       company: "Minkey",
       period: "Apr — Jun 2024",
-      focus: [
-        "UI improvement",
-        "Performance optimisation",
-        "WordPress → HTML/CSS/JS migration",
-      ],
+      focus: {
+        en: [
+          "UI improvement",
+          "Performance optimisation",
+          "WordPress → HTML/CSS/JS migration",
+        ],
+        fr: [
+          "Amélioration de l'interface utilisateur",
+          "Optimisation des performances",
+          "Migration WordPress → HTML/CSS/JS",
+        ],
+      },
     },
   ],
 
