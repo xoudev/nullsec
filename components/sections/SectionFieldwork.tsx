@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { gsap } from "@/lib/gsap";
+import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { work } from "@/content/work";
 
@@ -31,11 +32,11 @@ export function SectionFieldwork() {
   // Staggered scroll-entrance
   useEffect(() => {
     const rows = rowRefs.current.filter(Boolean) as HTMLElement[];
-    // Reduced motion (including a runtime flip to "reduce"): force rows visible
-    // and skip the reveal, so none stay stuck at opacity 0 below the fold.
+    // Reduced motion (including a runtime flip to "reduce"): no slide/stagger —
+    // just a soft opacity fade-in as each row scrolls into view.
     if (prefersReduced) {
-      rows.forEach((el) => gsap.set(el, { opacity: 1, y: 0 }));
-      return;
+      rows.forEach((el) => gsap.set(el, { y: 0 }));
+      return softReveal(rows);
     }
     rows.forEach((el) => gsap.set(el, { opacity: 0, y: 48 }));
 

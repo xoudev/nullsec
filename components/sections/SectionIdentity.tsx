@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 import { splitChars } from "@/lib/splitText";
+import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { profile } from "@/profile";
 
@@ -24,13 +25,11 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
     if (!line1Ref.current || !line2Ref.current) return;
     animated.current = true;
 
-    // ── Reduced motion: immediate reveal ──────────────────────────
+    // ── Reduced motion: soft opacity fade-in, no movement ─────────
     if (prefersReduced) {
-      gsap.set(
-        [line1Ref.current, line2Ref.current, metaRef.current, arrowRef.current],
-        { opacity: 1, y: 0 },
-      );
-      return;
+      const els = [line1Ref.current, line2Ref.current, metaRef.current, arrowRef.current];
+      gsap.set(els, { y: 0 }); // clear the resting translateY offsets, fade only
+      return softReveal(els);
     }
 
     // ── Main entrance timeline ─────────────────────────────────────

@@ -27,15 +27,17 @@ export default function Template({ children }: { children: React.ReactNode }) {
   const prefersReduced = useReducedMotion();
 
   useEffect(() => {
-    if (prefersReduced || !ref.current) return;
+    if (!ref.current) return;
     // Skip the fade when the boot sequence hasn't run yet — the Preloader is
     // covering the page and handles its own entrance. After first boot this key
-    // is set to "1", so navigations between routes get the normal fade.
+    // is set to "1", so navigations between routes get the fade.
     if (sessionStorage.getItem(SESSION_KEY) !== "1") return;
+    // Reduced motion still gets a soft, quicker cross-fade — opacity-only is
+    // vestibular-safe, so route transitions feel intentional rather than abrupt.
     gsap.fromTo(
       ref.current,
       { opacity: 0 },
-      { opacity: 1, duration: 0.55, ease: "power2.out" }
+      { opacity: 1, duration: prefersReduced ? 0.3 : 0.55, ease: "power2.out" }
     );
   }, [prefersReduced]);
 

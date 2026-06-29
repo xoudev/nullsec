@@ -47,10 +47,11 @@ export function Preloader({ onComplete }: PreloaderProps) {
     setBooting(true);
   }, []);
 
-  // Reduced motion: skip the waiting screen, auto-boot without audio.
-  useEffect(() => {
-    if (prefersReduced && !booting) setBooting(true);
-  }, [prefersReduced, booting]);
+  // Reduced motion keeps the STATIC intro rather than auto-skipping it: the
+  // boot screen is shown without the counter tick / log stagger / title scatter,
+  // and the same press-enter / tap gesture dismisses it with a soft fade (see
+  // the boot effect below). Auto-skipping it entirely is what made the site feel
+  // broken to reduced-motion visitors — they never saw the intro at all.
 
   // Global key listener — any key fires boot.
   useEffect(() => {
@@ -68,6 +69,8 @@ export function Preloader({ onComplete }: PreloaderProps) {
   useEffect(() => {
     if (!booting) return;
 
+    // Reduced motion: no animated boot sequence — the static intro simply
+    // soft-fades out once the visitor presses enter / taps.
     if (prefersReduced) {
       const tl = gsap.timeline({
         onComplete: () => {
@@ -75,7 +78,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
           onComplete();
         },
       });
-      tl.to(overlayRef.current, { opacity: 0, duration: 0.3 });
+      tl.to(overlayRef.current, { opacity: 0, duration: 0.45, ease: "power1.out" });
       return () => { tl.kill(); };
     }
 

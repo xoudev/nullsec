@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
+import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { profile } from "@/profile";
 
@@ -11,9 +12,10 @@ export function SectionAbout() {
   const prefersReduced = useReducedMotion();
 
   useEffect(() => {
-    if (prefersReduced) return;
     const el = contentRef.current;
     if (!el) return;
+    // Reduced motion: soft opacity fade-in, no upward slide.
+    if (prefersReduced) return softReveal([el]);
     gsap.set(el, { opacity: 0, y: 40 });
 
     const observer = new IntersectionObserver(

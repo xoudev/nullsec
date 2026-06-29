@@ -220,8 +220,11 @@ body {
   .terminal-header-title { display: none; }
 }
 
-/* ─── Custom cursor — hide native pointer on fine-pointer devices ─── */
-@media (pointer: fine) {
+/* ─── Custom cursor — hide native pointer only when the custom reticle is
+   actually rendered. CustomCursor returns null under prefers-reduced-motion,
+   so this rule MUST be gated on no-preference as well — otherwise reduced-
+   motion users get no cursor at all (native hidden, custom never drawn). ─── */
+@media (prefers-reduced-motion: no-preference) and (pointer: fine) {
   *, *::before, *::after { cursor: none; }
 }
 

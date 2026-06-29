@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { gsap } from "@/lib/gsap";
+import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { toolkitDomains, toolkitEntryCount } from "@/content/toolkit";
 
@@ -68,11 +69,12 @@ export function SectionToolkit() {
     // below the fold: force the visible resting state so nothing stays stuck in a
     // hidden start state, then bail before wiring any scroll animation.
     if (prefersReduced) {
+      // Resting state (no wipe / no slide), then a soft opacity fade per row.
       titleRefs.current.forEach((el) => el && gsap.set(el, { clipPath: "inset(0% 0% 0% 0%)" }));
       entryRefs.current.forEach((items) =>
-        items?.forEach((el) => el && gsap.set(el, { opacity: 1, y: 0 })),
+        items?.forEach((el) => el && gsap.set(el, { y: 0 })),
       );
-      return;
+      return softReveal(rows);
     }
 
     // Lock hidden initial states (section is below the fold, so this runs before it
