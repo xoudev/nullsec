@@ -15,7 +15,8 @@ export function LanguageToggle() {
     border: "none",
     padding: "0.15em 0.1em",
     margin: 0,
-    cursor: "pointer",
+    // No inline cursor: let the global `cursor: none` rule win so the custom
+    // reticle takes over (an inline cursor:pointer leaks the native cursor).
     pointerEvents: "auto",
     fontFamily: "inherit",
     fontSize: "inherit",
