@@ -7,6 +7,7 @@ import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { profile } from "@/profile";
 import { useT } from "@/lib/i18n";
+import { HeroBackground } from "@/components/HeroBackground";
 
 interface SectionIdentityProps {
   booted: boolean;
@@ -79,6 +80,9 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
         overflow:        "hidden",
       }}
     >
+      {/* Generative background layer (behind everything) */}
+      <HeroBackground />
+
       {/* Section number */}
       <div
         aria-hidden="true"
