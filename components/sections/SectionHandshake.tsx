@@ -603,6 +603,9 @@ export function SectionHandshake() {
             style={{
               height: "100%",
               overflowY: "auto",
+              // Aligned art (neofetch) is wider than a phone: let it scroll
+              // horizontally instead of wrapping into a broken mess.
+              overflowX: "auto",
               padding: "clamp(1rem, 2vw, 1.5rem)",
               fontFamily: "var(--font-jetbrains-mono)",
               fontSize: "clamp(0.72rem, 1vw, 0.88rem)",
@@ -615,9 +618,9 @@ export function SectionHandshake() {
             {output.map((line, i) => (
               <div
                 key={i}
-                // pre-wrap preserves the spacing that aligned output (neofetch,
-                // skills, xp) relies on, while still wrapping long lines.
-                style={{ color: lineColor(line.type), userSelect: "text", whiteSpace: "pre-wrap" }}
+                // Art lines (with per-segment colouring) never wrap, so their
+                // alignment survives on narrow screens; prose still wraps.
+                style={{ color: lineColor(line.type), userSelect: "text", whiteSpace: line.parts ? "pre" : "pre-wrap" }}
               >
                 {line.type === "input" ? (
                   <span>
