@@ -15,7 +15,9 @@ export const offDutyRows: OffDutyRow[] = [
   {
     title: { en: "MOTO", fr: "MOTO" },
     subtitle: { en: "same focus, different throttle.", fr: "même concentration, juste une autre poignée de gaz." },
-    tags: { en: ["SUPERSPORT", "#71", "NO LICENSE"], fr: ["SUPERSPORT", "#71", "SANS PERMIS"] },
+    // "TRACK ONLY" keeps the no-license joke unambiguous: circuit riding, not
+    // road riding without papers — this portfolio courts compliance recruiters.
+    tags: { en: ["SUPERSPORT", "#71", "NO LICENSE", "TRACK ONLY"], fr: ["SUPERSPORT", "#71", "SANS PERMIS", "CIRCUIT"] },
     image: "/off-duty/moto.png",
   },
   {

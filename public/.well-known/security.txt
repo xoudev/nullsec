@@ -1,0 +1,6 @@
+# RFC 9116 — security contact for nullsec.fr
+Contact: mailto:jordan.turnaco.pro@gmail.com
+Encryption: https://nullsec.fr/pgp.txt
+Preferred-Languages: fr, en
+Canonical: https://nullsec.fr/.well-known/security.txt
+Expires: 2027-06-30T22:00:00.000Z

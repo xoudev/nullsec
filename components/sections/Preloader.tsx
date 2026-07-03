@@ -27,7 +27,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const counterRef = useRef<HTMLSpanElement>(null);
   const logRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const titleRef = useRef<HTMLHeadingElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
   const prefersReduced = useReducedMotion();
   const { tr } = useT();
   const [booting, setBooting] = useState(false);
@@ -42,7 +42,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
     try {
       unlockAudio();
       void playFirst("/loading.mp3");
-      void preloadSound("/click.wav");
+      void preloadSound("/click.mp3");
     } catch {
       // Audio is optional — boot regardless of AudioContext availability.
     }
@@ -55,16 +55,33 @@ export function Preloader({ onComplete }: PreloaderProps) {
   // the boot effect below). Auto-skipping it entirely is what made the site feel
   // broken to reduced-motion visitors — they never saw the intro at all.
 
-  // Global key listener — any key fires boot.
+  // Global key listener — Enter or Space fires boot. Deliberately NOT every
+  // key: Tab must keep reaching the skip link, and modifier combos must not
+  // hijack the keyboard.
   useEffect(() => {
     if (booting) return;
-    const onKey = () => triggerBoot();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key !== "Enter" && e.key !== " ") return;
+      triggerBoot();
+    };
     window.addEventListener("keydown", onKey);
-    document.addEventListener("keydown", onKey);
     return () => {
       window.removeEventListener("keydown", onKey);
-      document.removeEventListener("keydown", onKey);
     };
+  }, [booting, triggerBoot]);
+
+  // Never strand a passive visitor at the prompt: auto-boot after a delay.
+  // Returning visitors (localStorage flag) get a near-immediate boot — the
+  // ritual is first-visit theatre, not a recurring toll.
+  useEffect(() => {
+    if (booting) return;
+    let returning = false;
+    try {
+      returning = localStorage.getItem("nullsec_returning") === "1";
+    } catch { /* storage unavailable */ }
+    const t = setTimeout(triggerBoot, returning ? 700 : 8000);
+    return () => clearTimeout(t);
   }, [booting, triggerBoot]);
 
   // Boot animation — runs once booting becomes true.
@@ -93,7 +110,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
     const complete = () => {
       clearTimeout(fallback);
       if (overlayRef.current) overlayRef.current.style.display = "none";
-      void playAmbient("/sound.wav");
+      void playAmbient("/sound.mp3");
       onComplete();
     };
 
@@ -269,8 +286,8 @@ export function Preloader({ onComplete }: PreloaderProps) {
         </div>
       </div>
 
-      {/* NULLSEC big title — appears at end of counter */}
-      <h1
+      {/* NULLSEC big title — decorative wordmark (the hero owns the page h1) */}
+      <div
         ref={titleRef}
         aria-hidden="true"
         style={{
@@ -290,7 +307,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
         }}
       >
         NULLSEC
-      </h1>
+      </div>
 
       {/* Bottom-right: env label */}
       <div

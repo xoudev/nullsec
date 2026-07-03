@@ -67,7 +67,7 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
     <section
       ref={sectionRef}
       data-section-id="01"
-      aria-label="Identity"
+      aria-label={tr("Identity", "Identité")}
       style={{
         minHeight:       "100dvh",
         backgroundColor: "var(--color-void)",
@@ -96,10 +96,22 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
         01 // IDENTITY
       </div>
 
-      {/* Title */}
-      <div
-        style={{ position: "relative", zIndex: 2 }}
-        aria-label={tr("I map the blind spots.", "Je cartographie les angles morts.")}
+      {/* Ghost numeral — bottom-right so it balances the left-anchored title */}
+      <span
+        aria-hidden="true"
+        className="ghost-numeral"
+        style={{ top: "auto", bottom: "clamp(4rem, 10vw, 8rem)" }}
+      >
+        01
+      </span>
+
+      {/* Title — the page's real h1 (the preloader wordmark is decorative) */}
+      <h1
+        style={{ position: "relative", zIndex: 2, margin: 0, fontWeight: 400 }}
+        aria-label={tr(
+          `${profile.fullName} — cybersecurity portfolio. I map the blind spots.`,
+          `${profile.fullName}, portfolio cybersécurité. Je cartographie les angles morts.`,
+        )}
       >
         <div
           ref={line1Ref}
@@ -131,7 +143,17 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
         >
           {tr("blind spots.", "les angles morts.")}
         </div>
-      </div>
+        {/* The page's one deliberate large-scale blood moment. */}
+        <div
+          aria-hidden="true"
+          style={{
+            height: "2px",
+            width: "clamp(6rem, 20vw, 20rem)",
+            backgroundColor: "var(--color-blood)",
+            marginTop: "clamp(1.25rem, 3vw, 2.5rem)",
+          }}
+        />
+      </h1>
 
       {/* Bottom row: metadata + scroll arrow */}
       <div
@@ -164,7 +186,7 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
             {"// "}{profile.handle}
             {" · "}{profile.age}
             {" · "}{profile.city.toLowerCase()}
-            {" · open "}{profile.available.toLowerCase()}
+            {tr(" · open ", " · dispo ")}{profile.available.toLowerCase()}
           </div>
           <div>{"// GRC · BLUE TEAM · DEVSECOPS"}</div>
           <div style={{ marginTop: "0.4rem" }}>
@@ -172,11 +194,19 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
           </div>
           <div style={{ marginTop: "0.6rem" }}>
             <a
-              href={profile.cvUrl}
+              href={t(profile.cvUrl)}
               target="_blank"
               rel="noopener noreferrer"
               data-cursor="open ↗"
-              style={{ color: "var(--color-blood)", textDecoration: "none", letterSpacing: "0.06em" }}
+              style={{
+                color: "var(--color-blood)",
+                textDecoration: "none",
+                letterSpacing: "0.06em",
+                // Inflate the hit area without moving the text (tap target).
+                display: "inline-block",
+                padding: "0.85em 0.85em 0.85em 0",
+                margin: "-0.85em -0.85em -0.85em 0",
+              }}
             >
               {"// CV ↗"}
             </a>
@@ -186,6 +216,7 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
         <div
           ref={arrowRef}
           aria-hidden="true"
+          className="hero-scroll-arrow"
           style={{
             fontFamily:    "var(--font-jetbrains-mono)",
             fontSize:      "clamp(1rem, 2vw, 1.5rem)",

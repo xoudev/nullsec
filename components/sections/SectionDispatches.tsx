@@ -20,7 +20,7 @@ export function SectionDispatches() {
   const sectionRef = useRef<HTMLElement>(null);
   const itemRefs   = useRef<(HTMLLIElement | null)[]>([]);
   const prefersReduced = useReducedMotion();
-  const { t, locale } = useT();
+  const { t, tr, locale } = useT();
 
   // Staggered entrance via IntersectionObserver
   useEffect(() => {
@@ -52,13 +52,17 @@ export function SectionDispatches() {
   return (
     <section
       ref={sectionRef}
+      id="dispatches"
       data-section-id="07"
-      aria-label="Dispatches"
+      aria-label={tr("Dispatches", "Dépêches")}
       style={{
         backgroundColor: "var(--color-void)",
         padding: "clamp(4rem, 8vw, 8rem) clamp(1.5rem, 4vw, 3rem)",
+        position: "relative",
       }}
     >
+      <span aria-hidden="true" className="ghost-numeral">07</span>
+
       {/* Section label */}
       <div
         aria-hidden="true"
@@ -67,13 +71,29 @@ export function SectionDispatches() {
           fontSize:      "0.65rem",
           color:         "var(--color-blood)",
           letterSpacing: "0.1em",
-          marginBottom:  "clamp(3rem, 6vw, 5rem)",
+          marginBottom:  "clamp(2rem, 4vw, 3rem)",
         }}
       >
         07 // DISPATCHES
       </div>
 
-      <ul style={{ listStyle: "none", padding: 0, margin: 0 }} aria-label="Writing">
+      {/* Display line — every chapter opens the same way */}
+      <h2
+        style={{
+          fontFamily:    "var(--font-instrument-serif)",
+          fontStyle:     "italic",
+          fontSize:      "clamp(1.8rem, 4.5vw, 3.5rem)",
+          lineHeight:    1.05,
+          letterSpacing: "-0.02em",
+          color:         "var(--color-bone)",
+          margin:        "0 0 clamp(2.5rem, 5vw, 4rem)",
+          maxWidth:      "20ch",
+        }}
+      >
+        {tr("Notes from the noise floor.", "Des notes prises au ras du bruit.")}
+      </h2>
+
+      <ul style={{ listStyle: "none", padding: 0, margin: 0 }} aria-label={tr("Writing", "Écrits")}>
         {dispatches.map((post, i) => (
           <li
             key={post.slug}

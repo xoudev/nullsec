@@ -18,7 +18,7 @@ export type Clearance = {
   status: ClearanceStatus;
   date: string;           // display format: YYYY.MM
   level: string;          // zero-padded display number, e.g. "01"
-  title: string;
+  title: Localized<string>; // FR must avoid em-dashes (owner rule)
   issuer: string;
   credentialId: string | null;
   credentialUrl: string | null; // links to issuer verification page; null = no link
@@ -32,7 +32,10 @@ export const clearances: Clearance[] = [
     status: "GRANTED",
     date: "2026.03",
     level: "01",
-    title: "CSNA — STORMSHIELD NETWORK ADMINISTRATOR",
+    title: {
+      en: "CSNA — STORMSHIELD NETWORK ADMINISTRATOR",
+      fr: "CSNA · STORMSHIELD NETWORK ADMINISTRATOR",
+    },
     issuer: "STORMSHIELD",
     credentialId: null,
     credentialUrl: null,
@@ -48,6 +51,56 @@ export const clearances: Clearance[] = [
       RISK:       30,
       AUDIT:      10,
       COMPLIANCE: 25,
+    },
+  },
+  // Roadmap targets — [PENDING] shows trajectory, which matters as much as the
+  // held cert on a 21-year-old profile. Dates are targets, not bookings.
+  {
+    status: "PENDING",
+    date: "→ 2027",
+    level: "02",
+    title: {
+      en: "ISO/IEC 27001 LEAD IMPLEMENTER",
+      fr: "ISO/IEC 27001 LEAD IMPLEMENTER",
+    },
+    issuer: "PECB",
+    credentialId: null,
+    credentialUrl: null,
+    validates: {
+      en: "ISMS design and implementation, audit preparation, risk treatment",
+      fr: "conception et mise en œuvre d'un SMSI, préparation à l'audit, traitement du risque",
+    },
+    radar: {
+      GOVERNANCE: 85,
+      NETWORK:    10,
+      DEFENSE:    20,
+      RISK:       70,
+      AUDIT:      75,
+      COMPLIANCE: 90,
+    },
+  },
+  {
+    status: "PENDING",
+    date: "→ 2028",
+    level: "03",
+    title: {
+      en: "CISSP — CERTIFIED INFORMATION SYSTEMS SECURITY PROFESSIONAL",
+      fr: "CISSP · CERTIFIED INFORMATION SYSTEMS SECURITY PROFESSIONAL",
+    },
+    issuer: "ISC2",
+    credentialId: null,
+    credentialUrl: null,
+    validates: {
+      en: "security and risk management, asset security, architecture, IAM, security operations",
+      fr: "management de la sécurité et du risque, sécurité des actifs, architecture, IAM, opérations de sécurité",
+    },
+    radar: {
+      GOVERNANCE: 75,
+      NETWORK:    55,
+      DEFENSE:    65,
+      RISK:       75,
+      AUDIT:      55,
+      COMPLIANCE: 65,
     },
   },
 ];

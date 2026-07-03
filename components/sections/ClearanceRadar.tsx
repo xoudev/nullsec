@@ -79,7 +79,7 @@ interface Props {
 }
 
 export function ClearanceRadar({ clearances, activeCertIndex, prefersReduced }: Props) {
-  const { tr } = useT();
+  const { t, tr, locale } = useT();
   const polygonRef = useRef<SVGPolygonElement>(null);
   const circleRefs = useRef<(SVGCircleElement | null)[]>([]);
   const labelRef   = useRef<HTMLDivElement>(null);
@@ -124,8 +124,8 @@ export function ClearanceRadar({ clearances, activeCertIndex, prefersReduced }: 
       : aggVerts;
 
     const newLabel = activeCertIndex !== null
-      ? `// ${clearances[activeCertIndex].title.toLowerCase()}`
-      : "// aggregate profile";
+      ? `// ${t(clearances[activeCertIndex].title).toLowerCase()}`
+      : tr("// aggregate profile", "// profil global");
 
     // Build flat target for GSAP
     const target: Record<string, number> = {};
@@ -164,7 +164,7 @@ export function ClearanceRadar({ clearances, activeCertIndex, prefersReduced }: 
 
     return () => { gsap.killTweensOf(st.current); };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeCertIndex, prefersReduced]);
+  }, [activeCertIndex, prefersReduced, locale]);
 
   // ── Static SVG geometry (never changes) ────────────────────────
 
@@ -210,13 +210,22 @@ export function ClearanceRadar({ clearances, activeCertIndex, prefersReduced }: 
   const initPtsStr = pts(aggVerts);
 
   return (
-    <div style={{
-      width:          "100%",
-      display:        "flex",
-      flexDirection:  "column",
-      alignItems:     "center",
-      gap:            "0.65rem",
-    }}>
+    <div
+      // One static summary for AT; the animated caption below is decorative
+      // (an aria-live caption rewritten on every hover/scroll was a firehose
+      // of announcements for screen-reader users).
+      aria-label={tr(
+        "Skill radar chart across governance, network, defense, risk, audit and compliance.",
+        "Radar de compétences : gouvernance, réseau, défense, risque, audit et conformité.",
+      )}
+      role="img"
+      style={{
+        width:          "100%",
+        display:        "flex",
+        flexDirection:  "column",
+        alignItems:     "center",
+        gap:            "0.65rem",
+      }}>
       <svg
         viewBox="0 0 500 500"
         aria-hidden="true"
@@ -258,10 +267,10 @@ export function ClearanceRadar({ clearances, activeCertIndex, prefersReduced }: 
         ))}
       </svg>
 
-      {/* Label below radar */}
+      {/* Label below radar — decorative caption, see wrapper aria-label */}
       <div
         ref={labelRef}
-        aria-live="polite"
+        aria-hidden="true"
         style={{
           fontFamily:    "var(--font-jetbrains-mono)",
           fontSize:      "0.875rem",
@@ -270,7 +279,7 @@ export function ClearanceRadar({ clearances, activeCertIndex, prefersReduced }: 
           textAlign:     "center",
         }}
       >
-        // aggregate profile
+        {tr("// aggregate profile", "// profil global")}
       </div>
     </div>
   );

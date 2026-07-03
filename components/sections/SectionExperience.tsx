@@ -43,12 +43,15 @@ export function SectionExperience() {
     <section
       ref={sectionRef}
       data-section-id="06"
-      aria-label="Experience"
+      aria-label={tr("Experience", "Expérience")}
       style={{
         backgroundColor: "var(--color-void)",
         padding: "clamp(4rem, 8vw, 8rem) clamp(1.5rem, 4vw, 3rem)",
+        position: "relative",
       }}
     >
+      <span aria-hidden="true" className="ghost-numeral">06</span>
+
       {/* Header */}
       <div
         style={{
@@ -63,7 +66,7 @@ export function SectionExperience() {
           {"06 // EXPERIENCE"}
         </span>
         <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-ash)", letterSpacing: "0.1em", whiteSpace: "nowrap" }}>
-          {`${String(profile.experience.length).padStart(2, "0")} ${tr("ROLES", "RÔLES")} · 2024 — 2026`}
+          {`${String(profile.experience.length).padStart(2, "0")} ${tr("ROLES · 2024 — 2026", "RÔLES · 2024 – 2026")}`}
         </span>
       </div>
 
@@ -106,7 +109,7 @@ export function SectionExperience() {
                 }}
               >
                 <span style={{ fontFamily: MONO, fontSize: "0.62rem", color: "var(--color-ash)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
-                  {xp.period}
+                  {t(xp.period)}
                   {current && (
                     <span style={{ color: "var(--color-blood)", marginLeft: "0.9rem" }}>{tr("// CURRENT", "// EN COURS")}</span>
                   )}
@@ -131,8 +134,9 @@ export function SectionExperience() {
                 {t(xp.title)}
               </h3>
 
-              {/* Responsibilities — flow inline, wrapping across the full width */}
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.55rem 1.75rem" }}>
+              {/* Responsibilities — inline flow, capped measure so lines stay
+                  readable on very wide viewports */}
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.55rem 1.75rem", maxWidth: "110ch" }}>
                 {t<readonly string[]>(xp.focus).map((f) => (
                   <span
                     key={f}

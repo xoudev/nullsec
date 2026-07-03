@@ -45,12 +45,15 @@ export function SectionOffDuty() {
     <section
       ref={sectionRef}
       data-section-id="08"
-      aria-label="Off-duty — interests"
+      aria-label={tr("Off-duty: interests", "Hors service : centres d'intérêt")}
       style={{
         backgroundColor: "var(--color-void)",
         padding: "clamp(4rem, 8vw, 8rem) clamp(1.5rem, 4vw, 3rem)",
+        position: "relative",
       }}
     >
+      <span aria-hidden="true" className="ghost-numeral">08</span>
+
       {/* Header */}
       <div
         style={{
@@ -58,16 +61,32 @@ export function SectionOffDuty() {
           justifyContent: "space-between",
           alignItems: "baseline",
           gap: "1rem",
-          marginBottom: "clamp(2.5rem, 5vw, 4rem)",
+          marginBottom: "clamp(2rem, 4vw, 3rem)",
         }}
       >
         <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.65rem", color: "var(--color-blood)", letterSpacing: "0.1em" }}>
           {"08 // OFF-DUTY"}
         </span>
         <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-ash)", letterSpacing: "0.1em", whiteSpace: "nowrap" }}>
-          {`${String(offDutyEntryCount).padStart(2, "0")} ${tr("ENTRIES · 00 LICENSES", "ENTRÉES · 00 LICENCES")}`}
+          {`${String(offDutyEntryCount).padStart(2, "0")} ${tr("ENTRIES · 00 LICENSES", "ENTRÉES · 00 PERMIS")}`}
         </span>
       </div>
+
+      {/* Display line — every chapter opens the same way */}
+      <h2
+        style={{
+          fontFamily: "var(--font-instrument-serif)",
+          fontStyle: "italic",
+          fontSize: "clamp(1.8rem, 4.5vw, 3.5rem)",
+          lineHeight: 1.05,
+          letterSpacing: "-0.02em",
+          color: "var(--color-bone)",
+          margin: "0 0 clamp(2.5rem, 5vw, 4rem)",
+          maxWidth: "22ch",
+        }}
+      >
+        {tr("Same focus, different targets.", "La même concentration, d'autres cibles.")}
+      </h2>
 
       {/* Rows — each reveals its own image behind it on hover */}
       <div>
@@ -83,7 +102,10 @@ export function SectionOffDuty() {
                 src={row.image}
                 alt=""
                 fill
-                sizes="100vw"
+                // Veiled backdrops: q50 is indistinguishable here, and capping
+                // the srcset stops DPR-2 laptops fetching 3840px variants.
+                sizes="(max-width: 1920px) 100vw, 1920px"
+                quality={50}
                 className="offduty-bg-img"
                 style={{ objectFit: "cover", objectPosition: "center" }}
               />
@@ -112,15 +134,15 @@ export function SectionOffDuty() {
                 >
                   {t(row.title)}
                 </h3>
-                <p style={{ fontFamily: MONO, fontSize: "clamp(0.64rem, 0.95vw, 0.72rem)", color: "var(--color-ash)", letterSpacing: "0.03em", margin: 0 }}>
+                <p className="offduty-subtitle" style={{ fontFamily: MONO, fontSize: "clamp(0.64rem, 0.95vw, 0.72rem)", color: "var(--color-ash)", letterSpacing: "0.03em", margin: 0 }}>
                   {t(row.subtitle)}
                 </p>
               </div>
 
+              {/* No arrow here: these rows don't navigate — the image reveal is
+                  the reward, and a sliding → promised a link that never came. */}
               <span className="offduty-tags" aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-ash)", letterSpacing: "0.08em", whiteSpace: "nowrap" }}>
                 {t(row.tags).join("  ·  ")}
-                {"   "}
-                <span className="offduty-arrow">→</span>
               </span>
             </div>
           </div>

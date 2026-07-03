@@ -17,7 +17,7 @@ export function SectionFieldwork() {
   const yearRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const tagRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const prefersReduced = useReducedMotion();
-  const { t } = useT();
+  const { t, tr } = useT();
 
   // Lock initial GSAP state so killTweensOf always has a clean baseline
   useEffect(() => {
@@ -99,13 +99,17 @@ export function SectionFieldwork() {
   return (
     <section
       ref={sectionRef}
+      id="fieldwork"
       data-section-id="02"
-      aria-label="Fieldwork"
+      aria-label={tr("Fieldwork", "Travaux de terrain")}
       style={{
         backgroundColor: "var(--color-void)",
         padding: "clamp(4rem, 8vw, 8rem) clamp(1.5rem, 4vw, 3rem)",
+        position: "relative",
       }}
     >
+      <span aria-hidden="true" className="ghost-numeral">02</span>
+
       {/* Section label */}
       <div
         aria-hidden="true"
@@ -114,13 +118,29 @@ export function SectionFieldwork() {
           fontSize: "0.65rem",
           color: "var(--color-blood)",
           letterSpacing: "0.1em",
-          marginBottom: "clamp(3rem, 6vw, 5rem)",
+          marginBottom: "clamp(2rem, 4vw, 3rem)",
         }}
       >
         {"02 // FIELDWORK"}
       </div>
 
-      <nav aria-label="Selected projects">
+      {/* Display line — every chapter opens the same way */}
+      <h2
+        style={{
+          fontFamily: "var(--font-instrument-serif)",
+          fontStyle: "italic",
+          fontSize: "clamp(1.8rem, 4.5vw, 3.5rem)",
+          lineHeight: 1.05,
+          letterSpacing: "-0.02em",
+          color: "var(--color-bone)",
+          margin: "0 0 clamp(2.5rem, 5vw, 4rem)",
+          maxWidth: "20ch",
+        }}
+      >
+        {tr("Proof over promises.", "Des preuves, pas des promesses.")}
+      </h2>
+
+      <nav aria-label={tr("Selected projects", "Projets sélectionnés")}>
         <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
           {work.map((item, i) => (
             <li
@@ -189,14 +209,17 @@ export function SectionFieldwork() {
                   >
                     {t(item.title)}
                   </span>
+                  {/* Excerpt stays visible on mobile — without it the section
+                      is seven context-free title rows on a phone. */}
                   <span
-                    className="hidden md:block"
+                    className="fieldwork-excerpt"
                     style={{
                       fontFamily: "var(--font-jetbrains-mono)",
                       fontSize: "0.68rem",
                       color: "var(--color-ash)",
                       lineHeight: 1.55,
                       letterSpacing: "0.02em",
+                      maxWidth: "72ch",
                     }}
                   >
                     {t(item.excerpt)}

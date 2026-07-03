@@ -13,8 +13,10 @@ export function LanguageToggle() {
   const btn = (active: boolean): React.CSSProperties => ({
     background: "none",
     border: "none",
-    padding: "0.15em 0.1em",
-    margin: 0,
+    // Generous padding = a real tap target (~44px high with the fixed offset);
+    // negative margin keeps the visual footprint identical.
+    padding: "0.9em 0.7em",
+    margin: "-0.9em -0.35em",
     // No inline cursor: let the global `cursor: none` rule win so the custom
     // reticle takes over (an inline cursor:pointer leaks the native cursor).
     pointerEvents: "auto",
@@ -30,6 +32,7 @@ export function LanguageToggle() {
     <div
       role="group"
       aria-label="Language / Langue"
+      className="language-toggle"
       style={{
         position: "fixed",
         bottom: "1.25rem",

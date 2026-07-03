@@ -68,7 +68,7 @@ export function DispatchArticle({
             letterSpacing: "0.1em",
           }}
         >
-          06 // DISPATCHES
+          07 // DISPATCHES
         </span>
       </nav>
 

@@ -10,6 +10,7 @@ export type WorkItem = {
   body: Localized<string[]>;   // paragraphs of editorial copy
   image?: string;   // optional path relative to /public — omit when no asset exists yet
   liveUrl?: string; // optional public / live site link
+  repoUrl?: string; // optional public source repository
 };
 
 export const work: WorkItem[] = [
@@ -44,6 +45,7 @@ export const work: WorkItem[] = [
     slug: "nullsec",
     index: "002",
     title: { en: "NULLSEC", fr: "NULLSEC" },
+    repoUrl: "https://github.com/xoudev/nullsec",
     year: "2025",
     tags: ["Next.js 16", "GSAP", "Lenis", "Tailwind v4", "Typst"],
     excerpt: {
@@ -128,7 +130,7 @@ export const work: WorkItem[] = [
     },
     body: {
       en: [
-        "Crappy Safe is not a creative name for a vulnerable firmware — it is an accurate description. The password verification routine compared characters in sequence and returned failure the moment it found a mismatch. That design decision turns the authentication routine into a measuring instrument: query with a wrong first character, get a response in T₁ milliseconds. Query with a correct first character and a wrong second, get T₂ > T₁. The timing difference is the key. The algorithm is never touched — the attack reads what the hardware cannot help broadcasting.",
+        "Crappy Safe is not a creative name for vulnerable firmware — it is an accurate description. The password verification routine compared characters in sequence and returned failure the moment it found a mismatch. That design decision turns the authentication routine into a measuring instrument: query with a wrong first character, get a response in T₁ milliseconds. Query with a correct first character and a wrong second, get T₂ > T₁. The timing difference is the key. The algorithm is never touched — the attack reads what the hardware cannot help broadcasting.",
         "UART for target communication, JTAG for flashing — with a fix required up front for the clone chip's JTAG ID, which the toolchain refused to recognise. The measurement strategy was median averaging across repeated queries: median rather than mean, because timing distributions on embedded hardware are not Gaussian. Interrupt service routines and clock jitter produce outliers that skew the mean and flatten the signal below the noise floor. The correct estimator required looking at the actual distribution first. That step is absent from most side-channel tutorials, and skipping it is why naive implementations of the attack fail.",
         "The recovery runs as a loop: for each character position, iterate through the candidate set, send a prefixed query, collect N timing measurements, take the median, identify which candidate takes longest. That candidate is correct. Advance to the next position and repeat. The lab's difficulty levels introduced additional noise and active countermeasure attempts — which required adjusting N and detection thresholds, not the fundamental method. The method is robust because the vulnerability is structural: you cannot make early-exit comparison constant-time by adding noise. The noise affects both candidates equally. The relative ordering survives.",
         "The remediation is constant-time string comparison — three lines of code, available in every standard library. The fifteen-page report in Word and LaTeX documents the full experimental arc: measurements that worked, the ones that required re-collection, and the parameter choices that revealed the underlying physics when they were wrong. The hardening recommendations cover constant-time comparison, authentication rate limiting, nonce-based challenge-response, and watchdog integration against fault injection. Documenting what to fix is only useful if the report also explains why the intuitive implementation was wrong — otherwise the next developer makes the same choice for the same reason.",
@@ -148,12 +150,12 @@ export const work: WorkItem[] = [
     year: "2026",
     tags: ["Unity", "C#", "Tower Defense", "Fantasy / D&D", "VFX as code", "UI/UX"],
     excerpt: {
-      en: "A fantasy, Dungeons & Dragons-flavoured tower-defense built — currently at pre-prototype, with my work spanning development, UI/UX, and VFX authored as code in C#.",
+      en: "A fantasy, Dungeons & Dragons-flavoured tower defense built in Unity — currently at pre-prototype, with my work spanning development, UI/UX, and VFX authored as code in C#.",
       fr: "Un tower-defense d'inspiration fantasy et Dungeons & Dragons, aujourd'hui au stade du pré-prototype, où j'interviens sur le développement, l'UI/UX et les VFX écrits comme du code, en C#.",
     },
     body: {
       en: [
-        "A tower-defense game with a fantasy, Dungeons & Dragons-flavoured art direction, built in Unity . It is at the pre-prototype stage — the moment where the core loop and the feel are being proven before anything gets polished. My role spans development, UI/UX, and visual effects.",
+        "A tower-defense game with a fantasy, Dungeons & Dragons-flavoured art direction, built in Unity. It is at the pre-prototype stage — the moment where the core loop and the feel are being proven before anything gets polished. My role spans development, UI/UX, and visual effects.",
         "The part I care most about is VFX as code: effects driven and parameterised in C# rather than hand-placed in the editor, so they are reproducible, tweakable, and version-controlled like any other source. Treating effects as code instead of artefacts you click into existence is the same discipline that keeps infrastructure and detection logic maintainable.",
         "Game development is an unusual entry on a security portfolio, but the transferable part is real: performance budgets, deterministic systems, and a UI that has to communicate state clearly under pressure. Building it with a team — under a shared art direction and a deadline — is also where most of the actual engineering happens.",
       ],

@@ -37,12 +37,15 @@ export function SectionAbout() {
     <section
       ref={sectionRef}
       data-section-id="05"
-      aria-label="About"
+      aria-label={tr("About", "À propos")}
       style={{
         backgroundColor: "var(--color-void)",
         padding: "clamp(4rem, 8vw, 8rem) clamp(1.5rem, 4vw, 3rem)",
+        position: "relative",
       }}
     >
+      <span aria-hidden="true" className="ghost-numeral">05</span>
+
       {/* Section label */}
       <div
         aria-hidden="true"
@@ -120,12 +123,12 @@ export function SectionAbout() {
           </div>
 
           {/* Right — key facts */}
-          <aside className="article-sidebar" aria-label="Profile facts">
+          <aside className="article-sidebar" aria-label={tr("Profile facts", "Repères du profil")}>
             {(
               [
                 [tr("LOCATION", "LIEU"),     `${profile.city}, ${profile.country}`],
                 [tr("SCHOOL", "ÉCOLE"),      "Guardia Cybersecurity School"],
-                [tr("CURRENT", "EN POSTE"),  tr("ISMS / GRC Apprentice @ Arvato", "Alternant SMSI / GRC @ Arvato")],
+                [tr("CURRENT", "EN POSTE"),  tr("Assistant LISO @ Arvato", "Assistant LISO @ Arvato")],
                 [tr("NEXT", "ENSUITE"),      tr("MSc Offensive / Defensive — Sept 2026", "Mastère offensif / défensif, sept. 2026")],
                 [tr("FOCUS", "FOCUS"),       "GRC · Blue Team · DevSecOps"],
                 [tr("AVAILABLE", "DISPO"),   profile.available],
@@ -135,7 +138,7 @@ export function SectionAbout() {
                 <div
                   style={{
                     fontFamily:    "var(--font-jetbrains-mono)",
-                    fontSize:      "0.55rem",
+                    fontSize:      "0.65rem",
                     color:         "var(--color-ash)",
                     letterSpacing: "0.15em",
                     marginBottom:  "0.4rem",

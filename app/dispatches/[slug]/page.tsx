@@ -27,6 +27,7 @@ export async function generateMetadata({
       url: `${profile.siteUrl}/dispatches/${post.slug}`,
       type: "article",
       publishedTime: post.date,
+      images: ["/opengraph-image"],
     },
   };
 }
@@ -43,8 +44,27 @@ export default async function DispatchPage({
 
   const { prev, next } = getAdjacentDispatch(slug);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title.en,
+    description: post.excerpt.en,
+    datePublished: post.date,
+    inLanguage: "en",
+    url: `${profile.siteUrl}/dispatches/${post.slug}`,
+    author: {
+      "@type": "Person",
+      name: profile.fullName,
+      url: profile.siteUrl,
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <ReadingProgress />
       <DispatchArticle post={post} prev={prev} next={next} />
     </>

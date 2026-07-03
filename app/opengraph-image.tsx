@@ -18,22 +18,40 @@ export default async function Image() {
         style={{
           width:           "100%",
           height:          "100%",
-          backgroundColor: "#0A0A0B",
+          backgroundColor: "#0F0F12",
           display:         "flex",
           flexDirection:   "column",
           padding:         "80px",
         }}
       >
-        {/* Top-left label */}
+        {/* Top row — site brand + handle */}
         <div
           style={{
-            fontFamily:    '"Inter"',
-            fontSize:      24,
-            color:         "#6B6B6B",
-            letterSpacing: "0.08em",
+            display:        "flex",
+            justifyContent: "space-between",
+            alignItems:     "baseline",
           }}
         >
-          {"// xoudev"}
+          <div
+            style={{
+              fontFamily:    '"Inter"',
+              fontSize:      28,
+              color:         "#E63946",
+              letterSpacing: "0.12em",
+            }}
+          >
+            NULLSEC
+          </div>
+          <div
+            style={{
+              fontFamily:    '"Inter"',
+              fontSize:      24,
+              color:         "#8A8A8A",
+              letterSpacing: "0.08em",
+            }}
+          >
+            {"// xoudev"}
+          </div>
         </div>
 
         {/* Centre — title + rule */}
@@ -64,12 +82,12 @@ export default async function Image() {
             style={{
               height:          1,
               width:           "100%",
-              backgroundColor: "rgba(112,112,112,0.3)",
+              backgroundColor: "rgba(138,138,138,0.3)",
             }}
           />
         </div>
 
-        {/* Bottom row */}
+        {/* Bottom row — the owner's name is the point of the card */}
         <div
           style={{
             display:        "flex",
@@ -79,12 +97,29 @@ export default async function Image() {
         >
           <div
             style={{
-              fontFamily: '"Inter"',
-              fontSize:   28,
-              color:      "#F2EFE8",
+              display:       "flex",
+              flexDirection: "column",
+              gap:           8,
             }}
           >
-            Securing what others overlook.
+            <div
+              style={{
+                fontFamily: '"Inter"',
+                fontSize:   30,
+                color:      "#F2EFE8",
+              }}
+            >
+              Jordan Turnaco
+            </div>
+            <div
+              style={{
+                fontFamily: '"Inter"',
+                fontSize:   22,
+                color:      "#8A8A8A",
+              }}
+            >
+              Cybersecurity — GRC · Blue Team · DevSecOps
+            </div>
           </div>
 
           <div

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Instrument_Serif, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { profile } from "@/profile";
@@ -8,6 +8,9 @@ import { CustomCursor } from "@/components/CustomCursor";
 import { AudioBootstrap } from "@/components/AudioBootstrap";
 import { LocaleProvider } from "@/lib/i18n";
 import { LanguageToggle } from "@/components/LanguageToggle";
+import { SkipLink } from "@/components/SkipLink";
+import { SiteFooter } from "@/components/SiteFooter";
+import { AudioControl } from "@/components/AudioControl";
 
 /* ─── Fonts ─── */
 const instrumentSerif = Instrument_Serif({
@@ -31,29 +34,36 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 /* ─── Metadata ─── */
+// SEO ships the EN copy (single-URL site, EN default); profile.tagline is a
+// Localized object so the EN variant must be picked explicitly here.
+const siteDescription = `Cybersecurity portfolio by ${profile.fullName} — apprentice security engineer in GRC, blue team detection, and zero trust. ${profile.tagline.en}`;
+
 export const metadata: Metadata = {
   metadataBase: new URL(profile.siteUrl),
   title: {
     default: `NULLSEC — ${profile.fullName} · Cybersecurity portfolio`,
     template: "%s · NULLSEC",
   },
-  description: `Cybersecurity portfolio by ${profile.fullName} — apprentice security engineer in GRC, blue team detection, and zero trust. ${profile.tagline}`,
-  keywords: ["cybersecurity", "GRC", "blue team", "zero trust", "portfolio", "security engineer", "ISO 27001", "EBIOS RM"],
+  description: siteDescription,
+  keywords: ["cybersecurity", "GRC", "blue team", "zero trust", "portfolio", "security engineer", "ISO 27001", "EBIOS RM", "cybersécurité", "alternance"],
   authors: [{ name: profile.fullName, url: profile.siteUrl }],
   creator: profile.fullName,
+  // Self-referencing canonical on every route (resolved against metadataBase).
+  alternates: {
+    canonical: "./",
+    types: { "application/rss+xml": "/feed.xml" },
+  },
   openGraph: {
     type:     "website",
     locale:   "en_US",
     url:      profile.siteUrl,
     siteName: "NULLSEC",
     title:    `NULLSEC — ${profile.fullName} · Cybersecurity portfolio`,
-    description: `Cybersecurity portfolio by ${profile.fullName} — apprentice security engineer in GRC, blue team detection, and zero trust. ${profile.tagline}`,
+    description: siteDescription,
   },
-  twitter: {
-    card:        "summary_large_image",
-    title:       `NULLSEC — ${profile.fullName} · Cybersecurity portfolio`,
-    description: `Cybersecurity portfolio by ${profile.fullName} — apprentice security engineer in GRC, blue team detection, and zero trust. ${profile.tagline}`,
-  },
+  // Card type only — title/description/image fall back to the og:* tags, so
+  // detail pages keep their own titles instead of inheriting the homepage's.
+  twitter: { card: "summary_large_image" },
   robots: {
     index:  true,
     follow: true,
@@ -66,13 +76,25 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: "#0F0F12",
+  colorScheme: "dark",
+};
+
 /* ─── JSON-LD Person schema ─── */
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
-  name: profile.name,
+  name: profile.fullName,
+  givenName: profile.name,
   jobTitle: "Cybersecurity Apprentice — GRC / Blue Team / DevSecOps",
   url: profile.siteUrl,
+  email: `mailto:${profile.email}`,
+  sameAs: [profile.github, profile.linkedin],
+  alumniOf: [...new Set(profile.education.map((e) => e.school))].map((name) => ({
+    "@type": "EducationalOrganization",
+    name,
+  })),
   address: {
     "@type": "PostalAddress",
     addressLocality: profile.city,
@@ -97,15 +119,15 @@ export default function RootLayout({
       <body>
         <LocaleProvider>
           {/* Skip link — visible on :focus for keyboard users */}
-          <a href="#main-content" className="skip-link">
-            Skip to main content
-          </a>
+          <SkipLink />
           <SmoothScroll>
             <AudioBootstrap />
             <CustomCursor />
             <ScanHUD />
+            <AudioControl />
             <LanguageToggle />
             {children}
+            <SiteFooter />
           </SmoothScroll>
         </LocaleProvider>
       </body>
