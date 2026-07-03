@@ -573,30 +573,38 @@ export function SectionHandshake() {
               >
                 visitor@nullsec:~$
               </label>
-              <input
-                id="terminal-input"
-                ref={inputRef}
-                type="text"
-                value={inputVal}
-                onChange={(e) => setInputVal(e.target.value)}
-                onKeyDown={handleInputKey}
-                autoComplete="off"
-                autoCorrect="off"
-                autoCapitalize="none"
-                spellCheck={false}
-                aria-label={tr("Terminal command input", "Saisie de commande du terminal")}
-                style={{
-                  flex: 1,
-                  background: "transparent",
-                  border: "none",
-                  outline: "none",
-                  color: "var(--color-bone)",
-                  fontFamily: "inherit",
-                  fontSize: "inherit",
-                  letterSpacing: "inherit",
-                  caretColor: "var(--color-blood)",
-                }}
-              />
+              {/* Input sized to its content so the block cursor sits right at
+                  the end of the typed text — the focus cue is that blinking
+                  block, not a coloured underline. */}
+              <span style={{ position: "relative", flex: 1, display: "inline-flex", alignItems: "center", minWidth: 0 }}>
+                <input
+                  id="terminal-input"
+                  ref={inputRef}
+                  type="text"
+                  value={inputVal}
+                  onChange={(e) => setInputVal(e.target.value)}
+                  onKeyDown={handleInputKey}
+                  autoComplete="off"
+                  autoCorrect="off"
+                  autoCapitalize="none"
+                  spellCheck={false}
+                  aria-label={tr("Terminal command input", "Saisie de commande du terminal")}
+                  style={{
+                    width: `calc(${Math.max(inputVal.length, 1)}ch + 1px)`,
+                    maxWidth: "100%",
+                    background: "transparent",
+                    border: "none",
+                    outline: "none",
+                    padding: 0,
+                    color: "var(--color-bone)",
+                    fontFamily: "inherit",
+                    fontSize: "inherit",
+                    letterSpacing: "inherit",
+                    caretColor: "transparent",
+                  }}
+                />
+                <span aria-hidden="true" className="terminal-cursor">▋</span>
+              </span>
             </form>
           </div>
         </div>

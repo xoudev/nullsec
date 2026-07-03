@@ -264,10 +264,21 @@ section[data-section-id] { isolation: isolate; }
   .terminal-header-title { display: none; }
 }
 
-/* ─── Terminal input focus: visible cue without breaking the borderless
-   aesthetic — the prompt line gains a blood underline on focus-within. ─── */
-.terminal-input-row { border-bottom: 1px solid transparent; }
-.terminal-input-row:focus-within { border-bottom-color: var(--color-blood); }
+/* ─── Terminal input focus: a blinking block cursor at the end of the typed
+   text (the canonical terminal focus cue) — no coloured underline. ─── */
+.terminal-cursor {
+  color: var(--color-bone);
+  margin-left: 1px;
+  opacity: 0;                 /* hidden until the input is focused */
+  transform: translateY(-0.02em);
+}
+.terminal-input-row:focus-within .terminal-cursor {
+  animation: terminal-blink 1.05s step-end infinite;
+}
+@keyframes terminal-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
 
 /* ─── Terminal on touch: cap the frame (a mostly-empty 100dvh box on a phone)
    and reveal the one-tap command chips. ─── */
