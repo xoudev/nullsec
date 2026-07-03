@@ -103,9 +103,10 @@ export const profile = {
   // ── Experience ────────────────────────────────────────────────────────────
   experience: [
     {
+      // Official Arvato title; the ISMS/GRC scope shows in the focus bullets.
       title: {
-        en: "ISMS / GRC Apprentice — Internal Control",
-        fr: "Alternant SMSI / GRC, contrôle interne",
+        en: "Assistant LISO — Local Information Security Officer",
+        fr: "Assistant LISO (Local Information Security Officer)",
       },
       company: "Arvato",
       period: { en: "Oct 2025 — Sept 2026", fr: "oct. 2025 – sept. 2026" },

@@ -1,14 +1,14 @@
 {
- "role": "Cybersecurity — GRC · Blue Team · DevSecOps",
- "pitch": "ISMS / GRC apprentice in Internal Control at Arvato; cybersecurity bachelor at Guardia. Building a hybrid profile: governance credible enough to decide, technical depth deep enough to verify.",
- "availability": "APPRENTICE @ ARVATO UNTIL SEPT 2026 · MASTÈRE 2026–2028 · FULL-TIME FROM SEPT 2028",
+ "role": "Cybersecurity - GRC · Blue Team · DevSecOps",
+ "pitch": "Assistant LISO (apprenticeship) in Internal Control at Arvato; cybersecurity bachelor at Guardia, Mastère (offensive & defensive) from Sept 2026. Focus: GRC, blue-team detection, and network security.",
+ "availability": "APPRENTICE @ ARVATO UNTIL SEPT 2026 · MASTÈRE 2026-2028 · FULL-TIME FROM SEPT 2028",
  "contact": {
   "email": "jordan.turnaco.pro@gmail.com",
   "location": "Paris, France"
  },
  "labels": {
   "experience": "Experience",
-  "projects": "Selected projects",
+  "projects": "Projects",
   "certifications": "Certifications",
   "education": "Education",
   "skills": "Skills",
@@ -16,9 +16,9 @@
  },
  "experience": [
   {
-   "title": "ISMS / GRC Apprentice — Internal Control",
+   "title": "Assistant LISO - Local Information Security Officer",
    "company": "Arvato",
-   "period": "Oct 2025 — Sept 2026",
+   "period": "Oct 2025 - Sept 2026",
    "focus": [
     "EBIOS RM risk analyses (GRC, second line)",
     "ISO 27001 / ISREG alignment",
@@ -31,7 +31,7 @@
   {
    "title": "Flutter Development Intern",
    "company": "AaliaTech",
-   "period": "Dec 2024 — Feb 2025",
+   "period": "Dec 2024 - Feb 2025",
    "focus": [
     "Responsive Dart/Flutter interfaces",
     "Firebase auth and storage",
@@ -41,7 +41,7 @@
   {
    "title": "Web Developer Intern",
    "company": "Minkey",
-   "period": "Apr — Jun 2024",
+   "period": "Apr - Jun 2024",
    "focus": [
     "UI improvement",
     "Performance optimisation",
@@ -61,7 +61,7 @@
    "name": "Zero Trust Architecture",
    "year": "2025",
    "stack": "NIST SP 800-207 · OPNsense · Wazuh",
-   "line": "Migration design for a multi-site logistics company: identity stack (Step-CA, Authentik, Teleport), inter-VLAN matrix, 3-year TCO, NIS2 art. 21 mapping.",
+   "line": "Migration design for a multi-site logistics company: identity stack (Step-CA, Authentik, Teleport), inter-VLAN traffic matrix, 3-year TCO, NIS2 art. 21 compliance mapping.",
    "link": ""
   },
   {
@@ -81,63 +81,46 @@
  ],
  "certifications": [
   {
-   "name": "CSNA — Stormshield Network Administrator",
+   "name": "CSNA - Stormshield Network Administrator",
    "status": "obtained · Mar 2026 · 80%"
   }
  ],
+ "certPreparing": "In preparation: ISO/IEC 27001 Lead Implementer (target 2027) · CISSP (target 2028)",
  "education": [
   {
-   "degree": "Mastère Expert Cybersecurity — Offensive / Defensive (RNCP 37796)",
+   "degree": "Mastère Expert Cybersecurity - Offensive / Defensive (RNCP 37796)",
    "school": "Guardia Cybersecurity School",
-   "period": "2026 – 2028"
+   "period": "2026 - 2028"
   },
   {
-   "degree": "Bachelor Cybersecurity — 3rd year (RNCP level 6)",
+   "degree": "Bachelor Cybersecurity - 3rd year (RNCP level 6)",
    "school": "Guardia Cybersecurity School",
-   "period": "2025 – 2026"
+   "period": "2025 - 2026"
   },
   {
-   "degree": "Computer Science — 2nd year · DevOps, systems & networks",
+   "degree": "Computer Science - 1st & 2nd year · DevOps, systems & networks",
    "school": "EPSI",
-   "period": "2024 – 2025"
-  },
-  {
-   "degree": "Computer Science — 1st year · DevOps, systems & networks",
-   "school": "EPSI",
-   "period": "2023 – 2024"
+   "period": "2023 - 2025"
   }
  ],
  "skills": [
   {
    "domain": "GRC / Risk",
-   "items": "ISO 27001 · EBIOS RM · NIS2 · ISREG · PSSI · vulnerability mgmt (CVSS · SLA) · supplier assessments"
+   "items": "ISO 27001 · EBIOS RM · NIS2 · ISREG · PSSI · risk analysis · vulnerability management (CVSS · SLA) · supplier assessments · security audit"
   },
   {
    "domain": "Blue team",
-   "items": "Stormshield · Wazuh · Wireshark · MITRE ATT&CK · detection engineering · log analysis"
+   "items": "Stormshield · Wazuh · Wireshark · MITRE ATT&CK · detection engineering · log analysis · incident management"
   },
   {
    "domain": "Offensive",
-   "items": "Burp Suite · Metasploit · Nmap · Kali · OSINT"
+   "items": "Burp Suite · Metasploit · Nmap · Kali Linux · OSINT"
   },
   {
    "domain": "Dev / Infra",
-   "items": "TypeScript · Next.js · Python · Docker · Kubernetes · Ansible · Proxmox · Linux · segmentation / VLANs"
+   "items": "TypeScript · Next.js · Python · Docker · Kubernetes · Ansible · CI/CD · Proxmox · Linux · network segmentation / VLANs · pfSense"
   }
  ],
- "languages": [
-  {
-   "name": "French",
-   "level": "Native"
-  },
-  {
-   "name": "English",
-   "level": "C1"
-  },
-  {
-   "name": "Spanish",
-   "level": "B1"
-  }
- ],
- "footer": "compiled from source — github.com/xoudev/nullsec"
+ "languagesLine": "French (native) · English (C1) · Spanish (B1)",
+ "footer": "compiled from source · github.com/xoudev/nullsec"
 }

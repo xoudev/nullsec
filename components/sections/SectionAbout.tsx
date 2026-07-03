@@ -128,7 +128,7 @@ export function SectionAbout() {
               [
                 [tr("LOCATION", "LIEU"),     `${profile.city}, ${profile.country}`],
                 [tr("SCHOOL", "ÉCOLE"),      "Guardia Cybersecurity School"],
-                [tr("CURRENT", "EN POSTE"),  tr("ISMS / GRC Apprentice @ Arvato", "Alternant SMSI / GRC @ Arvato")],
+                [tr("CURRENT", "EN POSTE"),  tr("Assistant LISO @ Arvato", "Assistant LISO @ Arvato")],
                 [tr("NEXT", "ENSUITE"),      tr("MSc Offensive / Defensive — Sept 2026", "Mastère offensif / défensif, sept. 2026")],
                 [tr("FOCUS", "FOCUS"),       "GRC · Blue Team · DevSecOps"],
                 [tr("AVAILABLE", "DISPO"),   profile.available],

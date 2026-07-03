@@ -83,14 +83,14 @@ function runCommand(raw: string, t: T, tr: Tr): OutputLine[] {
     case "whoami":
       return [
         { type: "output", text: `${profile.fullName} · ${profile.age} · ${profile.city}` },
-        { type: "output", text: tr("ISMS / GRC apprentice @ Arvato · Guardia · 3rd year", "Alternant SMSI / GRC @ Arvato · Guardia · 3e année") },
+        { type: "output", text: tr("Assistant LISO @ Arvato · Guardia · 3rd year", "Assistant LISO @ Arvato · Guardia · 3e année") },
         { type: "output", text: t(profile.bio) },
         { type: "output", text: tr(`next availability: ${profile.available}`, `disponible à partir de : ${profile.available}`) },
       ];
 
     case "hire":
       return [
-        { type: "output", text: tr("currently: ISMS / GRC apprentice @ Arvato, Oct 2025 — Sept 2026.", "en poste : alternance SMSI / GRC @ Arvato, oct. 2025 à sept. 2026.") },
+        { type: "output", text: tr("currently: Assistant LISO @ Arvato (apprenticeship), Oct 2025 — Sept 2026.", "en poste : Assistant LISO @ Arvato (alternance), oct. 2025 à sept. 2026.") },
         { type: "output", text: tr("next: Mastère offensive/defensive (alternance), 2026 — 2028.", "ensuite : Mastère offensif/défensif en alternance, 2026 à 2028.") },
         { type: "output", text: tr(`available full-time from ${profile.available}.`, "disponible à temps plein à partir de sept. 2028.") },
         { type: "output", text: tr("domains: GRC · Blue Team · DevSecOps.", "domaines : GRC · Blue Team · DevSecOps.") },
