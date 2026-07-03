@@ -14,14 +14,14 @@ const MONO = "var(--font-jetbrains-mono)";
  * handshake terminal above it on the homepage.
  */
 export function SiteFooter() {
-  const { tr } = useT();
+  const { t, tr } = useT();
   const pathname = usePathname();
 
   const links = [
     { label: "email", href: `mailto:${profile.email}` },
     { label: "github", href: profile.github },
     { label: "linkedin", href: profile.linkedin },
-    { label: "cv", href: profile.cvUrl },
+    { label: "cv", href: t(profile.cvUrl) },
     { label: "rss", href: "/feed.xml" },
   ];
 

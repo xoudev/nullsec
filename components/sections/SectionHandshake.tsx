@@ -44,7 +44,7 @@ function runCommand(raw: string, t: T, tr: Tr): OutputLine[] {
   }
   if (bin === "cat") {
     if (argv[1] === "cv.pdf") {
-      return [{ type: "output", text: tr(`binary file. open it: ${profile.siteUrl}/cv.pdf`, `fichier binaire. À ouvrir ici : ${profile.siteUrl}/cv.pdf`) }];
+      return [{ type: "output", text: tr(`binary file. open it: ${profile.siteUrl}${t(profile.cvUrl)}`, `fichier binaire. À ouvrir ici : ${profile.siteUrl}${t(profile.cvUrl)}`) }];
     }
     if (argv[1] === "pgp.txt") return [{ type: "output", text: profile.pgpKey }];
     if (!argv[1]) return [{ type: "error", text: tr("usage: cat <file>", "usage : cat <fichier>") }];
@@ -107,8 +107,8 @@ function runCommand(raw: string, t: T, tr: Tr): OutputLine[] {
 
     case "cv":
       return [
-        { type: "output", text: tr(`cv available at ${profile.siteUrl}/cv.pdf`, `cv consultable sur ${profile.siteUrl}/cv.pdf`) },
-        { type: "output", text: "Jordan Turnaco · ISMS · GRC · DevSecOps" },
+        { type: "output", text: tr(`cv available at ${profile.siteUrl}${t(profile.cvUrl)}`, `cv consultable sur ${profile.siteUrl}${t(profile.cvUrl)}`) },
+        { type: "output", text: tr("compiled from source — see scripts/build-cv.mjs", "compilé depuis les sources : voir scripts/build-cv.mjs") },
       ];
 
     case "xp":
@@ -643,7 +643,7 @@ export function SectionHandshake() {
           { label: "email", href: `mailto:${profile.email}` },
           { label: "github", href: profile.github },
           { label: "linkedin", href: profile.linkedin },
-          { label: "cv", href: profile.cvUrl },
+          { label: "cv", href: t(profile.cvUrl) },
         ].map(({ label, href }) => (
           <a
             key={label}

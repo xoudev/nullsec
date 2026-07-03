@@ -1,0 +1,143 @@
+{
+ "role": "Cybersécurité · GRC · Blue Team · DevSecOps",
+ "pitch": "Alternant SMSI / GRC au Contrôle Interne d'Arvato ; Bachelor cybersécurité à Guardia. Un profil hybride : assez de gouvernance pour décider, assez de technique pour vérifier.",
+ "availability": "ALTERNANT @ ARVATO JUSQU'À SEPT. 2026 · MASTÈRE 2026-2028 · TEMPS PLEIN DÈS SEPT. 2028",
+ "contact": {
+  "email": "jordan.turnaco.pro@gmail.com",
+  "location": "Paris, France"
+ },
+ "labels": {
+  "experience": "Expérience",
+  "projects": "Projets choisis",
+  "certifications": "Certifications",
+  "education": "Formation",
+  "skills": "Compétences",
+  "languages": "Langues"
+ },
+ "experience": [
+  {
+   "title": "Alternant SMSI / GRC, contrôle interne",
+   "company": "Arvato",
+   "period": "oct. 2025 – sept. 2026",
+   "focus": [
+    "Analyses de risques EBIOS RM (GRC, deuxième ligne de défense)",
+    "Mise en conformité ISO 27001 / ISREG",
+    "Rédaction de la PSSI et des politiques de sécurité",
+    "Évaluation du niveau de sécurité des tiers et des fournisseurs",
+    "Gestion des vulnérabilités sous JIRA (CVSS · SLA)",
+    "Documentation du SMSI et audits de terrain sur les sites logistiques"
+   ]
+  },
+  {
+   "title": "Stagiaire développeur Flutter",
+   "company": "AaliaTech",
+   "period": "déc. 2024 – févr. 2025",
+   "focus": [
+    "Développement d'interfaces Dart/Flutter responsives",
+    "Authentification et stockage avec Firebase",
+    "Optimisation des performances et correction de bugs"
+   ]
+  },
+  {
+   "title": "Stagiaire développeur web",
+   "company": "Minkey",
+   "period": "avr. – juin 2024",
+   "focus": [
+    "Refonte de l'interface utilisateur",
+    "Optimisation des performances",
+    "Migration de WordPress vers HTML/CSS/JS"
+   ]
+  }
+ ],
+ "projects": [
+  {
+   "name": "CyberLearn",
+   "year": "2025",
+   "stack": "Next.js · Supabase · PostgreSQL RLS",
+   "line": "Plateforme full-stack d'apprentissage de la cybersécurité ; autorisation par Row-Level Security, gamification, pipeline vidéo automatisé.",
+   "link": "cyberlearn.fr"
+  },
+  {
+   "name": "Architecture Zero Trust",
+   "year": "2025",
+   "stack": "NIST SP 800-207 · OPNsense · Wazuh",
+   "line": "Conception de migration pour une entreprise logistique multi-sites : pile d'identité (Step-CA, Authentik, Teleport), matrice inter-VLAN, TCO sur 3 ans, cartographie NIS2 art. 21.",
+   "link": ""
+  },
+  {
+   "name": "Audit cryptographique (STM32)",
+   "year": "2025",
+   "stack": "Canal auxiliaire · UART/JTAG · Python",
+   "line": "Attaque temporelle récupérant un mot de passe sur une comparaison à sortie anticipée ; méthodologie de mesure par médiane et rapport de durcissement.",
+   "link": ""
+  },
+  {
+   "name": "NULLSEC",
+   "year": "2025",
+   "stack": "Next.js 16 · GSAP · Typst",
+   "line": "Ce portfolio : contenu typé comme source unique de vérité ; ce CV se compile depuis les mêmes données.",
+   "link": "github.com/xoudev/nullsec"
+  }
+ ],
+ "certifications": [
+  {
+   "name": "CSNA · Stormshield Network Administrator",
+   "status": "obtenue · mars 2026 · 80 %"
+  }
+ ],
+ "education": [
+  {
+   "degree": "Mastère Expert Cybersécurité, volet offensif et défensif (RNCP 37796)",
+   "school": "Guardia Cybersecurity School",
+   "period": "2026 – 2028"
+  },
+  {
+   "degree": "Bachelor Cybersécurité, 3e année (RNCP niveau 6)",
+   "school": "Guardia Cybersecurity School",
+   "period": "2025 – 2026"
+  },
+  {
+   "degree": "Informatique, 2e année · DevOps, systèmes et réseaux",
+   "school": "EPSI",
+   "period": "2024 – 2025"
+  },
+  {
+   "degree": "Informatique, 1re année · DevOps, systèmes et réseaux",
+   "school": "EPSI",
+   "period": "2023 – 2024"
+  }
+ ],
+ "skills": [
+  {
+   "domain": "GRC / Risque",
+   "items": "ISO 27001 · EBIOS RM · NIS2 · ISREG · PSSI · gestion des vulnérabilités (CVSS · SLA) · évaluation des tiers"
+  },
+  {
+   "domain": "Blue team",
+   "items": "Stormshield · Wazuh · Wireshark · MITRE ATT&CK · ingénierie de détection · analyse de journaux"
+  },
+  {
+   "domain": "Offensif",
+   "items": "Burp Suite · Metasploit · Nmap · Kali · OSINT"
+  },
+  {
+   "domain": "Dev / Infra",
+   "items": "TypeScript · Next.js · Python · Docker · Kubernetes · Ansible · Proxmox · Linux · segmentation / VLAN"
+  }
+ ],
+ "languages": [
+  {
+   "name": "Français",
+   "level": "Natif"
+  },
+  {
+   "name": "Anglais",
+   "level": "C1"
+  },
+  {
+   "name": "Espagnol",
+   "level": "B1"
+  }
+ ],
+ "footer": "compilé depuis les sources · github.com/xoudev/nullsec"
+}

@@ -50,7 +50,7 @@ const SECTIONS: { id: string; label: string; fr: string }[] = [
 
 export function ScanHUD() {
   const prefersReduced = useReducedMotion();
-  const { tr } = useT();
+  const { t, tr } = useT();
   const pathname = usePathname();
   const muted = useSyncExternalStore(subscribeMute, getMuted, () => false);
   const vol = useSyncExternalStore(subscribeVolume, getVolume, () => 20);
@@ -188,7 +188,7 @@ export function ScanHUD() {
 
       {/* Persistent CV link — pointer convenience; also keyboard-reachable. */}
       <a
-        href={profile.cvUrl}
+        href={t(profile.cvUrl)}
         target="_blank"
         rel="noopener noreferrer"
         data-cursor="open ↗"

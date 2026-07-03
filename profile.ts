@@ -32,7 +32,9 @@ export const profile = {
       "-----END PGP PUBLIC KEY BLOCK-----", // paste armored public key here when you have one
 
   // ── Site ──────────────────────────────────────────────────────────────────
-  cvUrl: "/cv.pdf",
+  // Both PDFs compile from this file via scripts/build-cv.mjs. The historical
+  // /cv.pdf URL stays French (it always was); EN gets its own file.
+  cvUrl: { en: "/cv-en.pdf", fr: "/cv.pdf" },
   available: "Sept 2028",
   tagline: { en: "Securing what others overlook.", fr: "Protéger ce que les autres laissent filer." },
   // Resolves the hero's line instead of repeating it verbatim four viewports later.

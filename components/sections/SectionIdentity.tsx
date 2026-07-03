@@ -194,7 +194,7 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
           </div>
           <div style={{ marginTop: "0.6rem" }}>
             <a
-              href={profile.cvUrl}
+              href={t(profile.cvUrl)}
               target="_blank"
               rel="noopener noreferrer"
               data-cursor="open ↗"
