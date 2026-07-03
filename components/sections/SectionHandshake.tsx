@@ -30,17 +30,20 @@ function buildWelcome(tr: Tr): OutputLine[] {
 // ASCII system card — boxed "//" logo (blood) beside profile facts (bone).
 // Keys stay English (neofetch convention); values come from the profile.
 function neofetch(): OutputLine[] {
+  // ASCII-only box: the double-line box-drawing glyphs aren't in the loaded
+  // JetBrains Mono Latin subset, so they fall back to a different-width font
+  // and break the alignment. Plain +/-/| are always in the font.
   const logo = [
-    "╔═════════╗",
-    "║  //  // ║",
-    "║  //  // ║",
-    "║  //  // ║",
-    "╚═════════╝",
+    "+---------+",
+    "|  //  // |",
+    "|  //  // |",
+    "|  //  // |",
+    "+---------+",
   ];
   const www = profile.siteUrl.replace(/^https?:\/\//, "");
   const info = [
     "visitor@nullsec",
-    "───────────────",
+    "---------------",
     `host    ${profile.fullName} · ${profile.age} · ${profile.city}`,
     "role    Assistant LISO @ Arvato",
     "focus   GRC · Blue Team · DevSecOps",
