@@ -35,7 +35,8 @@ export const profile = {
   cvUrl: "/cv.pdf",
   available: "Sept 2028",
   tagline: { en: "Securing what others overlook.", fr: "Protéger ce que les autres laissent filer." },
-  bio: { en: "I don't build fortresses. I map the blind spots.", fr: "Je ne bâtis pas de forteresses : je cartographie les angles morts." },
+  // Resolves the hero's line instead of repeating it verbatim four viewports later.
+  bio: { en: "I don't build fortresses. I find where they leak.", fr: "Je ne bâtis pas de forteresses : je cherche où elles fuient." },
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://nullsec.fr",
 
   // ── Languages ─────────────────────────────────────────────────────────────
@@ -84,7 +85,17 @@ export const profile = {
 
   // ── Certifications ────────────────────────────────────────────────────────
   certifications: [
-    { name: "CSNA — Stormshield Network Administrator", issuer: "Stormshield", status: "obtained · Mar 2026 · 80%" },
+    {
+      name: {
+        en: "CSNA — Stormshield Network Administrator",
+        fr: "CSNA · Stormshield Network Administrator",
+      },
+      issuer: "Stormshield",
+      status: {
+        en: "obtained · Mar 2026 · 80%",
+        fr: "obtenue · mars 2026 · 80 %",
+      },
+    },
   ],
 
   // ── Experience ────────────────────────────────────────────────────────────
@@ -92,10 +103,10 @@ export const profile = {
     {
       title: {
         en: "ISMS / GRC Apprentice — Internal Control",
-        fr: "Alternant ISMS / GRC, contrôle interne",
+        fr: "Alternant SMSI / GRC, contrôle interne",
       },
       company: "Arvato",
-      period: "Oct 2025 — Sept 2026",
+      period: { en: "Oct 2025 — Sept 2026", fr: "oct. 2025 – sept. 2026" },
       focus: {
         en: [
           "EBIOS RM risk analyses (GRC, second line)",
@@ -111,7 +122,7 @@ export const profile = {
           "Rédaction de la PSSI et des politiques de sécurité",
           "Évaluation du niveau de sécurité des tiers et des fournisseurs",
           "Gestion des vulnérabilités sous JIRA (CVSS · SLA)",
-          "Documentation de l'ISMS et audits de terrain sur les sites logistiques",
+          "Documentation du SMSI et audits de terrain sur les sites logistiques",
         ],
       },
     },
@@ -121,7 +132,7 @@ export const profile = {
         fr: "Stagiaire développeur Flutter",
       },
       company: "AaliaTech",
-      period: "Dec 2024 — Feb 2025",
+      period: { en: "Dec 2024 — Feb 2025", fr: "déc. 2024 – févr. 2025" },
       focus: {
         en: [
           "Responsive Dart/Flutter interfaces",
@@ -141,7 +152,7 @@ export const profile = {
         fr: "Stagiaire développeur web",
       },
       company: "Minkey",
-      period: "Apr — Jun 2024",
+      period: { en: "Apr — Jun 2024", fr: "avr. – juin 2024" },
       focus: {
         en: [
           "UI improvement",

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { gsap } from "@/lib/gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
@@ -25,6 +26,13 @@ const SESSION_KEY = "nullsec_booted";
 export default function Template({ children }: { children: React.ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   const prefersReduced = useReducedMotion();
+  const pathname = usePathname();
+
+  // Entering the site through a detail page counts as booted: navigating home
+  // afterwards must not raise the boot gate mid-session.
+  useEffect(() => {
+    if (pathname !== "/") sessionStorage.setItem(SESSION_KEY, "1");
+  }, [pathname]);
 
   useEffect(() => {
     if (!ref.current) return;

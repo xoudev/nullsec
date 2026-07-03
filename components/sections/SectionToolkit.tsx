@@ -58,7 +58,10 @@ export function SectionToolkit() {
   const scrambleCancels = useRef<(() => void)[]>([]);
   const prefersReduced = useReducedMotion();
   const { t, tr } = useT();
-  const defaultHint = tr("// hover an entry for its proof", "// survolez une entrée pour afficher sa preuve");
+  // Two variants of the idle hint — CSS shows the right one per input type
+  // ("hover" makes no sense on a touchscreen).
+  const hintFine = tr("// hover an entry for its proof", "// survolez une entrée pour afficher sa preuve");
+  const hintCoarse = tr("// tap an entry for its proof", "// touchez une entrée pour afficher sa preuve");
 
   // [domainIndex, entryIndex] of the entry currently hovered/focused — drives proof reveal.
   const [active, setActive] = useState<[number, number] | null>(null);
@@ -152,12 +155,15 @@ export function SectionToolkit() {
     <section
       ref={sectionRef}
       data-section-id="03"
-      aria-label="Toolkit — competence domains"
+      aria-label={tr("Toolkit: competence domains", "Outillage : domaines de compétences")}
       style={{
         backgroundColor: "var(--color-void)",
         padding: "clamp(4rem, 8vw, 8rem) clamp(1.5rem, 4vw, 3rem)",
+        position: "relative",
       }}
     >
+      <span aria-hidden="true" className="ghost-numeral">03</span>
+
       {/* Header row */}
       <div
         style={{
@@ -226,9 +232,9 @@ export function SectionToolkit() {
 
           const activeEntry =
             active && active[0] === d ? domain.entries[active[1]] : null;
-          const hint = activeEntry?.proof
+          const proofHint = activeEntry?.proof
             ? `// ${t(activeEntry.proof)}${activeEntry.proofHref ? "  →" : ""}`
-            : defaultHint;
+            : null;
 
           return (
             <div
@@ -322,6 +328,7 @@ export function SectionToolkit() {
                             onMouseLeave={leave}
                             onFocus={enter}
                             onBlur={leave}
+                            className="toolkit-entry"
                             style={itemStyle}
                           >
                             {entry.label}
@@ -331,6 +338,12 @@ export function SectionToolkit() {
                             ref={setRef}
                             onMouseEnter={enter}
                             onMouseLeave={leave}
+                            // Focusable so keyboard users can reveal the proof
+                            // hint exactly like hover does.
+                            tabIndex={entry.proof ? 0 : undefined}
+                            onFocus={enter}
+                            onBlur={leave}
+                            className="toolkit-entry"
                             style={itemStyle}
                           >
                             {entry.label}
@@ -346,7 +359,7 @@ export function SectionToolkit() {
                   })}
                 </ul>
 
-                {/* Proof hint — swaps to the hovered entry's proof */}
+                {/* Proof hint — swaps to the hovered/focused entry's proof */}
                 <div
                   aria-hidden="true"
                   style={{
@@ -355,13 +368,18 @@ export function SectionToolkit() {
                     fontFamily: "var(--font-jetbrains-mono)",
                     fontSize: "0.62rem",
                     letterSpacing: "0.04em",
-                    color: activeEntry?.proof
+                    color: proofHint
                       ? "rgba(242,239,232,0.78)"
                       : "var(--color-ash)",
                     transition: "color 0.18s ease",
                   }}
                 >
-                  {hint}
+                  {proofHint ?? (
+                    <>
+                      <span className="toolkit-hint-fine">{hintFine}</span>
+                      <span className="toolkit-hint-coarse">{hintCoarse}</span>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

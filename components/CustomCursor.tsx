@@ -157,6 +157,7 @@ export function CustomCursor() {
       <div
         ref={frameRef}
         aria-hidden="true"
+        className="custom-cursor"
         style={{
           position: "fixed",
           top: 0,
@@ -196,6 +197,7 @@ export function CustomCursor() {
       <div
         ref={dotRef}
         aria-hidden="true"
+        className="custom-cursor"
         style={{
           position: "fixed",
           top: 0,

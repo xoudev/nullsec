@@ -93,12 +93,9 @@ export const toolkitDomains: ToolkitDomain[] = [
         proofHref: "/work/homelab-proxmox",
       },
       {
+        // No proof line: the homelab case study documents Wazuh but not Zabbix,
+        // and this file's own rule is "truthful evidence or nothing".
         label: "Zabbix",
-        proof: {
-          en: "Monitoring in the homelab",
-          fr: "Supervision dans le homelab",
-        },
-        proofHref: "/work/homelab-proxmox",
       },
       {
         label: "Wireshark",

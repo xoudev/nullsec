@@ -8,8 +8,13 @@ import { unlockAudio, preloadSound, playAmbient } from "@/lib/audio";
  * preloader's. The preloader only runs once per tab session (and never on
  * /work or /dispatches), so without this the AudioContext is never created on
  * a refresh or a detail page, and every sound silently no-ops. A single
- * pointerdown/keydown anywhere unlocks the context, preloads the click sound,
- * and starts the ambient loop (all idempotent — safe alongside the preloader).
+ * pointerdown/keydown anywhere unlocks the context and preloads the click
+ * sound (all idempotent — safe alongside the preloader).
+ *
+ * The ambient loop is only started here when the preloader is NOT about to run:
+ * on first visits to the homepage the same gesture that unlocks audio also
+ * starts the boot sequence, and the Preloader owns the ambient start at boot
+ * complete — starting it here too made ambient and the boot sound overlap.
  */
 export function AudioBootstrap() {
   useEffect(() => {
@@ -19,8 +24,13 @@ export function AudioBootstrap() {
       done = true;
       try {
         unlockAudio();
-        void preloadSound("/click.wav");
-        void playAmbient("/sound.wav");
+        void preloadSound("/click.mp3");
+        const preloaderPending =
+          window.location.pathname === "/" &&
+          sessionStorage.getItem("nullsec_booted") !== "1";
+        if (!preloaderPending) {
+          void playAmbient("/sound.mp3");
+        }
       } catch {
         // Audio is optional — never let it break interaction.
       }

@@ -141,12 +141,15 @@ export function SectionClearance() {
     <section
       ref={sectionRef}
       data-section-id="04"
-      aria-label="Clearance — Certifications"
+      aria-label={tr("Clearance: certifications", "Habilitations : certifications")}
       style={{
         backgroundColor: "var(--color-void)",
         padding: "clamp(5rem, 9vw, 8rem) clamp(1.5rem, 4vw, 3rem)",
+        position: "relative",
       }}
     >
+      <span aria-hidden="true" className="ghost-numeral">04</span>
+
       {/* Section header */}
       <div style={{ marginBottom: "clamp(3rem, 6vw, 5rem)" }}>
         <div
@@ -208,16 +211,16 @@ export function SectionClearance() {
                   paddingLeft: "clamp(1rem, 2vw, 1.5rem)",
                 }}
               >
-                {/* Status / date / rule / level row */}
+                {/* Status / date / rule / level row — real data (status, score,
+                    date, level), so it must reach assistive technology. */}
                 <div
-                  aria-hidden="true"
                   style={{
                     display:       "flex",
                     alignItems:    "center",
                     gap:           "0.75rem",
                     marginBottom:  "0.55rem",
                     fontFamily:    "var(--font-jetbrains-mono)",
-                    fontSize:      "0.58rem",
+                    fontSize:      "0.65rem",
                     letterSpacing: "0.1em",
                   }}
                 >
@@ -262,7 +265,7 @@ export function SectionClearance() {
                     marginBottom:   "0.3rem",
                   }}
                 >
-                  {item.title}
+                  {t(item.title)}
                 </div>
 
                 {/* Issuer + credential ID */}

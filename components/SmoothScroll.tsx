@@ -24,7 +24,8 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
     <ReactLenis
       root
       options={{
-        lerp: 0.08,
+        // duration + easing drive the scroll; a lerp option would be dead code
+        // here (Lenis prefers the duration/easing pair when both are given).
         duration: 1.2,
         smoothWheel: true,
         easing: ease,

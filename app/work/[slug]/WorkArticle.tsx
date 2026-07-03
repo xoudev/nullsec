@@ -176,6 +176,9 @@ export function WorkArticle({
                   height: "auto",
                   maxHeight: "140px",
                   objectFit: "contain",
+                  // Third-party artwork conforms to the 4-colour system, same
+                  // treatment as the off-duty photography.
+                  filter: "grayscale(1) contrast(1.05)",
                 }}
               />
             </div>
@@ -241,26 +244,54 @@ export function WorkArticle({
             </div>
           )}
 
-          {/* Live link — only when the project has a public site */}
-          {item.liveUrl && (
-            <a
-              href={item.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+          {/* Live / source links — only when the project has them */}
+          {(item.liveUrl || item.repoUrl) && (
+            <div
               style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                fontFamily: "var(--font-jetbrains-mono)",
-                fontSize: "0.7rem",
-                color: "var(--color-blood)",
-                letterSpacing: "0.08em",
-                textDecoration: "none",
+                display: "flex",
+                gap: "1.25rem",
                 marginBottom: "clamp(1.5rem, 2.5vw, 2rem)",
               }}
             >
-              {tr("[ live → ]", "[ en ligne → ]")}
-            </a>
+              {item.liveUrl && (
+                <a
+                  href={item.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    fontFamily: "var(--font-jetbrains-mono)",
+                    fontSize: "0.7rem",
+                    color: "var(--color-blood)",
+                    letterSpacing: "0.08em",
+                    textDecoration: "none",
+                  }}
+                >
+                  {tr("[ live → ]", "[ en ligne → ]")}
+                </a>
+              )}
+              {item.repoUrl && (
+                <a
+                  href={item.repoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    fontFamily: "var(--font-jetbrains-mono)",
+                    fontSize: "0.7rem",
+                    color: "var(--color-blood)",
+                    letterSpacing: "0.08em",
+                    textDecoration: "none",
+                  }}
+                >
+                  {tr("[ source → ]", "[ code source → ]")}
+                </a>
+              )}
+            </div>
           )}
 
           {/* Pull quote */}
@@ -293,7 +324,7 @@ export function WorkArticle({
           <div
             style={{
               fontFamily: "var(--font-jetbrains-mono)",
-              fontSize: "0.55rem",
+              fontSize: "0.65rem",
               color: "var(--color-ash)",
               letterSpacing: "0.15em",
               marginBottom: "1rem",

@@ -73,14 +73,17 @@ body {
   border: 0;
 }
 
-/* ─── Skip link (keyboard accessibility) ─── */
+/* ─── Skip link (keyboard accessibility) ───
+   Bone background + void text: 16.7:1 (bone-on-blood only reached 3.6:1,
+   below the 4.5:1 AA floor for 12px text). Blood stays as the border. */
 .skip-link {
   position: absolute;
   top: -100%;
   left: 1rem;
   z-index: 200;
-  background: var(--color-blood);
-  color: var(--color-bone);
+  background: var(--color-bone);
+  color: var(--color-void);
+  border: 2px solid var(--color-blood);
   font-family: var(--font-jetbrains-mono), monospace;
   font-size: 0.75rem;
   letter-spacing: 0.06em;
@@ -93,6 +96,12 @@ body {
 /* ─── ScanHUD: hidden on small screens to avoid overlap ─── */
 .scan-hud { display: none; }
 @media (min-width: 768px) { .scan-hud { display: block; } }
+
+/* ─── Standalone mute button — only where the ScanHUD (desktop volume UI)
+   is absent: small screens, or any viewport under reduced motion. ─── */
+.audio-control { display: none; }
+@media (max-width: 767px) { .audio-control { display: block; } }
+.audio-control--force { display: block; }
 
 /* ─── Hover utility classes (used by server-component pages) ─── */
 .hover-to-bone {
@@ -224,9 +233,79 @@ body {
   .offduty-row:hover .offduty-title { transform: none; }
 }
 
+/* ─── Ghost section numeral — the site's signature device, systematised.
+   One oversized dimmed numeral per section (same family as the dispatch
+   ghost numbers). z-index -1 paints it under the in-flow content while the
+   section's background-color (non-stacking-context) stays behind it. ─── */
+/* Each numbered section isolates its stacking context so the z-index:-1
+   numeral paints above the section's own background (not under it). */
+section[data-section-id] { isolation: isolate; }
+
+.ghost-numeral {
+  position: absolute;
+  top: clamp(1.5rem, 3vw, 2.5rem);
+  right: clamp(1.5rem, 4vw, 3rem);
+  z-index: -1;
+  font-family: var(--font-jetbrains-mono);
+  font-size: clamp(7rem, 15vw, 17rem);
+  line-height: 0.9;
+  color: var(--color-ash);
+  opacity: 0.07;
+  letter-spacing: -0.04em;
+  user-select: none;
+  pointer-events: none;
+}
+@media (max-width: 767px) {
+  .ghost-numeral { font-size: clamp(5rem, 24vw, 8rem); opacity: 0.06; }
+}
+
 /* ─── Terminal header: hide centred title on very narrow screens ─── */
 @media (max-width: 480px) {
   .terminal-header-title { display: none; }
+}
+
+/* ─── Terminal input focus: visible cue without breaking the borderless
+   aesthetic — the prompt line gains a blood underline on focus-within. ─── */
+.terminal-input-row { border-bottom: 1px solid transparent; }
+.terminal-input-row:focus-within { border-bottom-color: var(--color-blood); }
+
+/* ─── Terminal on touch: cap the frame (a mostly-empty 100dvh box on a phone)
+   and reveal the one-tap command chips. ─── */
+.terminal-chips { display: none; }
+@media (hover: none) {
+  .terminal-frame { flex: 0 1 auto; max-height: 24rem; }
+  .terminal-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+}
+
+/* ─── Hero scroll arrow: hidden on small screens (collides with the fixed
+   EN/FR toggle in the bottom-right corner at ~390px). ─── */
+@media (max-width: 767px) {
+  .hero-scroll-arrow { display: none; }
+}
+
+/* ─── Toolkit hint + tap targets ─── */
+.toolkit-hint-coarse { display: none; }
+@media (hover: none) {
+  .toolkit-hint-fine { display: none; }
+  .toolkit-hint-coarse { display: inline; }
+  /* Grow entry hit areas on touch without reflowing the desktop layout. */
+  .toolkit-entry { padding: 0.45rem 0.2rem; margin: -0.45rem -0.2rem; }
+}
+
+/* ─── Fieldwork excerpt: tighter on small screens but always present ─── */
+@media (max-width: 767px) {
+  .fieldwork-excerpt { font-size: 0.62rem; }
+}
+
+/* ─── Off-duty subtitle over always-on mobile imagery: lift from ash to
+   near-bone so it stays readable against mid-gray artwork. ─── */
+@media (hover: none) {
+  .offduty-subtitle { color: rgba(242, 239, 232, 0.85) !important; }
 }
 
 /* ─── Custom cursor — hide native pointer only when the custom reticle is
@@ -333,5 +412,29 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ─── Print — case studies go into candidate packets; make them legible on
+   paper instead of void-black pages stamped with fixed chrome. ─── */
+@media print {
+  html, body {
+    background: #ffffff !important;
+    color: #111111 !important;
+  }
+  .scan-hud,
+  .audio-control,
+  .language-toggle,
+  .custom-cursor,
+  .skip-link,
+  .ghost-numeral,
+  .site-footer {
+    display: none !important;
+  }
+  a { color: #111111; }
+  /* Expose destinations for links whose text isn't the URL itself. */
+  article a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
   }
 }

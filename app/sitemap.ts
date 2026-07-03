@@ -6,9 +6,10 @@ import { dispatches } from "@/content/dispatches";
 const base = profile.siteUrl;
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  // No lastModified on home/work: build-time "now" on every entry teaches
+  // crawlers to ignore the field. Dispatches keep their honest post dates.
   const workEntries: MetadataRoute.Sitemap = work.map((item) => ({
     url: `${base}/work/${item.slug}`,
-    lastModified: new Date(),
     changeFrequency: "monthly",
     priority: 0.8,
   }));
@@ -23,7 +24,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: base,
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 1,
     },

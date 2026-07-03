@@ -26,6 +26,41 @@ function buildWelcome(tr: Tr): OutputLine[] {
 
 function runCommand(raw: string, t: T, tr: Tr): OutputLine[] {
   const cmd = raw.trim().toLowerCase();
+  const argv = cmd.split(/\s+/);
+  const bin = argv[0] ?? "";
+
+  // The classics every technical visitor tries first — the illusion must not
+  // break on `ls`.
+  if (bin === "pwd") return [{ type: "output", text: "/home/visitor" }];
+  if (bin === "cd") {
+    return [{ type: "output", text: tr("nowhere to go. everything is right here.", "nulle part où aller : tout est déjà là.") }];
+  }
+  if (bin === "ls" || bin === "ll" || bin === "dir") {
+    return [
+      { type: "output", text: "identity/    fieldwork/   toolkit/     clearance/" },
+      { type: "output", text: "about/       experience/  dispatches/  off-duty/" },
+      { type: "output", text: "cv.pdf       pgp.txt      .well-known/" },
+    ];
+  }
+  if (bin === "cat") {
+    if (argv[1] === "cv.pdf") {
+      return [{ type: "output", text: tr(`binary file. open it: ${profile.siteUrl}/cv.pdf`, `fichier binaire. À ouvrir ici : ${profile.siteUrl}/cv.pdf`) }];
+    }
+    if (argv[1] === "pgp.txt") return [{ type: "output", text: profile.pgpKey }];
+    if (!argv[1]) return [{ type: "error", text: tr("usage: cat <file>", "usage : cat <fichier>") }];
+    return [{ type: "error", text: `cat: ${argv[1]}: ${tr("permission denied", "permission refusée")}` }];
+  }
+  // Generic sudo (the rm -rf variants keep their own easter egg below).
+  if (bin === "sudo" && !cmd.includes("rm -rf")) {
+    return [{
+      type: "error",
+      text: tr(
+        "visitor is not in the sudoers file. This incident will be reported.",
+        "visitor n'est pas dans le fichier sudoers. L'incident sera signalé.",
+      ),
+    }];
+  }
+
   switch (cmd) {
     case "help":
       return [
@@ -48,16 +83,16 @@ function runCommand(raw: string, t: T, tr: Tr): OutputLine[] {
     case "whoami":
       return [
         { type: "output", text: `${profile.fullName} · ${profile.age} · ${profile.city}` },
-        { type: "output", text: tr("ISMS / GRC apprentice @ Arvato · Guardia · 3rd year", "Alternant ISMS / GRC @ Arvato · Guardia · 3e année") },
+        { type: "output", text: tr("ISMS / GRC apprentice @ Arvato · Guardia · 3rd year", "Alternant SMSI / GRC @ Arvato · Guardia · 3e année") },
         { type: "output", text: t(profile.bio) },
         { type: "output", text: tr(`next availability: ${profile.available}`, `disponible à partir de : ${profile.available}`) },
       ];
 
     case "hire":
       return [
-        { type: "output", text: tr("currently: ISMS / GRC apprentice @ Arvato, Oct 2025 — Sept 2026.", "en poste : alternance ISMS / GRC @ Arvato, oct. 2025 à sept. 2026.") },
-        { type: "output", text: tr("not available for full-time until Sept 2028.", "pas de CDI envisageable avant sept. 2028.") },
-        { type: "output", text: tr("next: Mastère offensive/defensive (alternance), 2026 — 2028 — open to host companies.", "ensuite : Mastère offensif/défensif en alternance, 2026 à 2028 ; en quête d'une entreprise d'accueil.") },
+        { type: "output", text: tr("currently: ISMS / GRC apprentice @ Arvato, Oct 2025 — Sept 2026.", "en poste : alternance SMSI / GRC @ Arvato, oct. 2025 à sept. 2026.") },
+        { type: "output", text: tr("next: Mastère offensive/defensive (alternance), 2026 — 2028.", "ensuite : Mastère offensif/défensif en alternance, 2026 à 2028.") },
+        { type: "output", text: tr(`available full-time from ${profile.available}.`, "disponible à temps plein à partir de sept. 2028.") },
         { type: "output", text: tr("domains: GRC · Blue Team · DevSecOps.", "domaines : GRC · Blue Team · DevSecOps.") },
         { type: "output", text: tr(`contact: ${profile.email}`, `contact : ${profile.email}`) },
       ];
@@ -80,7 +115,7 @@ function runCommand(raw: string, t: T, tr: Tr): OutputLine[] {
     case "experience":
       return profile.experience.flatMap((e, i) => [
         { type: "output" as const, text: tr(`[${i + 1}] ${t(e.title)} — ${e.company}`, `[${i + 1}] ${t(e.title)} · ${e.company}`) },
-        { type: "output" as const, text: `    ${e.period}` },
+        { type: "output" as const, text: `    ${t(e.period)}` },
         ...t<readonly string[]>(e.focus).map((f) => ({ type: "output" as const, text: `    · ${f}` })),
       ]);
 
@@ -97,7 +132,7 @@ function runCommand(raw: string, t: T, tr: Tr): OutputLine[] {
         { type: "output" as const, text: tr("certifications:", "certifications :") },
         ...profile.certifications.map((c) => ({
           type: "output" as const,
-          text: tr(`  ${c.name} — ${c.status}`, `  ${c.name} · ${c.status}`),
+          text: tr(`  ${t(c.name)} — ${t(c.status)}`, `  ${t(c.name)} · ${t(c.status)}`),
         })),
       ];
 
@@ -178,6 +213,9 @@ export function SectionHandshake() {
   const booted = useRef(false);
   const [output, setOutput] = useState<OutputLine[]>([]);
   const [inputVal, setInputVal] = useState("");
+  // Arrow-up/down command history, like a real shell.
+  const history = useRef<string[]>([]);
+  const historyPos = useRef(-1);
   const prefersReduced = useReducedMotion();
   const { t, tr } = useT();
 
@@ -195,11 +233,18 @@ export function SectionHandshake() {
     }
   }, [output]);
 
-  // Boot sequence — plays once when section enters viewport
+  // Boot sequence — plays once when section enters viewport. `help` runs by
+  // itself after the welcome so the window is never a big empty box and every
+  // visitor discovers the commands without typing.
   useEffect(() => {
+    const autoHelp = (): OutputLine[] => [
+      { type: "input", text: "help" },
+      ...runCommand("help", i18nRef.current.t, i18nRef.current.tr),
+    ];
+
     if (prefersReduced) {
-      // Show the welcome output immediately; soft-fade the terminal window in.
-      setOutput(buildWelcome(i18nRef.current.tr));
+      // Show the welcome + help output immediately; soft-fade the window in.
+      setOutput([...buildWelcome(i18nRef.current.tr), ...autoHelp()]);
       return softReveal([windowRef.current]);
     }
 
@@ -220,14 +265,20 @@ export function SectionHandshake() {
           );
         }
 
-        // Staggered welcome lines
-        buildWelcome(i18nRef.current.tr).forEach((line, i) => {
+        // Staggered welcome lines, then the auto-run help
+        const welcome = buildWelcome(i18nRef.current.tr);
+        welcome.forEach((line, i) => {
           timers.push(
             setTimeout(() => {
               setOutput((prev) => [...prev, line]);
             }, 350 + i * 260)
           );
         });
+        timers.push(
+          setTimeout(() => {
+            setOutput((prev) => [...prev, ...autoHelp()]);
+          }, 350 + welcome.length * 260 + 300)
+        );
       },
       { threshold: 0.15 }
     );
@@ -239,19 +290,50 @@ export function SectionHandshake() {
     };
   }, [prefersReduced]);
 
+  const execute = useCallback((raw: string) => {
+    const { t: tt, tr: ttr } = i18nRef.current;
+    if (raw.trim()) {
+      history.current.push(raw);
+      historyPos.current = -1;
+    }
+    const result = runCommand(raw, tt, ttr);
+    const isClear = result.some((l) => l.text === "__CLEAR__");
+    setOutput((prev) =>
+      isClear
+        ? buildWelcome(ttr)
+        : [...prev, { type: "input" as const, text: raw }, ...result]
+    );
+  }, []);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const raw = inputVal;
     setInputVal("");
+    execute(raw);
+  };
 
-    const result = runCommand(raw, t, tr);
-    const isClear = result.some((l) => l.text === "__CLEAR__");
-
-    setOutput((prev) =>
-      isClear
-        ? buildWelcome(tr)
-        : [...prev, { type: "input" as const, text: raw }, ...result]
-    );
+  // Shell-style history navigation on the input.
+  const handleInputKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const h = history.current;
+    if (e.key === "ArrowUp") {
+      if (!h.length) return;
+      e.preventDefault();
+      historyPos.current =
+        historyPos.current === -1
+          ? h.length - 1
+          : Math.max(0, historyPos.current - 1);
+      setInputVal(h[historyPos.current]);
+    } else if (e.key === "ArrowDown") {
+      if (historyPos.current === -1) return;
+      e.preventDefault();
+      historyPos.current += 1;
+      if (historyPos.current >= h.length) {
+        historyPos.current = -1;
+        setInputVal("");
+      } else {
+        setInputVal(h[historyPos.current]);
+      }
+    }
   };
 
   const lineColor = (type: OutputLine["type"]): string => {
@@ -278,8 +360,11 @@ export function SectionHandshake() {
         minHeight: "100dvh",
         display: "flex",
         flexDirection: "column",
+        position: "relative",
       }}
     >
+      <span aria-hidden="true" className="ghost-numeral">EOF</span>
+
       {/* Section label */}
       <div
         aria-hidden="true"
@@ -288,15 +373,53 @@ export function SectionHandshake() {
           fontSize: "0.65rem",
           color: "var(--color-blood)",
           letterSpacing: "0.1em",
-          marginBottom: "clamp(1.5rem, 3vw, 2.5rem)",
+          marginBottom: "clamp(1.25rem, 2.5vw, 2rem)",
         }}
       >
         {"09 // HANDSHAKE"}
       </div>
 
+      {/* Closing statement — the page's final typographic beat. The tagline
+          gets its display-scale moment here, with a single blood word. */}
+      <h2
+        style={{
+          fontFamily: "var(--font-instrument-serif)",
+          fontStyle: "italic",
+          fontSize: "clamp(1.8rem, 4.5vw, 3.5rem)",
+          lineHeight: 1.05,
+          letterSpacing: "-0.02em",
+          color: "var(--color-bone)",
+          margin: "0 0 0.9rem",
+          maxWidth: "24ch",
+        }}
+      >
+        {tr("Securing what others ", "Protéger ce que les autres ")}
+        <span style={{ color: "var(--color-blood)" }}>
+          {tr("overlook", "laissent filer")}
+        </span>
+        {"."}
+      </h2>
+
+      {/* The email in plain sight — no command required. */}
+      <a
+        href={`mailto:${profile.email}`}
+        style={{
+          alignSelf: "flex-start",
+          fontFamily: "var(--font-jetbrains-mono)",
+          fontSize: "clamp(0.7rem, 1vw, 0.8rem)",
+          letterSpacing: "0.06em",
+          marginBottom: "clamp(1.5rem, 3vw, 2.5rem)",
+          padding: "0.4rem 0",
+        }}
+        className="hover-to-bone"
+      >
+        {"// "}{profile.email}
+      </a>
+
       {/* ── Terminal window frame ── */}
       <div
         ref={windowRef}
+        className="terminal-frame"
         style={{
           flex: 1,
           display: "flex",
@@ -436,6 +559,7 @@ export function SectionHandshake() {
             {/* Input line */}
             <form
               onSubmit={handleSubmit}
+              className="terminal-input-row"
               style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
               aria-label={tr("Terminal input", "Saisie du terminal")}
             >
@@ -455,6 +579,7 @@ export function SectionHandshake() {
                 type="text"
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
+                onKeyDown={handleInputKey}
                 autoComplete="off"
                 autoCorrect="off"
                 autoCapitalize="none"
@@ -477,15 +602,45 @@ export function SectionHandshake() {
         </div>
       </div>
 
+      {/* Command chips — typing into a fake shell on a phone keyboard is a big
+          ask; on touch these run the key commands with one tap. */}
+      <div
+        className="terminal-chips"
+        aria-label={tr("Quick commands", "Commandes rapides")}
+        role="group"
+      >
+        {["whoami", "hire", "certs", "email"].map((c) => (
+          <button
+            key={c}
+            type="button"
+            onClick={() => execute(c)}
+            style={{
+              background: "none",
+              border: "1px solid rgba(107,107,107,0.35)",
+              color: "var(--color-ash)",
+              fontFamily: "var(--font-jetbrains-mono)",
+              fontSize: "0.68rem",
+              letterSpacing: "0.08em",
+              padding: "0.55rem 0.9rem",
+              whiteSpace: "nowrap",
+            }}
+          >
+            [ {c} ]
+          </button>
+        ))}
+      </div>
+
       {/* Social links */}
       <div
         style={{
           marginTop: "clamp(2rem, 4vw, 3rem)",
           display: "flex",
-          gap: "clamp(1.5rem, 3vw, 2.5rem)",
+          flexWrap: "wrap",
+          gap: "clamp(0.75rem, 2vw, 2.5rem)",
         }}
       >
         {[
+          { label: "email", href: `mailto:${profile.email}` },
           { label: "github", href: profile.github },
           { label: "linkedin", href: profile.linkedin },
           { label: "cv", href: profile.cvUrl },
@@ -496,13 +651,14 @@ export function SectionHandshake() {
             aria-label={label}
             aria-disabled={!href}
             rel="noopener noreferrer"
-            target={href ? "_blank" : undefined}
+            target={href && href.startsWith("http") ? "_blank" : undefined}
             style={{
               fontFamily: "var(--font-jetbrains-mono)",
               fontSize: "0.7rem",
               color: href ? "var(--color-ash)" : "rgba(107,107,107,0.3)",
               letterSpacing: "0.08em",
               textDecoration: "none",
+              whiteSpace: "nowrap",
               border: "1px solid",
               borderColor: href ? "rgba(107,107,107,0.35)" : "rgba(107,107,107,0.15)",
               padding: "0.4rem 0.9rem",
@@ -537,7 +693,7 @@ export function SectionHandshake() {
           letterSpacing: "0.06em",
         }}
       >
-        {tr("// xoudev — securing what others overlook.", "// xoudev · sécuriser ce que les autres négligent.")}
+        {tr(`// xoudev — ${profile.tagline.en.toLowerCase()}`, `// xoudev · ${profile.tagline.fr.toLowerCase()}`)}
       </div>
     </section>
   );
