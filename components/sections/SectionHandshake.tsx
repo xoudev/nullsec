@@ -10,6 +10,9 @@ import { useT } from "@/lib/i18n";
 type OutputLine = {
   type: "input" | "output" | "error" | "system";
   text: string;
+  // Optional per-segment colouring for aligned art (e.g. neofetch): when set,
+  // the line renders these coloured spans instead of `text`.
+  parts?: { text: string; color: string }[];
 };
 
 type I18n = ReturnType<typeof useT>;
@@ -24,7 +27,62 @@ function buildWelcome(tr: Tr): OutputLine[] {
   ];
 }
 
-function runCommand(raw: string, t: T, tr: Tr): OutputLine[] {
+// ASCII system card — boxed "//" logo (blood) beside profile facts (bone).
+// Keys stay English (neofetch convention); values come from the profile.
+function neofetch(): OutputLine[] {
+  const logo = [
+    "╔═════════╗",
+    "║  //  // ║",
+    "║  //  // ║",
+    "║  //  // ║",
+    "╚═════════╝",
+  ];
+  const www = profile.siteUrl.replace(/^https?:\/\//, "");
+  const info = [
+    "visitor@nullsec",
+    "───────────────",
+    `host    ${profile.fullName} · ${profile.age} · ${profile.city}`,
+    "role    Assistant LISO @ Arvato",
+    "focus   GRC · Blue Team · DevSecOps",
+    "stack   Next.js · GSAP · Lenis · Typst",
+    "shell   nullsh v1.0.0",
+    `uptime  ${profile.age} yrs`,
+    `www     ${www}`,
+  ];
+  const W = 14; // logo column width
+  const rows = Math.max(logo.length, info.length);
+  const out: OutputLine[] = [];
+  for (let i = 0; i < rows; i++) {
+    const l = (logo[i] ?? "").padEnd(W, " ");
+    const r = info[i] ?? "";
+    out.push({
+      type: "output",
+      text: l + r,
+      parts: [
+        { text: l, color: "var(--color-blood)" },
+        { text: r, color: "var(--color-bone)" },
+      ],
+    });
+  }
+  // Palette swatch — the three non-void brand colours, like a real neofetch.
+  const gap = " ".repeat(W);
+  out.push({ type: "output", text: "", parts: [{ text: " ", color: "var(--color-bone)" }] });
+  out.push({
+    type: "output",
+    text: gap + "███ ███ ███",
+    parts: [
+      { text: gap, color: "var(--color-bone)" },
+      { text: "███", color: "var(--color-bone)" },
+      { text: " ", color: "var(--color-bone)" },
+      { text: "███", color: "var(--color-blood)" },
+      { text: " ", color: "var(--color-bone)" },
+      { text: "███", color: "var(--color-ash)" },
+    ],
+  });
+  return out;
+}
+
+function runCommand(raw: string, t: T, tr: Tr, history: string[] = []): OutputLine[] {
   const cmd = raw.trim().toLowerCase();
   const argv = cmd.split(/\s+/);
   const bin = argv[0] ?? "";
@@ -50,8 +108,31 @@ function runCommand(raw: string, t: T, tr: Tr): OutputLine[] {
     if (!argv[1]) return [{ type: "error", text: tr("usage: cat <file>", "usage : cat <fichier>") }];
     return [{ type: "error", text: `cat: ${argv[1]}: ${tr("permission denied", "permission refusée")}` }];
   }
-  // Generic sudo (the rm -rf variants keep their own easter egg below).
-  if (bin === "sudo" && !cmd.includes("rm -rf")) {
+  if (bin === "echo") return [{ type: "output", text: raw.trim().replace(/^echo\s?/i, "") }];
+  if (bin === "date") return [{ type: "output", text: new Date().toString() }];
+  if (bin === "uptime") {
+    return [{ type: "output", text: tr(`up ${profile.age} years · load average: caffeine`, `en marche depuis ${profile.age} ans · charge moyenne : caféine`) }];
+  }
+  if (bin === "neofetch" || bin === "fetch") return neofetch();
+  if (bin === "history") {
+    if (!history.length) return [{ type: "output", text: tr("no history yet.", "aucun historique.") }];
+    return history.map((h, i) => ({ type: "output" as const, text: `${String(i + 1).padStart(4, " ")}  ${h}` }));
+  }
+  if (bin === "man") {
+    if (!argv[1]) return [{ type: "error", text: tr("what manual page do you want?", "quelle page de manuel voulez-vous ?") }];
+    return [{ type: "output", text: tr(`no manual entry for ${argv[1]}. this shell documents itself: type "help".`, `pas de page de manuel pour ${argv[1]}. ce shell se documente tout seul : tapez « help ».`) }];
+  }
+  if (bin === "rm") {
+    return [{ type: "error", text: tr("rm: read-only filesystem. grab the cv instead.", "rm : système de fichiers en lecture seule. prenez plutôt le CV.") }];
+  }
+  if (bin === "exit" || bin === "logout" || bin === "quit") {
+    return [{ type: "output", text: tr("there is no exit. just scroll.", "pas de sortie : il suffit de remonter.") }];
+  }
+  if (bin === "sudo") {
+    if (cmd.includes("rm -rf")) return [{ type: "error", text: tr("nice try.", "joli essai.") }];
+    if (cmd === "sudo su" || cmd === "sudo -i" || cmd === "sudo su -") {
+      return [{ type: "error", text: tr("root on a portfolio? bold. denied.", "root sur un portfolio ? audacieux. refusé.") }];
+    }
     return [{
       type: "error",
       text: tr(
@@ -158,11 +239,6 @@ function runCommand(raw: string, t: T, tr: Tr): OutputLine[] {
 
     case "clear":
       return [{ type: "system", text: "__CLEAR__" }];
-
-    case "sudo rm -rf /":
-    case "sudo rm -rf /*":
-    case "sudo rm -rf / --no-preserve-root":
-      return [{ type: "error", text: tr("nice try.", "joli essai.") }];
 
     case "":
       return [];
@@ -296,7 +372,7 @@ export function SectionHandshake() {
       history.current.push(raw);
       historyPos.current = -1;
     }
-    const result = runCommand(raw, tt, ttr);
+    const result = runCommand(raw, tt, ttr, history.current);
     const isClear = result.some((l) => l.text === "__CLEAR__");
     setOutput((prev) =>
       isClear
@@ -536,7 +612,9 @@ export function SectionHandshake() {
             {output.map((line, i) => (
               <div
                 key={i}
-                style={{ color: lineColor(line.type), userSelect: "text" }}
+                // pre-wrap preserves the spacing that aligned output (neofetch,
+                // skills, xp) relies on, while still wrapping long lines.
+                style={{ color: lineColor(line.type), userSelect: "text", whiteSpace: "pre-wrap" }}
               >
                 {line.type === "input" ? (
                   <span>
@@ -550,6 +628,10 @@ export function SectionHandshake() {
                     </span>{" "}
                     {line.text}
                   </span>
+                ) : line.parts ? (
+                  line.parts.map((p, j) => (
+                    <span key={j} style={{ color: p.color }}>{p.text}</span>
+                  ))
                 ) : (
                   renderWithLinks(line.text)
                 )}
@@ -573,10 +655,13 @@ export function SectionHandshake() {
               >
                 visitor@nullsec:~$
               </label>
-              {/* Input sized to its content so the block cursor sits right at
-                  the end of the typed text — the focus cue is that blinking
-                  block, not a coloured underline. */}
-              <span style={{ position: "relative", flex: 1, display: "inline-flex", alignItems: "center", minWidth: 0 }}>
+              {/* Mirror layer shows the typed text + block cursor in normal
+                  flow (so the cursor always sits exactly after the text); the
+                  real input is overlaid and transparent, capturing typing and
+                  focus. The block is the focus cue — no coloured underline. */}
+              <span style={{ position: "relative", flex: 1, minWidth: 0, display: "inline-flex", alignItems: "center", overflow: "hidden" }}>
+                <span aria-hidden="true" style={{ whiteSpace: "pre", color: "var(--color-bone)" }}>{inputVal}</span>
+                <span aria-hidden="true" className="terminal-cursor">▋</span>
                 <input
                   id="terminal-input"
                   ref={inputRef}
@@ -590,20 +675,21 @@ export function SectionHandshake() {
                   spellCheck={false}
                   aria-label={tr("Terminal command input", "Saisie de commande du terminal")}
                   style={{
-                    width: `calc(${Math.max(inputVal.length, 1)}ch + 1px)`,
-                    maxWidth: "100%",
+                    position: "absolute",
+                    inset: 0,
+                    width: "100%",
                     background: "transparent",
                     border: "none",
                     outline: "none",
                     padding: 0,
-                    color: "var(--color-bone)",
+                    margin: 0,
+                    color: "transparent",
+                    caretColor: "transparent",
                     fontFamily: "inherit",
                     fontSize: "inherit",
                     letterSpacing: "inherit",
-                    caretColor: "transparent",
                   }}
                 />
-                <span aria-hidden="true" className="terminal-cursor">▋</span>
               </span>
             </form>
           </div>
