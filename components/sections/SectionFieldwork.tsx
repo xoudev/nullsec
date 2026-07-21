@@ -163,6 +163,10 @@ export function SectionFieldwork() {
                   {tr("// SIDE PROJECTS · CREATIVE ENGINEERING", "// PROJETS ANNEXES · INGÉNIERIE CRÉATIVE")}
                 </div>
               )}
+              {/* Row wrapper is the bone wipe's positioning context, so the
+                  wipe covers ONLY the row — never the side-projects divider
+                  that shares this <li> above it. */}
+              <div style={{ position: "relative" }}>
               {/* Full-row bone wipe — clips from right, reveals left→right on hover */}
               <div
                 ref={(el) => { bgRefs.current[i] = el; }}
@@ -274,6 +278,7 @@ export function SectionFieldwork() {
                   [{item.year}]{"  →"}
                 </span>
               </Link>
+              </div>
             </li>
           ))}
           <li style={{ borderTop: "1px solid rgba(107,107,107,0.2)", height: 0 }} />

@@ -12,6 +12,7 @@ import { LanguageToggle } from "@/components/LanguageToggle";
 import { SkipLink } from "@/components/SkipLink";
 import { SiteFooter } from "@/components/SiteFooter";
 import { AudioControl } from "@/components/AudioControl";
+import { Analytics } from "@vercel/analytics/next";
 
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
@@ -110,6 +111,9 @@ export default async function LocaleLayout({
             <SiteFooter />
           </SmoothScroll>
         </LocaleProvider>
+        {/* Vercel Web Analytics — cookieless, first-party (/_vercel/insights,
+            same-origin, so the strict CSP needs no change). */}
+        <Analytics />
       </body>
     </html>
   );

@@ -63,10 +63,12 @@ export function SiteFooter() {
         ))}
       </nav>
 
-      {/* Colophon — the no-tracker line is true: there is no analytics code. */}
+      {/* Colophon — analytics is Vercel's cookieless first-party pageview
+          count: no cookies, no cross-site or ad tracking, no consent banner.
+          Kept honest so the line survives scrutiny from technical visitors. */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem 1.5rem" }}>
         <span style={{ whiteSpace: "nowrap" }}>
-          {tr("// no cookies · no trackers", "// pas de cookies · pas de traceurs")}
+          {tr("// cookieless analytics · no ad trackers", "// analytics sans cookies · sans traceurs pub")}
         </span>
         <span style={{ whiteSpace: "nowrap" }}>
           {tr("// 4 colours · 3 typefaces", "// 4 couleurs · 3 typographies")}
