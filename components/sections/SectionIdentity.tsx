@@ -185,7 +185,7 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
           <div>
             {"// "}{profile.handle}
             {" · "}{profile.city.toLowerCase()}
-            {tr(" · open ", " · dispo ")}{profile.available.toLowerCase()}
+            {tr(" · full-time from ", " · temps plein dès ")}{profile.available.toLowerCase()}
           </div>
           <div>{"// GRC · BLUE TEAM · DEVSECOPS"}</div>
           <div style={{ marginTop: "0.4rem" }}>

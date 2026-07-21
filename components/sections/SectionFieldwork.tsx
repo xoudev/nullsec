@@ -6,7 +6,7 @@ import { gsap } from "@/lib/gsap";
 import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useT } from "@/lib/i18n";
-import { work } from "@/content/work";
+import { orderedWork } from "@/content/work";
 
 export function SectionFieldwork() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -142,11 +142,27 @@ export function SectionFieldwork() {
 
       <nav aria-label={tr("Selected projects", "Projets sélectionnés")}>
         <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-          {work.map((item, i) => (
+          {orderedWork.map((item, i) => (
             <li
               key={item.slug}
               style={{ position: "relative" }}
             >
+              {/* Divider before the first side project. */}
+              {item.tier === "side" && orderedWork[i - 1]?.tier !== "side" && (
+                <div
+                  aria-hidden="true"
+                  style={{
+                    fontFamily: "var(--font-jetbrains-mono)",
+                    fontSize: "0.6rem",
+                    color: "var(--color-ash)",
+                    letterSpacing: "0.14em",
+                    padding: "clamp(2.5rem, 5vw, 4rem) 0 clamp(1rem, 2vw, 1.5rem)",
+                    borderTop: "1px solid rgba(107,107,107,0.2)",
+                  }}
+                >
+                  {tr("// SIDE PROJECTS · CREATIVE ENGINEERING", "// PROJETS ANNEXES · INGÉNIERIE CRÉATIVE")}
+                </div>
+              )}
               {/* Full-row bone wipe — clips from right, reveals left→right on hover */}
               <div
                 ref={(el) => { bgRefs.current[i] = el; }}

@@ -8,6 +8,8 @@ export type WorkFact = {
 export type WorkItem = {
   slug: string;
   index: string;
+  // "side" projects (creative engineering) render after the core security work.
+  tier?: "core" | "side";
   title: Localized<string>;
   year: string;
   tags: string[];
@@ -183,7 +185,8 @@ export const work: WorkItem[] = [
   },
   {
     slug: "tower-defense-game",
-    index: "006",
+    index: "007",
+    tier: "side",
     title: { en: "TOWER DEFENSE GAME", fr: "JEU TOWER DEFENSE" },
     year: "2026",
     tags: ["Unity", "C#", "Tower Defense", "Fantasy / D&D", "VFX as code", "UI/UX"],
@@ -212,7 +215,7 @@ export const work: WorkItem[] = [
   },
   {
     slug: "homelab-proxmox",
-    index: "007",
+    index: "006",
     title: { en: "HOMELAB · PROXMOX", fr: "HOMELAB · PROXMOX" },
     year: "2026",
     tags: ["Proxmox", "Wazuh", "Self-hosted", "Linux", "Networking"],
@@ -241,13 +244,21 @@ export const work: WorkItem[] = [
   },
 ];
 
+// Display order: core security work first, then side (creative) projects,
+// each group by its index. Used by the fieldwork list and detail-page nav so
+// they agree.
+const tierRank = (w: WorkItem) => (w.tier === "side" ? 1 : 0);
+export const orderedWork: WorkItem[] = [...work].sort(
+  (a, b) => tierRank(a) - tierRank(b) || a.index.localeCompare(b.index),
+);
+
 // Adjacent-project navigation helper used in work/[slug] pages.
 export function getAdjacentWork(
   slug: string
 ): { prev: WorkItem | null; next: WorkItem | null } {
-  const idx = work.findIndex((w) => w.slug === slug);
+  const idx = orderedWork.findIndex((w) => w.slug === slug);
   return {
-    prev: idx > 0 ? work[idx - 1] : null,
-    next: idx < work.length - 1 ? work[idx + 1] : null,
+    prev: idx > 0 ? orderedWork[idx - 1] : null,
+    next: idx < orderedWork.length - 1 ? orderedWork[idx + 1] : null,
   };
 }
