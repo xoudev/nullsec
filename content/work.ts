@@ -65,8 +65,8 @@ export const work: WorkItem[] = [
     year: "2025",
     tags: ["Next.js 16", "GSAP", "Lenis", "Tailwind v4", "Typst"],
     excerpt: {
-      en: "The site you are reading. An editorial-brutalist portfolio built under deliberate constraint — four colours, no gradients, three typefaces — where the content is typed data and the CVs are compiled from source.",
-      fr: "Le site que vous êtes en train de lire. Un portfolio éditorial-brutaliste conçu sous contrainte délibérée (quatre couleurs, aucun dégradé, trois typographies), où le contenu n'est que de la donnée structurée et où les CV se compilent depuis les sources.",
+      en: "The site you are reading. An editorial-brutalist portfolio built under deliberate constraint — five colours, no gradients, three typefaces — where the content is typed data and the CVs are compiled from source.",
+      fr: "Le site que vous êtes en train de lire. Un portfolio éditorial-brutaliste conçu sous contrainte délibérée (cinq couleurs, aucun dégradé, trois typographies), où le contenu n'est que de la donnée structurée et où les CV se compilent depuis les sources.",
     },
     facts: [
       { label: { en: "CONTEXT", fr: "CONTEXTE" }, value: { en: "Personal site, designed and built solo", fr: "Site personnel, conçu et développé en solo" } },
@@ -76,12 +76,12 @@ export const work: WorkItem[] = [
     ],
     body: {
       en: [
-        "NULLSEC is this site. The brief I set myself was a constraint, not a moodboard: four colours, no gradients, three typefaces, and motion that earns its place. Constraints are a design forcing-function — they remove the decisions that do not matter so the ones that do become obvious. The result is editorial rather than decorative, which is the right register for security work.",
+        "NULLSEC is this site. The brief I set myself was a constraint, not a moodboard: five colours, no gradients, three typefaces, and motion that earns its place. Constraints are a design forcing-function — they remove the decisions that do not matter so the ones that do become obvious. The result is editorial rather than decorative, which is the right register for security work.",
         "Motion runs on GSAP and Lenis. Every animation is guarded by a reduced-motion check and torn down through GSAP's context cleanup, so the site degrades gracefully instead of breaking for anyone who has opted out or arrived on hardware that cannot keep up. Smooth scroll that fights the browser is worse than none at all; the discipline is in the cleanup paths, not the keyframes.",
         "Content is data. The profile, projects, certifications, and writing all live in typed TypeScript modules as a single source of truth, and the pages are generated from them — adding a project means editing a file, never touching a component. The CVs are authored in Typst, CV-as-code: versioned, diffable, reproducible PDFs that rebuild from source instead of being maintained by hand in a word processor.",
       ],
       fr: [
-        "NULLSEC, c'est ce site. Le cahier des charges que je me suis fixé tenait de la contrainte, pas du moodboard : quatre couleurs, aucun dégradé, trois typographies et une animation qui doit justifier sa présence. La contrainte agit comme un révélateur de conception : elle écarte les décisions sans importance pour faire ressortir celles qui comptent. Le résultat est éditorial plutôt que décoratif, et c'est le bon registre pour un travail de sécurité.",
+        "NULLSEC, c'est ce site. Le cahier des charges que je me suis fixé tenait de la contrainte, pas du moodboard : cinq couleurs, aucun dégradé, trois typographies et une animation qui doit justifier sa présence. La contrainte agit comme un révélateur de conception : elle écarte les décisions sans importance pour faire ressortir celles qui comptent. Le résultat est éditorial plutôt que décoratif, et c'est le bon registre pour un travail de sécurité.",
         "L'animation repose sur GSAP et Lenis. Chaque effet est conditionné à un test « reduced-motion » et démantelé par le nettoyage de contexte de GSAP, pour que le site se dégrade en douceur au lieu de casser chez ceux qui ont désactivé le mouvement ou qui arrivent sur une machine trop juste. Un défilement fluide qui lutte contre le navigateur est pire que pas de défilement du tout : toute la rigueur se trouve dans les routines de nettoyage, pas dans les keyframes.",
         "Le contenu n'est que de la donnée. Le profil, les projets, les certifications et les écrits résident tous dans des modules TypeScript typés, source unique de vérité d'où les pages sont générées : ajouter un projet, c'est éditer un fichier, jamais toucher à un composant. Les CV, eux, sont écrits en Typst, en mode « CV-as-code » : des PDF versionnés, suivis au diff et reproductibles, qui se reconstruisent depuis les sources au lieu d'être bricolés à la main dans un traitement de texte.",
       ],

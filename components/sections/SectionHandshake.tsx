@@ -507,7 +507,7 @@ export function SectionHandshake() {
           boxShadow: [
             "inset 0 0 0 1px rgba(255,255,255,0.02)",
             "0 20px 80px rgba(0,0,0,0.55)",
-            "0 0 120px rgba(230,57,70,0.04)",
+            "0 0 120px rgba(255,107,26,0.04)",
           ].join(", "),
           overflow: "hidden",
         }}
@@ -627,7 +627,7 @@ export function SectionHandshake() {
                     <span
                       style={{
                         color: "var(--color-blood)",
-                        textShadow: "0 0 10px rgba(230,57,70,0.45)",
+                        textShadow: "0 0 10px rgba(255,107,26,0.45)",
                       }}
                     >
                       visitor@nullsec:~$
@@ -656,7 +656,7 @@ export function SectionHandshake() {
                 style={{
                   color: "var(--color-blood)",
                   whiteSpace: "nowrap",
-                  textShadow: "0 0 10px rgba(230,57,70,0.45)",
+                  textShadow: "0 0 10px rgba(255,107,26,0.45)",
                 }}
               >
                 visitor@nullsec:~$

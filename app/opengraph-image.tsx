@@ -36,7 +36,7 @@ export default async function Image() {
             style={{
               fontFamily:    '"Inter"',
               fontSize:      28,
-              color:         "#E63946",
+              color:         "#FF6B1A",
               letterSpacing: "0.12em",
             }}
           >
@@ -126,7 +126,7 @@ export default async function Image() {
             style={{
               fontFamily:    '"Inter"',
               fontSize:      24,
-              color:         "#E63946",
+              color:         "#FF6B1A",
               letterSpacing: "0.06em",
             }}
           >

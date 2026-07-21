@@ -33,7 +33,7 @@ export async function ogCard(opts: {
       >
         {/* Top row */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-          <div style={{ fontFamily: '"Inter"', fontSize: 26, color: "#E63946", letterSpacing: "0.12em" }}>
+          <div style={{ fontFamily: '"Inter"', fontSize: 26, color: "#FF6B1A", letterSpacing: "0.12em" }}>
             NULLSEC
           </div>
           <div style={{ fontFamily: '"Inter"', fontSize: 22, color: "#8A8A8A", letterSpacing: "0.08em" }}>
@@ -55,7 +55,7 @@ export async function ogCard(opts: {
           >
             {opts.title}
           </div>
-          <div style={{ height: 2, width: 220, backgroundColor: "#E63946" }} />
+          <div style={{ height: 2, width: 220, backgroundColor: "#FF6B1A" }} />
         </div>
 
         {/* Bottom row */}
@@ -63,7 +63,7 @@ export async function ogCard(opts: {
           <div style={{ fontFamily: '"Inter"', fontSize: 22, color: "#8A8A8A", maxWidth: 820 }}>
             {opts.meta}
           </div>
-          <div style={{ fontFamily: '"Inter"', fontSize: 22, color: "#E63946", letterSpacing: "0.06em" }}>
+          <div style={{ fontFamily: '"Inter"', fontSize: 22, color: "#FF6B1A", letterSpacing: "0.06em" }}>
             nullsec.fr
           </div>
         </div>

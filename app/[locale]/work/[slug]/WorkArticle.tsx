@@ -417,7 +417,7 @@ export function WorkArticle({
               fontStyle: "italic",
               fontSize: "clamp(4rem, 7vw, 7rem)",
               lineHeight: 1,
-              color: "rgba(107,107,107,0.12)",
+              color: "rgba(139,92,246,0.16)",
               letterSpacing: "-0.03em",
               userSelect: "none",
             }}
