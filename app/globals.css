@@ -374,6 +374,15 @@ section[data-section-id] { isolation: isolate; }
   .dispatch-row:hover .dispatch-title { transform: none; }
 }
 
+/* ─── Index list rows (server-rendered /work and /dispatches archives).
+   CSS-only hover so the pages stay server components — fully indexable, zero
+   hydration cost. ─── */
+.index-row { text-decoration: none; }
+.index-title,
+.index-index { transition: color 0.2s ease; }
+.index-row:hover .index-title { color: var(--color-blood); }
+.index-row:hover .index-index { color: var(--color-blood); }
+
 /* ─── Clearance section — two-column layout ─── */
 .clearance-grid {
   display: grid;

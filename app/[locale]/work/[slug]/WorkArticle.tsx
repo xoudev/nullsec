@@ -14,7 +14,7 @@ export function WorkArticle({
   prev: WorkItem | null;
   next: WorkItem | null;
 }) {
-  const { t, tr } = useT();
+  const { t, tr, lp } = useT();
 
   const title = t(item.title);
   const body = t(item.body);
@@ -32,36 +32,26 @@ export function WorkArticle({
     >
       {/* Top nav */}
       <nav
-        aria-label={tr("Site navigation", "Navigation du site")}
+        aria-label={tr("Breadcrumb", "Fil d'Ariane")}
         style={{
           display: "flex",
-          justifyContent: "space-between",
           alignItems: "center",
+          gap: "0.6rem",
           marginBottom: "clamp(4rem, 8vw, 7rem)",
+          fontFamily: "var(--font-jetbrains-mono)",
+          fontSize: "0.7rem",
+          letterSpacing: "0.06em",
         }}
       >
-        <Link
-          href="/"
-          className="hover-to-bone"
-          style={{
-            fontFamily: "var(--font-jetbrains-mono)",
-            fontSize: "0.7rem",
-            letterSpacing: "0.06em",
-          }}
-        >
+        <Link href={lp("/")} className="hover-to-bone">
           ← NULLSEC
         </Link>
-        <span
-          aria-hidden="true"
-          style={{
-            fontFamily: "var(--font-jetbrains-mono)",
-            fontSize: "0.65rem",
-            color: "var(--color-blood)",
-            letterSpacing: "0.1em",
-          }}
-        >
-          02 // FIELDWORK
+        <span aria-hidden="true" style={{ color: "var(--color-ash)" }}>
+          /
         </span>
+        <Link href={lp("/work")} className="hover-to-bone">
+          {tr("fieldwork", "travaux")}
+        </Link>
       </nav>
 
       {/* Header */}
@@ -458,7 +448,7 @@ export function WorkArticle({
       >
         {prev ? (
           <Link
-            href={`/work/${prev.slug}`}
+            href={lp(`/work/${prev.slug}`)}
             aria-label={`${tr("Previous project", "Projet précédent")} : ${t(
               prev.title,
             )}`}
@@ -496,7 +486,7 @@ export function WorkArticle({
 
         {next ? (
           <Link
-            href={`/work/${next.slug}`}
+            href={lp(`/work/${next.slug}`)}
             aria-label={`${tr("Next project", "Projet suivant")} : ${t(
               next.title,
             )}`}

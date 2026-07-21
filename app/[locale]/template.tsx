@@ -28,11 +28,13 @@ export default function Template({ children }: { children: React.ReactNode }) {
   const prefersReduced = useReducedMotion();
   const pathname = usePathname();
 
-  // Entering the site through a detail page counts as booted: navigating home
-  // afterwards must not raise the boot gate mid-session.
+  // Entering the site through a detail/index page counts as booted: navigating
+  // to the home page afterwards must not raise the boot gate mid-session. The
+  // home page is the bare locale root (/en or /fr).
+  const isHome = pathname === "/en" || pathname === "/fr";
   useEffect(() => {
-    if (pathname !== "/") sessionStorage.setItem(SESSION_KEY, "1");
-  }, [pathname]);
+    if (!isHome) sessionStorage.setItem(SESSION_KEY, "1");
+  }, [isHome]);
 
   useEffect(() => {
     if (!ref.current) return;

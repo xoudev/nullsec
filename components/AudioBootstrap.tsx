@@ -25,8 +25,9 @@ export function AudioBootstrap() {
       try {
         unlockAudio();
         void preloadSound("/click.mp3");
+        const p = window.location.pathname;
         const preloaderPending =
-          window.location.pathname === "/" &&
+          (p === "/en" || p === "/fr") &&
           sessionStorage.getItem("nullsec_booted") !== "1";
         if (!preloaderPending) {
           void playAmbient("/sound.mp3");

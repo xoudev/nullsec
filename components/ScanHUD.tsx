@@ -60,7 +60,7 @@ export function ScanHUD() {
   const ttfbRef = useRef<HTMLSpanElement>(null);
   const lenisRef = useRef<Lenis | null>(null);
 
-  const isHome = pathname === "/";
+  const isHome = pathname === "/en" || pathname === "/fr";
 
   // Global click sound — fires on any interactive element click.
   useEffect(() => {
@@ -91,9 +91,11 @@ export function ScanHUD() {
 
     if (!isHome) {
       if (nodeRef.current) {
-        nodeRef.current.textContent = pathname.startsWith("/work")
+        // Strip the /en or /fr locale prefix before matching the section.
+        const rest = pathname.replace(/^\/(en|fr)(?=\/|$)/, "");
+        nodeRef.current.textContent = rest.startsWith("/work")
           ? "0x02"
-          : pathname.startsWith("/dispatches")
+          : rest.startsWith("/dispatches")
             ? "0x07"
             : "0x00";
       }

@@ -5,7 +5,7 @@ import { useT } from "@/lib/i18n";
 
 /** Localized 404 body — the route itself stays a server component. */
 export function NotFoundBody() {
-  const { tr } = useT();
+  const { tr, lp } = useT();
 
   return (
     <div
@@ -62,7 +62,7 @@ export function NotFoundBody() {
       </p>
 
       <Link
-        href="/"
+        href={lp("/")}
         className="hover-to-bone"
         style={{
           fontFamily: "var(--font-jetbrains-mono)",

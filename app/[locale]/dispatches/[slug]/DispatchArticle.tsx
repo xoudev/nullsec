@@ -13,7 +13,7 @@ export function DispatchArticle({
   prev: Dispatch | null;
   next: Dispatch | null;
 }) {
-  const { t, tr, locale } = useT();
+  const { t, tr, lp, locale } = useT();
 
   const formatDate = (iso: string): string =>
     new Date(iso).toLocaleDateString(locale === "fr" ? "fr-FR" : "en-GB", {
@@ -40,36 +40,26 @@ export function DispatchArticle({
     >
       {/* Top nav */}
       <nav
-        aria-label={tr("Site navigation", "Navigation du site")}
+        aria-label={tr("Breadcrumb", "Fil d'Ariane")}
         style={{
           display: "flex",
-          justifyContent: "space-between",
           alignItems: "center",
+          gap: "0.6rem",
           marginBottom: "clamp(4rem, 8vw, 7rem)",
+          fontFamily: "var(--font-jetbrains-mono)",
+          fontSize: "0.7rem",
+          letterSpacing: "0.06em",
         }}
       >
-        <Link
-          href="/"
-          className="hover-to-bone"
-          style={{
-            fontFamily: "var(--font-jetbrains-mono)",
-            fontSize: "0.7rem",
-            letterSpacing: "0.06em",
-          }}
-        >
+        <Link href={lp("/")} className="hover-to-bone">
           ← NULLSEC
         </Link>
-        <span
-          aria-hidden="true"
-          style={{
-            fontFamily: "var(--font-jetbrains-mono)",
-            fontSize: "0.65rem",
-            color: "var(--color-blood)",
-            letterSpacing: "0.1em",
-          }}
-        >
-          07 // DISPATCHES
+        <span aria-hidden="true" style={{ color: "var(--color-ash)" }}>
+          /
         </span>
+        <Link href={lp("/dispatches")} className="hover-to-bone">
+          {tr("dispatches", "dépêches")}
+        </Link>
       </nav>
 
       {/* Header */}
@@ -257,7 +247,7 @@ export function DispatchArticle({
       >
         {prev ? (
           <Link
-            href={`/dispatches/${prev.slug}`}
+            href={lp(`/dispatches/${prev.slug}`)}
             aria-label={`${tr("Previous", "Précédent")} : ${t(prev.title)}`}
             style={{
               textDecoration: "none",
@@ -293,7 +283,7 @@ export function DispatchArticle({
 
         {next ? (
           <Link
-            href={`/dispatches/${next.slug}`}
+            href={lp(`/dispatches/${next.slug}`)}
             aria-label={`${tr("Next", "Suivant")} : ${t(next.title)}`}
             style={{
               textDecoration: "none",

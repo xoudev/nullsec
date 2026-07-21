@@ -17,7 +17,7 @@ export function SectionFieldwork() {
   const yearRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const tagRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const prefersReduced = useReducedMotion();
-  const { t, tr } = useT();
+  const { t, tr, lp } = useT();
 
   // Lock initial GSAP state so killTweensOf always has a clean baseline
   useEffect(() => {
@@ -179,7 +179,7 @@ export function SectionFieldwork() {
               />
 
               <Link
-                href={`/work/${item.slug}`}
+                href={lp(`/work/${item.slug}`)}
                 ref={(el) => { rowRefs.current[i] = el; }}
                 onMouseEnter={() => handleRowEnter(i)}
                 onMouseLeave={() => handleRowLeave(i)}
