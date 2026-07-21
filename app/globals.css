@@ -8,7 +8,8 @@
   /* Colours */
   --color-void:  #0F0F12; /* soft dark background, lifted from #0A0A0B — keeps blood accent ≥4.5:1 AA */
   --color-bone:  #F2EFE8; /* off-white foreground  */
-  --color-blood: #E63946; /* red — accent only      */
+  --color-blood: #FF6B1A; /* orange — primary accent (var name kept for reach) */
+  --color-violet: #8B5CF6; /* violet — secondary accent: ghost numerals + hero rule */
   --color-ash:   #8A8A8A; /* mid-grey metadata — lifted from #707070 to clear WCAG AA (≈5.4:1 on void) */
 
   /* Font stacks — variables are injected by next/font on <html> */
@@ -249,14 +250,14 @@ section[data-section-id] { isolation: isolate; }
   font-family: var(--font-jetbrains-mono);
   font-size: clamp(7rem, 15vw, 17rem);
   line-height: 0.9;
-  color: var(--color-ash);
-  opacity: 0.07;
+  color: var(--color-violet);
+  opacity: 0.15;
   letter-spacing: -0.04em;
   user-select: none;
   pointer-events: none;
 }
 @media (max-width: 767px) {
-  .ghost-numeral { font-size: clamp(5rem, 24vw, 8rem); opacity: 0.06; }
+  .ghost-numeral { font-size: clamp(5rem, 24vw, 8rem); opacity: 0.13; }
 }
 
 /* ─── Terminal header: hide centred title on very narrow screens ─── */
@@ -346,7 +347,7 @@ section[data-section-id] { isolation: isolate; }
 .dispatch-number {
   font-family: var(--font-jetbrains-mono);
   font-size: clamp(4rem, 8vw, 8rem);
-  color: var(--color-ash);
+  color: var(--color-violet);
   opacity: 0.15;
   line-height: 1;
   flex-shrink: 0;
@@ -413,7 +414,7 @@ section[data-section-id] { isolation: isolate; }
 /* ─── Clearance section — PENDING pulse ─── */
 @keyframes clearance-pulse {
   0%, 100% { border-left-color: var(--color-blood); }
-  50%       { border-left-color: rgba(138,3,3,0.25); }
+  50%       { border-left-color: rgba(255,107,26,0.25); }
 }
 
 .clearance-pending {

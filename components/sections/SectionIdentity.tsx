@@ -143,13 +143,14 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
         >
           {tr("blind spots.", "les angles morts.")}
         </div>
-        {/* The page's one deliberate large-scale blood moment. */}
+        {/* The page's one deliberate large-scale colour moment — the violet
+            signature that pairs with the orange accents. */}
         <div
           aria-hidden="true"
           style={{
             height: "2px",
             width: "clamp(6rem, 20vw, 20rem)",
-            backgroundColor: "var(--color-blood)",
+            backgroundColor: "var(--color-violet)",
             marginTop: "clamp(1.25rem, 3vw, 2.5rem)",
           }}
         />
@@ -238,7 +239,7 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
                 color: "var(--color-blood)",
                 textDecoration: "none",
                 letterSpacing: "0.08em",
-                border: "1px solid rgba(230,57,70,0.45)",
+                border: "1px solid rgba(255,107,26,0.45)",
                 padding: "0.5em 0.9em",
                 whiteSpace: "nowrap",
               }}

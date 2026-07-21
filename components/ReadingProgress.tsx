@@ -36,7 +36,7 @@ export function ReadingProgress() {
         right: 0,
         height: "2px",
         zIndex: 200,
-        backgroundColor: "rgba(230,57,70,0.12)",
+        backgroundColor: "rgba(255,107,26,0.12)",
         pointerEvents: "none",
       }}
     >

@@ -71,7 +71,7 @@ export function SiteFooter() {
           {tr("// cookieless analytics · no ad trackers", "// analytics sans cookies · sans traceurs pub")}
         </span>
         <span style={{ whiteSpace: "nowrap" }}>
-          {tr("// 4 colours · 3 typefaces", "// 4 couleurs · 3 typographies")}
+          {tr("// 5 colours · 3 typefaces", "// 5 couleurs · 3 typographies")}
         </span>
         {pathname !== "/en" && pathname !== "/fr" && (
           <Link href={lp("/")} className="hover-to-bone" style={{ whiteSpace: "nowrap" }}>

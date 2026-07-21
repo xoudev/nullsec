@@ -137,7 +137,7 @@ export function DispatchArticle({
             style={{
               margin: "0 0 clamp(2rem, 3vw, 2.5rem)",
               padding: "0 0 0 1.25rem",
-              borderLeft: "2px solid var(--color-blood)",
+              borderLeft: "2px solid var(--color-violet)",
               fontFamily: "var(--font-instrument-serif)",
               fontStyle: "italic",
               fontSize: "clamp(1rem, 1.3vw, 1.15rem)",
@@ -216,7 +216,7 @@ export function DispatchArticle({
               fontStyle: "italic",
               fontSize: "clamp(4rem, 7vw, 7rem)",
               lineHeight: 1,
-              color: "rgba(107,107,107,0.12)",
+              color: "rgba(139,92,246,0.16)",
               letterSpacing: "-0.03em",
               userSelect: "none",
             }}
