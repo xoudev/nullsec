@@ -251,13 +251,13 @@ section[data-section-id] { isolation: isolate; }
   font-size: clamp(7rem, 15vw, 17rem);
   line-height: 0.9;
   color: var(--color-violet);
-  opacity: 0.12;
+  opacity: 0.15;
   letter-spacing: -0.04em;
   user-select: none;
   pointer-events: none;
 }
 @media (max-width: 767px) {
-  .ghost-numeral { font-size: clamp(5rem, 24vw, 8rem); opacity: 0.10; }
+  .ghost-numeral { font-size: clamp(5rem, 24vw, 8rem); opacity: 0.13; }
 }
 
 /* ─── Terminal header: hide centred title on very narrow screens ─── */
@@ -347,7 +347,7 @@ section[data-section-id] { isolation: isolate; }
 .dispatch-number {
   font-family: var(--font-jetbrains-mono);
   font-size: clamp(4rem, 8vw, 8rem);
-  color: var(--color-ash);
+  color: var(--color-violet);
   opacity: 0.15;
   line-height: 1;
   flex-shrink: 0;
