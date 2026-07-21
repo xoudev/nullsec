@@ -184,15 +184,51 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
         >
           <div>
             {"// "}{profile.handle}
-            {" · "}{profile.age}
             {" · "}{profile.city.toLowerCase()}
-            {tr(" · open ", " · dispo ")}{profile.available.toLowerCase()}
+            {tr(" · full-time from ", " · temps plein dès ")}{profile.available.toLowerCase()}
           </div>
           <div>{"// GRC · BLUE TEAM · DEVSECOPS"}</div>
           <div style={{ marginTop: "0.4rem" }}>
             {"// "}{t(profile.tagline)}
           </div>
-          <div style={{ marginTop: "0.6rem" }}>
+          {/* Primary actions — a recruiter should never have to hunt. */}
+          <div
+            style={{
+              marginTop: "0.9rem",
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "0.6rem 0.75rem",
+            }}
+          >
+            <a
+              href="#fieldwork"
+              data-cursor="jump"
+              style={{
+                color: "var(--color-bone)",
+                textDecoration: "none",
+                letterSpacing: "0.08em",
+                border: "1px solid rgba(138,138,138,0.4)",
+                padding: "0.5em 0.9em",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {tr("[ view projects ↓ ]", "[ voir les projets ↓ ]")}
+            </a>
+            <a
+              href={`mailto:${profile.email}`}
+              data-cursor="mail"
+              style={{
+                color: "var(--color-void)",
+                backgroundColor: "var(--color-blood)",
+                textDecoration: "none",
+                letterSpacing: "0.08em",
+                border: "1px solid var(--color-blood)",
+                padding: "0.5em 0.9em",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {tr("[ contact me ]", "[ me contacter ]")}
+            </a>
             <a
               href={t(profile.cvUrl)}
               target="_blank"
@@ -201,14 +237,13 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
               style={{
                 color: "var(--color-blood)",
                 textDecoration: "none",
-                letterSpacing: "0.06em",
-                // Inflate the hit area without moving the text (tap target).
-                display: "inline-block",
-                padding: "0.85em 0.85em 0.85em 0",
-                margin: "-0.85em -0.85em -0.85em 0",
+                letterSpacing: "0.08em",
+                border: "1px solid rgba(230,57,70,0.45)",
+                padding: "0.5em 0.9em",
+                whiteSpace: "nowrap",
               }}
             >
-              {"// CV ↗"}
+              {"[ CV ↗ ]"}
             </a>
           </div>
         </div>

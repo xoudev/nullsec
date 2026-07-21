@@ -2,32 +2,44 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { dispatches, getAdjacentDispatch } from "@/content/dispatches";
 import { profile } from "@/profile";
+import { LOCALES, isLocale, type Locale } from "@/lib/locale";
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { DispatchArticle } from "./DispatchArticle";
 
 /* ─── Static generation ─── */
 export function generateStaticParams() {
-  return dispatches.map((d) => ({ slug: d.slug }));
+  return LOCALES.flatMap((locale) => dispatches.map((d) => ({ locale, slug: d.slug })));
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: string; slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
+  const { locale, slug } = await params;
+  const l: Locale = isLocale(locale) ? locale : "en";
   const post = dispatches.find((d) => d.slug === slug);
   if (!post) return {};
+  const title = post.title[l];
+  const description = post.excerpt[l];
+  const base = profile.siteUrl;
   return {
-    title: post.title.en,
-    description: post.excerpt.en,
+    title,
+    description,
+    alternates: {
+      canonical: `${base}/${l}/dispatches/${post.slug}`,
+      languages: {
+        en: `${base}/en/dispatches/${post.slug}`,
+        fr: `${base}/fr/dispatches/${post.slug}`,
+        "x-default": `${base}/en/dispatches/${post.slug}`,
+      },
+    },
     openGraph: {
-      title: `${post.title.en} · NULLSEC`,
-      description: post.excerpt.en,
-      url: `${profile.siteUrl}/dispatches/${post.slug}`,
+      title: `${title} · NULLSEC`,
+      description,
+      url: `${base}/${l}/dispatches/${post.slug}`,
       type: "article",
       publishedTime: post.date,
-      images: ["/opengraph-image"],
     },
   };
 }
@@ -36,9 +48,10 @@ export async function generateMetadata({
 export default async function DispatchPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: string; slug: string }>;
 }) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
+  const l: Locale = isLocale(locale) ? locale : "en";
   const post = dispatches.find((d) => d.slug === slug);
   if (!post) notFound();
 
@@ -47,16 +60,12 @@ export default async function DispatchPage({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    headline: post.title.en,
-    description: post.excerpt.en,
+    headline: post.title[l],
+    description: post.excerpt[l],
     datePublished: post.date,
-    inLanguage: "en",
-    url: `${profile.siteUrl}/dispatches/${post.slug}`,
-    author: {
-      "@type": "Person",
-      name: profile.fullName,
-      url: profile.siteUrl,
-    },
+    inLanguage: l,
+    url: `${profile.siteUrl}/${l}/dispatches/${post.slug}`,
+    author: { "@type": "Person", name: profile.fullName, url: profile.siteUrl },
   };
 
   return (

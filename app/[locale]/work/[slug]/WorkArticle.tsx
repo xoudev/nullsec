@@ -14,7 +14,7 @@ export function WorkArticle({
   prev: WorkItem | null;
   next: WorkItem | null;
 }) {
-  const { t, tr } = useT();
+  const { t, tr, lp } = useT();
 
   const title = t(item.title);
   const body = t(item.body);
@@ -32,36 +32,26 @@ export function WorkArticle({
     >
       {/* Top nav */}
       <nav
-        aria-label={tr("Site navigation", "Navigation du site")}
+        aria-label={tr("Breadcrumb", "Fil d'Ariane")}
         style={{
           display: "flex",
-          justifyContent: "space-between",
           alignItems: "center",
+          gap: "0.6rem",
           marginBottom: "clamp(4rem, 8vw, 7rem)",
+          fontFamily: "var(--font-jetbrains-mono)",
+          fontSize: "0.7rem",
+          letterSpacing: "0.06em",
         }}
       >
-        <Link
-          href="/"
-          className="hover-to-bone"
-          style={{
-            fontFamily: "var(--font-jetbrains-mono)",
-            fontSize: "0.7rem",
-            letterSpacing: "0.06em",
-          }}
-        >
+        <Link href={lp("/")} className="hover-to-bone">
           ← NULLSEC
         </Link>
-        <span
-          aria-hidden="true"
-          style={{
-            fontFamily: "var(--font-jetbrains-mono)",
-            fontSize: "0.65rem",
-            color: "var(--color-blood)",
-            letterSpacing: "0.1em",
-          }}
-        >
-          02 // FIELDWORK
+        <span aria-hidden="true" style={{ color: "var(--color-ash)" }}>
+          /
         </span>
+        <Link href={lp("/work")} className="hover-to-bone">
+          {tr("fieldwork", "travaux")}
+        </Link>
       </nav>
 
       {/* Header */}
@@ -129,6 +119,46 @@ export function WorkArticle({
       <div className="article-grid">
         {/* Body copy */}
         <section aria-label={tr("Case study", "Étude de cas")}>
+          {/* Fast fact sheet — the 20-second read before the essay. */}
+          {item.facts && item.facts.length > 0 && (
+            <dl
+              style={{
+                display: "grid",
+                gridTemplateColumns: "minmax(6rem, 8rem) 1fr",
+                gap: "0.6rem 1.25rem",
+                margin: "0 0 clamp(2.5rem, 5vw, 3.5rem)",
+                paddingBottom: "clamp(2rem, 4vw, 3rem)",
+                borderBottom: "1px solid rgba(107,107,107,0.2)",
+              }}
+            >
+              {item.facts.map((f) => (
+                <div key={t(f.label)} style={{ display: "contents" }}>
+                  <dt
+                    style={{
+                      fontFamily: "var(--font-jetbrains-mono)",
+                      fontSize: "0.62rem",
+                      letterSpacing: "0.12em",
+                      color: "var(--color-blood)",
+                      paddingTop: "0.15rem",
+                    }}
+                  >
+                    {t(f.label)}
+                  </dt>
+                  <dd
+                    style={{
+                      margin: 0,
+                      fontFamily: "var(--font-sans)",
+                      fontSize: "clamp(0.85rem, 1vw, 0.95rem)",
+                      lineHeight: 1.5,
+                      color: "var(--color-bone)",
+                    }}
+                  >
+                    {t(f.value)}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          )}
           {body.map((paragraph, i) => (
             <p
               key={i}
@@ -418,7 +448,7 @@ export function WorkArticle({
       >
         {prev ? (
           <Link
-            href={`/work/${prev.slug}`}
+            href={lp(`/work/${prev.slug}`)}
             aria-label={`${tr("Previous project", "Projet précédent")} : ${t(
               prev.title,
             )}`}
@@ -456,7 +486,7 @@ export function WorkArticle({
 
         {next ? (
           <Link
-            href={`/work/${next.slug}`}
+            href={lp(`/work/${next.slug}`)}
             aria-label={`${tr("Next project", "Projet suivant")} : ${t(
               next.title,
             )}`}

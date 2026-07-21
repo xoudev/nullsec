@@ -1,30 +1,29 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useCallback, useContext, useEffect, type ReactNode } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { type Locale, type Localized, DEFAULT_LOCALE, localePath } from "./locale";
 
 /**
- * Lightweight client-side i18n.
- *
+ * Route-driven i18n. The locale is the first URL segment (/en or /fr), so the
+ * server renders each language on its own URL (indexable, hreflang-linked).
  * Content lives in the typed data modules as `Localized<T>` ({ en, fr }) and is
- * picked at render time via the `t()` helper. UI chrome strings hardcoded in
- * components use the inline `tr(en, fr)` helper. EN is the default; the choice
- * is persisted in localStorage. SSR renders EN (the default) to avoid a
- * hydration mismatch, then the client swaps to the saved locale on mount.
+ * picked via `t()`; inline chrome strings use `tr(en, fr)`.
+ *
+ * The pure primitives (LOCALES, isLocale, localePath, the Locale/Localized
+ * types) live in ./locale — a server-safe module — because THIS file carries
+ * "use client". Re-exporting them keeps the client-facing API stable, while
+ * server components import them straight from ./locale (importing from a client
+ * module hands the server a proxy and breaks LOCALES.map at build time).
  */
+export { LOCALES, DEFAULT_LOCALE, isLocale, localePath } from "./locale";
+export type { Locale, Localized } from "./locale";
 
-export type Locale = "en" | "fr";
-
-/** A value that exists in both locales. */
-export type Localized<T> = { en: T; fr: T };
-
-const STORAGE_KEY = "nullsec_locale";
+/** Swap the locale segment of the current pathname. */
+function swapLocale(pathname: string, target: Locale): string {
+  const rest = pathname.replace(/^\/(en|fr)(?=\/|$)/, "");
+  return `/${target}${rest || ""}` || `/${target}`;
+}
 
 type LocaleContextValue = {
   locale: Locale;
@@ -33,50 +32,36 @@ type LocaleContextValue = {
 };
 
 const LocaleContext = createContext<LocaleContextValue>({
-  locale: "en",
+  locale: DEFAULT_LOCALE,
   setLocale: () => {},
   toggle: () => {},
 });
 
-function persist(l: Locale) {
-  try {
-    localStorage.setItem(STORAGE_KEY, l);
-  } catch {
-    // ignore (private mode / storage disabled)
-  }
-  if (typeof document !== "undefined") document.documentElement.lang = l;
-}
+export function LocaleProvider({
+  locale,
+  children,
+}: {
+  locale: Locale;
+  children: ReactNode;
+}) {
+  const router = useRouter();
+  const pathname = usePathname();
 
-export function LocaleProvider({ children }: { children: ReactNode }) {
-  // SSR-safe default — must match the server render (always "en").
-  const [locale, setLocaleState] = useState<Locale>("en");
-
-  // On mount, adopt the persisted choice (if any).
+  // Keep <html lang> in sync (the root layout can't know the locale).
   useEffect(() => {
-    let saved: string | null = null;
-    try {
-      saved = localStorage.getItem(STORAGE_KEY);
-    } catch {
-      saved = null;
-    }
-    if (saved === "fr" || saved === "en") {
-      setLocaleState(saved);
-      if (typeof document !== "undefined") document.documentElement.lang = saved;
-    }
-  }, []);
+    document.documentElement.lang = locale;
+  }, [locale]);
 
-  const setLocale = useCallback((l: Locale) => {
-    setLocaleState(l);
-    persist(l);
-  }, []);
+  const setLocale = useCallback(
+    (l: Locale) => {
+      if (l !== locale) router.push(swapLocale(pathname, l));
+    },
+    [locale, pathname, router],
+  );
 
   const toggle = useCallback(() => {
-    setLocaleState((prev) => {
-      const next: Locale = prev === "en" ? "fr" : "en";
-      persist(next);
-      return next;
-    });
-  }, []);
+    setLocale(locale === "en" ? "fr" : "en");
+  }, [locale, setLocale]);
 
   return (
     <LocaleContext.Provider value={{ locale, setLocale, toggle }}>
@@ -93,16 +78,15 @@ export function useLocale(): LocaleContextValue {
  * Translation helpers bound to the active locale.
  * - `t(value)` picks the active locale from a `Localized<T>`.
  * - `tr(en, fr)` returns the active-locale string for inline chrome.
+ * - `lp(path)` prefixes an internal path with the current locale.
  */
 export function useT() {
   const { locale } = useLocale();
-  const t = useCallback(
-    <T,>(value: Localized<T>): T => value[locale],
-    [locale],
-  );
+  const t = useCallback(<T,>(value: Localized<T>): T => value[locale], [locale]);
   const tr = useCallback(
     (en: string, fr: string): string => (locale === "fr" ? fr : en),
     [locale],
   );
-  return { locale, t, tr };
+  const lp = useCallback((path: string): string => localePath(locale, path), [locale]);
+  return { locale, t, tr, lp };
 }

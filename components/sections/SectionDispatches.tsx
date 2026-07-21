@@ -20,7 +20,7 @@ export function SectionDispatches() {
   const sectionRef = useRef<HTMLElement>(null);
   const itemRefs   = useRef<(HTMLLIElement | null)[]>([]);
   const prefersReduced = useReducedMotion();
-  const { t, tr, locale } = useT();
+  const { t, tr, lp, locale } = useT();
 
   // Staggered entrance via IntersectionObserver
   useEffect(() => {
@@ -102,7 +102,7 @@ export function SectionDispatches() {
           >
             {/* Full-width flex row: text block left, ghost number right */}
             <Link
-              href={`/dispatches/${post.slug}`}
+              href={lp(`/dispatches/${post.slug}`)}
               className="dispatch-row"
             >
               {/* ── Text block ── */}

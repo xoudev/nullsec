@@ -44,12 +44,12 @@ function neofetch(): OutputLine[] {
   const info = [
     "visitor@nullsec",
     "---------------",
-    `host    ${profile.fullName} · ${profile.age} · ${profile.city}`,
+    `host    ${profile.fullName} · ${profile.city}`,
     "role    Assistant LISO @ Arvato",
     "focus   GRC · Blue Team · DevSecOps",
     "stack   Next.js · GSAP · Lenis · Typst",
     "shell   nullsh v1.0.0",
-    `uptime  ${profile.age} yrs`,
+    "load    caffeine · 0.71 · 0.44",
     `www     ${www}`,
   ];
   const W = 14; // logo column width
@@ -114,7 +114,7 @@ function runCommand(raw: string, t: T, tr: Tr, history: string[] = []): OutputLi
   if (bin === "echo") return [{ type: "output", text: raw.trim().replace(/^echo\s?/i, "") }];
   if (bin === "date") return [{ type: "output", text: new Date().toString() }];
   if (bin === "uptime") {
-    return [{ type: "output", text: tr(`up ${profile.age} years · load average: caffeine`, `en marche depuis ${profile.age} ans · charge moyenne : caféine`) }];
+    return [{ type: "output", text: tr("up since 2023 · load average: caffeine", "en marche depuis 2023 · charge moyenne : caféine") }];
   }
   if (bin === "neofetch" || bin === "fetch") return neofetch();
   if (bin === "history") {
@@ -166,7 +166,7 @@ function runCommand(raw: string, t: T, tr: Tr, history: string[] = []): OutputLi
     case "about":
     case "whoami":
       return [
-        { type: "output", text: `${profile.fullName} · ${profile.age} · ${profile.city}` },
+        { type: "output", text: `${profile.fullName} · ${profile.city}` },
         { type: "output", text: tr("Assistant LISO @ Arvato · Guardia · 3rd year", "Assistant LISO @ Arvato · Guardia · 3e année") },
         { type: "output", text: t(profile.bio) },
         { type: "output", text: tr(`next availability: ${profile.available}`, `disponible à partir de : ${profile.available}`) },
@@ -175,8 +175,8 @@ function runCommand(raw: string, t: T, tr: Tr, history: string[] = []): OutputLi
     case "hire":
       return [
         { type: "output", text: tr("currently: Assistant LISO @ Arvato (apprenticeship), Oct 2025 — Sept 2026.", "en poste : Assistant LISO @ Arvato (alternance), oct. 2025 à sept. 2026.") },
-        { type: "output", text: tr("next: Mastère offensive/defensive (alternance), 2026 — 2028.", "ensuite : Mastère offensif/défensif en alternance, 2026 à 2028.") },
-        { type: "output", text: tr(`available full-time from ${profile.available}.`, "disponible à temps plein à partir de sept. 2028.") },
+        { type: "output", text: tr("next: Mastère offensive/defensive apprenticeship, 2026 — 2028 (host company secured).", "ensuite : Mastère offensif/défensif en alternance, 2026 à 2028 (entreprise d'accueil trouvée).") },
+        { type: "output", text: tr(`open to full-time from ${profile.available}. happy to talk before then.`, "ouvert à un CDI dès sept. 2028. ravi d'échanger d'ici là.") },
         { type: "output", text: tr("domains: GRC · Blue Team · DevSecOps.", "domaines : GRC · Blue Team · DevSecOps.") },
         { type: "output", text: tr(`contact: ${profile.email}`, `contact : ${profile.email}`) },
       ];

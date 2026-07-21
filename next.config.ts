@@ -100,10 +100,13 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      // Bare list URLs (people trim shared links) land on the matching
-      // homepage section instead of a 404.
-      { source: "/work", destination: "/#fieldwork", permanent: false },
-      { source: "/dispatches", destination: "/#dispatches", permanent: false },
+      // Legacy un-prefixed URLs (the site used to live at /work, /dispatches
+      // before the /en · /fr split, and people trim shared links). Send them to
+      // the English tree; hreflang + the in-page toggle expose the French side.
+      { source: "/work", destination: "/en/work", permanent: false },
+      { source: "/work/:slug", destination: "/en/work/:slug", permanent: false },
+      { source: "/dispatches", destination: "/en/dispatches", permanent: false },
+      { source: "/dispatches/:slug", destination: "/en/dispatches/:slug", permanent: false },
     ];
   },
 };

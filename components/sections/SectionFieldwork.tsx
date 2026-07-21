@@ -6,7 +6,7 @@ import { gsap } from "@/lib/gsap";
 import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useT } from "@/lib/i18n";
-import { work } from "@/content/work";
+import { orderedWork } from "@/content/work";
 
 export function SectionFieldwork() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -17,7 +17,7 @@ export function SectionFieldwork() {
   const yearRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const tagRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const prefersReduced = useReducedMotion();
-  const { t, tr } = useT();
+  const { t, tr, lp } = useT();
 
   // Lock initial GSAP state so killTweensOf always has a clean baseline
   useEffect(() => {
@@ -142,11 +142,31 @@ export function SectionFieldwork() {
 
       <nav aria-label={tr("Selected projects", "Projets sélectionnés")}>
         <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-          {work.map((item, i) => (
+          {orderedWork.map((item, i) => (
             <li
               key={item.slug}
               style={{ position: "relative" }}
             >
+              {/* Divider before the first side project. */}
+              {item.tier === "side" && orderedWork[i - 1]?.tier !== "side" && (
+                <div
+                  aria-hidden="true"
+                  style={{
+                    fontFamily: "var(--font-jetbrains-mono)",
+                    fontSize: "0.6rem",
+                    color: "var(--color-ash)",
+                    letterSpacing: "0.14em",
+                    padding: "clamp(2.5rem, 5vw, 4rem) 0 clamp(1rem, 2vw, 1.5rem)",
+                    borderTop: "1px solid rgba(107,107,107,0.2)",
+                  }}
+                >
+                  {tr("// SIDE PROJECTS · CREATIVE ENGINEERING", "// PROJETS ANNEXES · INGÉNIERIE CRÉATIVE")}
+                </div>
+              )}
+              {/* Row wrapper is the bone wipe's positioning context, so the
+                  wipe covers ONLY the row — never the side-projects divider
+                  that shares this <li> above it. */}
+              <div style={{ position: "relative" }}>
               {/* Full-row bone wipe — clips from right, reveals left→right on hover */}
               <div
                 ref={(el) => { bgRefs.current[i] = el; }}
@@ -163,7 +183,7 @@ export function SectionFieldwork() {
               />
 
               <Link
-                href={`/work/${item.slug}`}
+                href={lp(`/work/${item.slug}`)}
                 ref={(el) => { rowRefs.current[i] = el; }}
                 onMouseEnter={() => handleRowEnter(i)}
                 onMouseLeave={() => handleRowLeave(i)}
@@ -258,6 +278,7 @@ export function SectionFieldwork() {
                   [{item.year}]{"  →"}
                 </span>
               </Link>
+              </div>
             </li>
           ))}
           <li style={{ borderTop: "1px solid rgba(107,107,107,0.2)", height: 0 }} />

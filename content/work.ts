@@ -1,12 +1,22 @@
 import type { Localized } from "@/lib/i18n";
 
+export type WorkFact = {
+  label: Localized<string>;
+  value: Localized<string>;
+};
+
 export type WorkItem = {
   slug: string;
   index: string;
+  // "side" projects (creative engineering) render after the core security work.
+  tier?: "core" | "side";
   title: Localized<string>;
   year: string;
   tags: string[];
   excerpt: Localized<string>;
+  // Fast fact sheet rendered above the editorial body — a reader must get the
+  // context, role and outcome in twenty seconds, then read on if interested.
+  facts: WorkFact[];
   body: Localized<string[]>;   // paragraphs of editorial copy
   image?: string;   // optional path relative to /public — omit when no asset exists yet
   liveUrl?: string; // optional public / live site link
@@ -26,6 +36,12 @@ export const work: WorkItem[] = [
       en: "The platform I keep coming back to. A full-stack cybersecurity learning environment where the hard part was never writing the lessons — it was making progress feel earned and keeping a multi-tenant database honest about who is allowed to read what.",
       fr: "La plateforme sur laquelle je reviens toujours. Un environnement full-stack d'apprentissage de la cybersécurité où le plus dur n'a jamais été de rédiger les leçons, mais de faire en sorte que la progression se mérite et de tenir une base multi-tenant rigoureuse sur les droits de lecture de chacun.",
     },
+    facts: [
+      { label: { en: "CONTEXT", fr: "CONTEXTE" }, value: { en: "Personal product, built and run solo", fr: "Produit personnel, conçu et opéré en solo" } },
+      { label: { en: "ROLE", fr: "RÔLE" }, value: { en: "Architecture, full-stack development, security model", fr: "Architecture, développement full-stack, modèle de sécurité" } },
+      { label: { en: "DELIVERABLES", fr: "LIVRABLES" }, value: { en: "Live platform, PostgreSQL RLS policy set, gamification layer, Remotion video pipeline", fr: "Plateforme en ligne, politiques RLS PostgreSQL, couche de gamification, pipeline vidéo Remotion" } },
+      { label: { en: "OUTCOME", fr: "RÉSULTAT" }, value: { en: "Authorisation enforced at row level (fails closed); catalogue maintainable by one person", fr: "Autorisation appliquée au niveau des lignes (se referme en cas de doute) ; catalogue tenable par une seule personne" } },
+    ],
     body: {
       en: [
         "CyberLearn is the project everything else orbits. It is a Turborepo monorepo on Next.js 15, with Supabase and Prisma underneath — a French-first platform for learning cybersecurity that is built as a product, not a demo. The interesting engineering was never the lesson content. It was the data model, the authorisation boundary, and the systems that decide what a learner sees and when.",
@@ -52,6 +68,12 @@ export const work: WorkItem[] = [
       en: "The site you are reading. An editorial-brutalist portfolio built under deliberate constraint — four colours, no gradients, three typefaces — where the content is typed data and the CVs are compiled from source.",
       fr: "Le site que vous êtes en train de lire. Un portfolio éditorial-brutaliste conçu sous contrainte délibérée (quatre couleurs, aucun dégradé, trois typographies), où le contenu n'est que de la donnée structurée et où les CV se compilent depuis les sources.",
     },
+    facts: [
+      { label: { en: "CONTEXT", fr: "CONTEXTE" }, value: { en: "Personal site, designed and built solo", fr: "Site personnel, conçu et développé en solo" } },
+      { label: { en: "ROLE", fr: "RÔLE" }, value: { en: "Design system, development, content, hardening", fr: "Système de design, développement, contenu, durcissement" } },
+      { label: { en: "DELIVERABLES", fr: "LIVRABLES" }, value: { en: "This site, typed content model, Typst CV pipeline, CSP/HSTS/security.txt posture", fr: "Ce site, modèle de contenu typé, pipeline de CV Typst, posture CSP/HSTS/security.txt" } },
+      { label: { en: "OUTCOME", fr: "RÉSULTAT" }, value: { en: "Single source of truth: site and CVs compile from the same data", fr: "Source unique de vérité : le site et les CV se compilent depuis les mêmes données" } },
+    ],
     body: {
       en: [
         "NULLSEC is this site. The brief I set myself was a constraint, not a moodboard: four colours, no gradients, three typefaces, and motion that earns its place. Constraints are a design forcing-function — they remove the decisions that do not matter so the ones that do become obvious. The result is editorial rather than decorative, which is the right register for security work.",
@@ -76,6 +98,12 @@ export const work: WorkItem[] = [
       en: "Designing a Zero Trust migration for an organisation that already exists is a different problem from designing for one that does not. NIST SP 800-207 describes the destination clearly. It says almost nothing about the journey.",
       fr: "Concevoir une migration Zero Trust pour une organisation qui existe déjà n'a rien à voir avec le fait de la concevoir pour une organisation qui n'existe pas encore. NIST SP 800-207 décrit clairement la destination. Il ne dit presque rien du chemin pour y arriver.",
     },
+    facts: [
+      { label: { en: "CONTEXT", fr: "CONTEXTE" }, value: { en: "School architecture dossier (Guardia), multi-site logistics case", fr: "Dossier d'architecture (Guardia), cas d'une logistique multi-sites" } },
+      { label: { en: "ROLE", fr: "RÔLE" }, value: { en: "Sole author: architecture, costing, compliance mapping, lab build", fr: "Auteur unique : architecture, chiffrage, cartographie de conformité, lab" } },
+      { label: { en: "DELIVERABLES", fr: "LIVRABLES" }, value: { en: "Technical Architecture Document, inter-VLAN traffic matrix, identity stack design, hands-on lab guide", fr: "Document d'architecture technique, matrice de flux inter-VLAN, pile d'identité, guide de lab pratique" } },
+      { label: { en: "OUTCOME", fr: "RÉSULTAT" }, value: { en: "5-phase migration plan, 3-year TCO of ~€25,200, NIS2 art. 21 mapping, working homelab implementation", fr: "Plan de migration en 5 phases, TCO de ~25 200 € sur 3 ans, cartographie NIS2 art. 21, implémentation homelab fonctionnelle" } },
+    ],
     body: {
       en: [
         "Designing a zero trust architecture for a multi-site logistics company that is already running is a different problem from designing for one that does not exist yet. The existing network has credentials, traffic flows, and operational dependencies that keep the business alive — and a migration that cannot break any of them. NIST SP 800-207 describes the destination with precision. It says almost nothing about how to get there from a network built ten years ago by people who are no longer employed by the company.",
@@ -102,6 +130,12 @@ export const work: WorkItem[] = [
       en: "Ransomware in a satellite company is not a ransomware problem. It is a question of which systems you can afford to lose, for how long — and what the answer looks like for systems where the answer is not measured in hours.",
       fr: "Un rançongiciel dans une entreprise de satellites n'est pas un problème de rançongiciel. C'est la question de savoir quels systèmes vous pouvez vous permettre de perdre, et pour combien de temps, et ce que devient cette réponse pour les systèmes où elle ne se compte plus en heures.",
     },
+    facts: [
+      { label: { en: "CONTEXT", fr: "CONTEXTE" }, value: { en: "School crisis simulation (Guardia): satellite operator under ransomware", fr: "Simulation de crise (Guardia) : opérateur de satellites sous rançongiciel" } },
+      { label: { en: "ROLE", fr: "RÔLE" }, value: { en: "GRC analyst: risk scenarios, continuity planning, governance redesign", fr: "Analyste GRC : scénarios de risque, plans de continuité, refonte de la gouvernance" } },
+      { label: { en: "DELIVERABLES", fr: "LIVRABLES" }, value: { en: "4 risk scenarios, BCP/DRP with a 6-hour RTO on satellite control, RACI matrix, P1-P3 remediation roadmap", fr: "4 scénarios de risque, PCA/PRA avec RTO de 6 h sur le contrôle satellite, matrice RACI, feuille de route P1-P3" } },
+      { label: { en: "OUTCOME", fr: "RÉSULTAT" }, value: { en: "ISO 27001 + NIS2 + CER applied jointly; the key finding was the unowned gap between civil and military postures", fr: "ISO 27001, NIS2 et CER appliqués de front ; constat clef : l'écart sans propriétaire entre postures civile et militaire" } },
+    ],
     body: {
       en: [
         "Ransomware in a satellite company is not a ransomware problem. It is a question of which systems you can afford to lose, for how long, and what the answer looks like for systems where the answer is not measured in hours. Guardian Space: 800 employees, civil telecommunications satellites, military communications infrastructure, classified and unclassified assets sharing the same organisational context. The phishing campaign that seeded the incident had already succeeded by the time the crisis simulation began. The first task was not containment. It was understanding what was actually at risk.",
@@ -128,6 +162,12 @@ export const work: WorkItem[] = [
       en: "Crappy Safe is not a creative name for vulnerable firmware — it is an accurate description. The password check compared characters in sequence and returned failure on the first mismatch. That single design decision turns the authentication routine into a measuring instrument.",
       fr: "« Crappy Safe » n'est pas un nom trouvé pour faire joli sur un firmware vulnérable : c'est une description exacte. La vérification du mot de passe comparait les caractères un à un et s'arrêtait sur un échec dès la première différence. Ce seul choix de conception suffit à transformer la routine d'authentification en instrument de mesure.",
     },
+    facts: [
+      { label: { en: "CONTEXT", fr: "CONTEXTE" }, value: { en: "Hardware security lab: timing side-channel on an STM32 target", fr: "Lab de sécurité matérielle : canal auxiliaire temporel sur cible STM32" } },
+      { label: { en: "ROLE", fr: "RÔLE" }, value: { en: "Attack design, instrumentation, measurement methodology, reporting", fr: "Conception de l'attaque, instrumentation, méthodologie de mesure, rédaction" } },
+      { label: { en: "DELIVERABLES", fr: "LIVRABLES" }, value: { en: "Python recovery tool, UART/JTAG bring-up, 15-page report, hardening recommendations", fr: "Outil de récupération Python, mise en route UART/JTAG, rapport de 15 pages, recommandations de durcissement" } },
+      { label: { en: "OUTCOME", fr: "RÉSULTAT" }, value: { en: "Full password recovery via median-based timing analysis; fix is constant-time comparison", fr: "Récupération complète du mot de passe par analyse temporelle sur médiane ; correctif : comparaison en temps constant" } },
+    ],
     body: {
       en: [
         "Crappy Safe is not a creative name for vulnerable firmware — it is an accurate description. The password verification routine compared characters in sequence and returned failure the moment it found a mismatch. That design decision turns the authentication routine into a measuring instrument: query with a wrong first character, get a response in T₁ milliseconds. Query with a correct first character and a wrong second, get T₂ > T₁. The timing difference is the key. The algorithm is never touched — the attack reads what the hardware cannot help broadcasting.",
@@ -145,7 +185,8 @@ export const work: WorkItem[] = [
   },
   {
     slug: "tower-defense-game",
-    index: "006",
+    index: "007",
+    tier: "side",
     title: { en: "TOWER DEFENSE GAME", fr: "JEU TOWER DEFENSE" },
     year: "2026",
     tags: ["Unity", "C#", "Tower Defense", "Fantasy / D&D", "VFX as code", "UI/UX"],
@@ -153,6 +194,12 @@ export const work: WorkItem[] = [
       en: "A fantasy, Dungeons & Dragons-flavoured tower defense built in Unity — currently at pre-prototype, with my work spanning development, UI/UX, and VFX authored as code in C#.",
       fr: "Un tower-defense d'inspiration fantasy et Dungeons & Dragons, aujourd'hui au stade du pré-prototype, où j'interviens sur le développement, l'UI/UX et les VFX écrits comme du code, en C#.",
     },
+    facts: [
+      { label: { en: "CONTEXT", fr: "CONTEXTE" }, value: { en: "Side project — creative engineering, small team", fr: "Projet perso, ingénierie créative, petite équipe" } },
+      { label: { en: "ROLE", fr: "RÔLE" }, value: { en: "Development, UI/UX, VFX-as-code", fr: "Développement, UI/UX, VFX-as-code" } },
+      { label: { en: "STATUS", fr: "STATUT" }, value: { en: "Pre-prototype — core loop and feel", fr: "Pré-prototype : boucle de jeu et ressenti" } },
+      { label: { en: "OUTCOME", fr: "RÉSULTAT" }, value: { en: "Transfers performance budgets and deterministic-systems discipline outside security", fr: "Transfère budgets de perf et discipline des systèmes déterministes hors sécurité" } },
+    ],
     body: {
       en: [
         "A tower-defense game with a fantasy, Dungeons & Dragons-flavoured art direction, built in Unity. It is at the pre-prototype stage — the moment where the core loop and the feel are being proven before anything gets polished. My role spans development, UI/UX, and visual effects.",
@@ -168,7 +215,7 @@ export const work: WorkItem[] = [
   },
   {
     slug: "homelab-proxmox",
-    index: "007",
+    index: "006",
     title: { en: "HOMELAB · PROXMOX", fr: "HOMELAB · PROXMOX" },
     year: "2026",
     tags: ["Proxmox", "Wazuh", "Self-hosted", "Linux", "Networking"],
@@ -176,6 +223,12 @@ export const work: WorkItem[] = [
       en: "A small Proxmox homelab on a laptop — Ryzen 7, 16 GB, 512 GB NVMe — running real workloads: game servers for friends, a Wazuh stack, and a provisioning box for testing.",
       fr: "Un petit homelab Proxmox sur un ordinateur portable (Ryzen 7, 16 Go, NVMe de 512 Go) qui fait tourner de vraies charges : des serveurs de jeu pour des amis, une stack Wazuh et une machine de provisionnement pour les tests.",
     },
+    facts: [
+      { label: { en: "CONTEXT", fr: "CONTEXTE" }, value: { en: "Personal infrastructure, running continuously", fr: "Infrastructure personnelle, en fonctionnement continu" } },
+      { label: { en: "ROLE", fr: "RÔLE" }, value: { en: "Sole operator: build, segmentation, detection, upkeep", fr: "Opérateur unique : montage, segmentation, détection, maintien" } },
+      { label: { en: "DELIVERABLES", fr: "LIVRABLES" }, value: { en: "Proxmox host, game servers via playit.gg tunnel, Wazuh detection stack, provisioning box", fr: "Hôte Proxmox, serveurs de jeu via tunnel playit.gg, stack de détection Wazuh, machine de provisionnement" } },
+      { label: { en: "OUTCOME", fr: "RÉSULTAT" }, value: { en: "Live detection engineering against real logs; least privilege and segmentation as muscle memory", fr: "Ingénierie de détection sur de vrais journaux ; moindre privilège et segmentation devenus des réflexes" } },
+    ],
     body: {
       en: [
         "The homelab is where the infrastructure and detection skills get rehearsed on something low-stakes and genuinely real. It runs Proxmox on a single laptop — a Ryzen 7 (7000-series), 16 GB of RAM, a 512 GB NVMe — deliberately modest, because the constraint is the lesson: you learn more squeezing real services onto limited hardware than you do with headroom to waste.",
@@ -191,13 +244,21 @@ export const work: WorkItem[] = [
   },
 ];
 
+// Display order: core security work first, then side (creative) projects,
+// each group by its index. Used by the fieldwork list and detail-page nav so
+// they agree.
+const tierRank = (w: WorkItem) => (w.tier === "side" ? 1 : 0);
+export const orderedWork: WorkItem[] = [...work].sort(
+  (a, b) => tierRank(a) - tierRank(b) || a.index.localeCompare(b.index),
+);
+
 // Adjacent-project navigation helper used in work/[slug] pages.
 export function getAdjacentWork(
   slug: string
 ): { prev: WorkItem | null; next: WorkItem | null } {
-  const idx = work.findIndex((w) => w.slug === slug);
+  const idx = orderedWork.findIndex((w) => w.slug === slug);
   return {
-    prev: idx > 0 ? work[idx - 1] : null,
-    next: idx < work.length - 1 ? work[idx + 1] : null,
+    prev: idx > 0 ? orderedWork[idx - 1] : null,
+    next: idx < orderedWork.length - 1 ? orderedWork[idx + 1] : null,
   };
 }

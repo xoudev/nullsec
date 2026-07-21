@@ -1,4 +1,3 @@
-import type { Localized } from "@/lib/i18n";
 
 // Single source of truth for all personal information.
 // Never hardcode these values anywhere else in the codebase.
@@ -7,7 +6,6 @@ export const profile = {
   name: "Jordan",
   fullName: "Jordan Turnaco",
   handle: "xoudev",
-  age: 21,
   city: "Paris",
   country: "France",
   nationality: "French",
@@ -51,10 +49,12 @@ export const profile = {
   // ── Education ─────────────────────────────────────────────────────────────
   education: [
     {
-      // RNCP 37796 — "Gestionnaire de la sécurité des données, des réseaux et des systèmes". Starts 14 Sept 2026.
+      // RNCP 42345 "Expert cybersécurité" (level 7) — it replaces RNCP 37796,
+      // whose registration lapses 19 July 2026, before this cohort starts on
+      // 14 Sept 2026 (source: France Compétences). Confirm with Guardia.
       degree: {
-        en: "Mastère Expert Cybersecurity — Offensive / Defensive (RNCP 37796)",
-        fr: "Mastère Expert Cybersécurité, volet offensif et défensif (RNCP 37796)",
+        en: "Mastère Expert Cybersecurity — Offensive / Defensive (RNCP 42345)",
+        fr: "Mastère Expert Cybersécurité, volet offensif et défensif (RNCP 42345)",
       },
       school: "Guardia Cybersecurity School",
       period: "2026 – 2028",
