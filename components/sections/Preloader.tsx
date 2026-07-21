@@ -71,7 +71,8 @@ export function Preloader({ onComplete }: PreloaderProps) {
     };
   }, [booting, triggerBoot]);
 
-  // Never strand a passive visitor at the prompt: auto-boot after a delay.
+  // Never strand a passive visitor at the prompt: auto-boot quickly. A
+  // recruiter must reach the identity in ~4s without touching anything.
   // Returning visitors (localStorage flag) get a near-immediate boot — the
   // ritual is first-visit theatre, not a recurring toll.
   useEffect(() => {
@@ -80,7 +81,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
     try {
       returning = localStorage.getItem("nullsec_returning") === "1";
     } catch { /* storage unavailable */ }
-    const t = setTimeout(triggerBoot, returning ? 700 : 8000);
+    const t = setTimeout(triggerBoot, returning ? 600 : 2500);
     return () => clearTimeout(t);
   }, [booting, triggerBoot]);
 
@@ -101,11 +102,11 @@ export function Preloader({ onComplete }: PreloaderProps) {
       return () => { tl.kill(); };
     }
 
-    // Hard fallback — if GSAP silently fails, force completion after 6s.
+    // Hard fallback — if GSAP silently fails, force completion after 4s.
     const fallback = setTimeout(() => {
       if (overlayRef.current) overlayRef.current.style.display = "none";
       onComplete();
-    }, 6000);
+    }, 4000);
 
     const complete = () => {
       clearTimeout(fallback);
@@ -117,10 +118,11 @@ export function Preloader({ onComplete }: PreloaderProps) {
     const counter = { val: 0 };
     const tl = gsap.timeline({ onComplete: complete });
 
-    // Phase 1 (0–2.2s): counter ticks up + log lines reveal one by one.
+    // Deliberately brief (~1.9s total): the ritual sets the tone, it must
+    // never gate a recruiter. Phase 1 (0–1.2s): counter + log lines.
     tl.to(counter, {
       val: 100,
-      duration: 2.2,
+      duration: 1.2,
       ease: "power1.inOut",
       onUpdate() {
         if (counterRef.current) {
@@ -135,17 +137,17 @@ export function Preloader({ onComplete }: PreloaderProps) {
       logRefs.current.filter(Boolean),
       {
         opacity: 1,
-        stagger: 2.2 / LOG_LINES.length,
+        stagger: 1.2 / LOG_LINES.length,
         duration: 0,
         ease: "none",
       },
       0
     );
 
-    // Phase 2 (2.2s): NULLSEC title fades in.
-    tl.to(titleRef.current, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }, 2.0);
+    // Phase 2 (1.1s): NULLSEC title fades in.
+    tl.to(titleRef.current, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }, 1.1);
 
-    // Phase 3 (2.55s): chars scatter.
+    // Phase 3 (1.45s): chars scatter.
     tl.call(() => {
       if (!titleRef.current) return;
       const { chars } = splitChars(titleRef.current);
@@ -154,16 +156,30 @@ export function Preloader({ onComplete }: PreloaderProps) {
         y: () => gsap.utils.random(-200, 200) as number,
         rotation: () => gsap.utils.random(-25, 25) as number,
         opacity: 0,
-        duration: 0.55,
-        stagger: { each: 0.025, from: "center" },
+        duration: 0.45,
+        stagger: { each: 0.02, from: "center" },
         ease: "power2.in",
       });
-    }, [], 2.55);
+    }, [], 1.45);
 
-    // Phase 4 (3.1s): overlay fades to void.
-    tl.to(overlayRef.current, { opacity: 0, duration: 0.3, ease: "power1.in" }, 3.1);
+    // Phase 4 (1.85s): overlay fades to void.
+    tl.to(overlayRef.current, { opacity: 0, duration: 0.25, ease: "power1.in" }, 1.85);
 
-    return () => { tl.kill(); clearTimeout(fallback); };
+    // Impatient visitors skip the animation entirely: any Enter/Space/click
+    // during the boot jumps straight to the end state.
+    const skip = () => tl.progress(1);
+    const onSkipKey = (e: KeyboardEvent) => {
+      if (e.key === "Enter" || e.key === " ") skip();
+    };
+    window.addEventListener("keydown", onSkipKey);
+    window.addEventListener("pointerdown", skip);
+
+    return () => {
+      tl.kill();
+      clearTimeout(fallback);
+      window.removeEventListener("keydown", onSkipKey);
+      window.removeEventListener("pointerdown", skip);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [booting, prefersReduced]);
 

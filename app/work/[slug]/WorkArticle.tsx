@@ -129,6 +129,46 @@ export function WorkArticle({
       <div className="article-grid">
         {/* Body copy */}
         <section aria-label={tr("Case study", "Étude de cas")}>
+          {/* Fast fact sheet — the 20-second read before the essay. */}
+          {item.facts && item.facts.length > 0 && (
+            <dl
+              style={{
+                display: "grid",
+                gridTemplateColumns: "minmax(6rem, 8rem) 1fr",
+                gap: "0.6rem 1.25rem",
+                margin: "0 0 clamp(2.5rem, 5vw, 3.5rem)",
+                paddingBottom: "clamp(2rem, 4vw, 3rem)",
+                borderBottom: "1px solid rgba(107,107,107,0.2)",
+              }}
+            >
+              {item.facts.map((f) => (
+                <div key={t(f.label)} style={{ display: "contents" }}>
+                  <dt
+                    style={{
+                      fontFamily: "var(--font-jetbrains-mono)",
+                      fontSize: "0.62rem",
+                      letterSpacing: "0.12em",
+                      color: "var(--color-blood)",
+                      paddingTop: "0.15rem",
+                    }}
+                  >
+                    {t(f.label)}
+                  </dt>
+                  <dd
+                    style={{
+                      margin: 0,
+                      fontFamily: "var(--font-sans)",
+                      fontSize: "clamp(0.85rem, 1vw, 0.95rem)",
+                      lineHeight: 1.5,
+                      color: "var(--color-bone)",
+                    }}
+                  >
+                    {t(f.value)}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          )}
           {body.map((paragraph, i) => (
             <p
               key={i}

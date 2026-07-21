@@ -25,9 +25,8 @@ export async function generateMetadata({
       title: `${item.title.en} · NULLSEC`,
       description: item.excerpt.en,
       url: `${profile.siteUrl}/work/${item.slug}`,
-      // Detail routes have no own og-image segment file — reuse the branded
-      // root card so shares never render imageless.
-      images: ["/opengraph-image"],
+      // og:image comes from the per-slug opengraph-image route (branded,
+      // project-specific card) via the file convention.
     },
   };
 }

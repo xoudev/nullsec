@@ -27,7 +27,7 @@ export async function generateMetadata({
       url: `${profile.siteUrl}/dispatches/${post.slug}`,
       type: "article",
       publishedTime: post.date,
-      images: ["/opengraph-image"],
+      // og:image comes from the per-slug opengraph-image route.
     },
   };
 }
