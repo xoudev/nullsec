@@ -18,7 +18,9 @@ export function GET(): Response {
   const items = [...dispatches]
     .sort((a, b) => (a.date < b.date ? 1 : -1))
     .map((post) => {
-      const url = `${base}/dispatches/${post.slug}`;
+      // Locale-prefixed: the bare /dispatches/<slug> path now 307-redirects,
+      // so linking it here made every feed reader spend two requests per item.
+      const url = `${base}/en/dispatches/${post.slug}`;
       return [
         "    <item>",
         `      <title>${escapeXml(post.title.en)}</title>`,
@@ -36,7 +38,7 @@ export function GET(): Response {
     '<rss version="2.0">',
     "  <channel>",
     "    <title>NULLSEC — Dispatches</title>",
-    `    <link>${base}</link>`,
+    `    <link>${base}/en</link>`,
     `    <description>Field notes on GRC, blue team detection, and zero trust — by ${profile.fullName}.</description>`,
     "    <language>en</language>",
     items,
@@ -46,6 +48,11 @@ export function GET(): Response {
   ].join("\n");
 
   return new Response(xml, {
-    headers: { "Content-Type": "application/rss+xml; charset=utf-8" },
+    headers: {
+      "Content-Type": "application/rss+xml; charset=utf-8",
+      // Feed readers poll on a timer. An explicit CDN TTL keeps a badly
+      // behaved poller from turning into sustained origin traffic.
+      "Cache-Control": "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400",
+    },
   });
 }
