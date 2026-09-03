@@ -61,8 +61,10 @@ export const profile = {
     },
     {
       degree: {
-        en: "Bachelor Cybersecurity — 3rd year (RNCP level 6)",
-        fr: "Bachelor Cybersécurité, 3e année (RNCP niveau 6)",
+        // RNCP 37680 "Administrateur d'infrastructures sécurisées" (level 6),
+        // confirmed by the final-year dossier itself.
+        en: "Bachelor Cybersecurity — Secure Infrastructure Administrator (RNCP 37680, level 6)",
+        fr: "Bachelor Cybersécurité, administrateur d'infrastructures sécurisées (RNCP 37680, niveau 6)",
       },
       school: "Guardia Cybersecurity School",
       period: "2025 – 2026",

@@ -57,7 +57,7 @@ export function SectionToolkit() {
   const indexRefs = useRef<(HTMLDivElement | null)[]>([]);
   const scrambleCancels = useRef<(() => void)[]>([]);
   const prefersReduced = useReducedMotion();
-  const { t, tr } = useT();
+  const { t, tr, lp } = useT();
   // Two variants of the idle hint — CSS shows the right one per input type
   // ("hover" makes no sense on a touchscreen).
   const hintFine = tr("// hover an entry for its proof", "// survolez une entrée pour afficher sa preuve");
@@ -321,7 +321,7 @@ export function SectionToolkit() {
                       <li key={entry.label}>
                         {entry.proofHref ? (
                           <Link
-                            href={entry.proofHref}
+                            href={lp(entry.proofHref)}
                             ref={setRef}
                             aria-label={entry.proof ? `${entry.label}: ${t(entry.proof)}` : entry.label}
                             onMouseEnter={enter}
