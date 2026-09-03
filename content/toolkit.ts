@@ -72,6 +72,14 @@ export const toolkitDomains: ToolkitDomain[] = [
           fr: "Création de formations · Arvato",
         },
       },
+      {
+        label: "CIS Benchmark",
+        proof: {
+          en: "Level 1/2 hardening, scanner-verified",
+          fr: "Durcissement niveau 1 et 2, vérifié par scanner",
+        },
+        proofHref: "/work/zero-trust-architecture",
+      },
     ],
   },
   {
@@ -80,9 +88,10 @@ export const toolkitDomains: ToolkitDomain[] = [
       {
         label: "Stormshield",
         proof: {
-          en: "CSNA certified · firewalling",
-          fr: "Certifié CSNA · pare-feu",
+          en: "CSNA certified · NGFW architecture design",
+          fr: "Certifié CSNA · conception d'architecture NGFW",
         },
+        proofHref: "/work/zero-trust-architecture",
       },
       {
         label: "Wazuh",
@@ -111,6 +120,67 @@ export const toolkitDomains: ToolkitDomain[] = [
           fr: "Ingénierie de détection · homelab",
         },
         proofHref: "/work/homelab-proxmox",
+      },
+      {
+        label: "Grafana / Prometheus",
+        proof: {
+          en: "Supervision and severity-routed alerting · 3 sites",
+          fr: "Supervision et alerting routé par criticité · 3 sites",
+        },
+        proofHref: "/work/zero-trust-architecture",
+      },
+    ],
+  },
+  {
+    title: { en: "NETWORK / IDENTITY", fr: "RÉSEAU / IDENTITÉ" },
+    entries: [
+      {
+        label: "Active Directory",
+        proof: {
+          en: "Hybrid AD, 0/1/2 tiering, GPO hardening",
+          fr: "AD hybride, tiering 0/1/2, durcissement par GPO",
+        },
+        proofHref: "/work/zero-trust-architecture",
+      },
+      {
+        label: "VLAN Segmentation",
+        proof: {
+          en: "11 VLANs, deny-by-default flow matrix",
+          fr: "11 VLANs, matrice de flux en refus par défaut",
+        },
+        proofHref: "/work/zero-trust-architecture",
+      },
+      {
+        label: "IPSec VPN",
+        proof: {
+          en: "Full-mesh IKEv2 across 3 sites",
+          fr: "Maillage complet IKEv2 sur 3 sites",
+        },
+        proofHref: "/work/zero-trust-architecture",
+      },
+      {
+        label: "MFA & Privileged Access",
+        proof: {
+          en: "MFA policy, hardened admin workstations, SSH bastion",
+          fr: "Politique MFA, postes d'administration durcis, bastion SSH",
+        },
+        proofHref: "/work/zero-trust-architecture",
+      },
+      {
+        label: "Teleport",
+        proof: {
+          en: "SSH bastion replacing direct access",
+          fr: "Bastion SSH en remplacement des accès directs",
+        },
+        proofHref: "/work/zero-trust-architecture",
+      },
+      {
+        label: "PowerShell",
+        proof: {
+          en: "Active Directory automation scripts",
+          fr: "Scripts d'automatisation Active Directory",
+        },
+        proofHref: "/work/zero-trust-architecture",
       },
     ],
   },
