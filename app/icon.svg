@@ -1,4 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- The "//" section marker used throughout the site, drawn as paths rather
+       than as <text>: an SVG favicon rendered with font-family="monospace"
+       picks up whichever mono face the operating system happens to have, so
+       the mark's weight, slant and spacing changed from machine to machine.
+       Two parallelograms, 6 units thick with a 6-unit gap, inset 4 units on
+       every side, stay distinct down to 16 px. -->
   <rect width="32" height="32" fill="#0F0F12"/>
-  <text x="16" y="22" font-family="monospace" font-size="15" fill="#E63946" text-anchor="middle" letter-spacing="-1">//</text>
+  <path d="M4 27 L10 27 L16 5 L10 5 Z" fill="#FF6B1A"/>
+  <path d="M16 27 L22 27 L28 5 L22 5 Z" fill="#FF6B1A"/>
 </svg>
