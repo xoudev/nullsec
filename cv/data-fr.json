@@ -53,21 +53,21 @@
   {
    "name": "CyberLearn",
    "year": "2025",
-   "stack": "Next.js · Supabase · PostgreSQL RLS",
+   "stack": "Next.js 15 · Supabase · PostgreSQL RLS",
    "line": "Plateforme full-stack d'apprentissage de la cybersécurité ; autorisation par Row-Level Security, gamification, pipeline vidéo automatisé.",
    "link": "cyberlearn.fr"
   },
   {
    "name": "Architecture Zero Trust",
    "year": "2026",
-   "stack": "EBIOS RM · Stormshield · Wazuh XDR",
+   "stack": "EBIOS RM · Stormshield SNS · Wazuh XDR",
    "line": "Dossier de fin d'études, activité logistique sur trois sites : analyse EBIOS RM, segmentation en 11 VLANs avec matrice de flux en refus par défaut, AD hybride en tiering, socle SIEM et supervision.",
    "link": ""
   },
   {
    "name": "Audit cryptographique (STM32)",
    "year": "2025",
-   "stack": "Canal auxiliaire · UART/JTAG · Python",
+   "stack": "Side-Channel · STM32 · Python",
    "line": "Attaque temporelle récupérant un mot de passe sur une comparaison à sortie anticipée ; méthodologie de mesure par médiane et rapport de durcissement.",
    "link": ""
   },
@@ -105,20 +105,32 @@
  ],
  "skills": [
   {
-   "domain": "GRC / Risque",
-   "items": "ISO 27001 · EBIOS RM · NIS2 · ISREG · PSSI · analyse de risques · gestion des vulnérabilités (CVSS · SLA) · évaluation des tiers · audit de sécurité"
+   "domain": "GRC / RISQUE",
+   "items": "EBIOS RM · ISO 27001 · NIS2 · MITRE ATT&CK · Vulnerability Mgmt (CVSS) · PSSI & Policy · Training & Awareness · CIS Benchmark"
   },
   {
-   "domain": "Blue team",
-   "items": "Stormshield · Wazuh · Wireshark · MITRE ATT&CK · ingénierie de détection · analyse de journaux · gestion des incidents"
+   "domain": "BLUE TEAM / DÉFENSE",
+   "items": "Stormshield · Wazuh · Zabbix · Wireshark · Log & Traffic Analysis · Grafana / Prometheus"
   },
   {
-   "domain": "Offensif",
-   "items": "Burp Suite · Metasploit · Nmap · Kali Linux · OSINT"
+   "domain": "RÉSEAU / IDENTITÉ",
+   "items": "Active Directory · VLAN Segmentation · IPSec VPN · MFA & Privileged Access · Teleport · PowerShell"
   },
   {
-   "domain": "Dev / Infra",
-   "items": "TypeScript · Next.js · Python · Docker · Kubernetes · Ansible · CI/CD · Proxmox · Linux · Active Directory · segmentation réseau / VLAN · IPSec · pfSense"
+   "domain": "OFFENSIF / RECONNAISSANCE",
+   "items": "Burp Suite · Metasploit · Kali · Nmap · cURL · OSINT"
+  },
+  {
+   "domain": "INGÉNIERIE / WEB",
+   "items": "TypeScript · Next.js · React · Turborepo · Supabase · PostgreSQL · Prisma · Tailwind · GSAP · Lenis · Typst"
+  },
+  {
+   "domain": "INFRA / DEVSECOPS",
+   "items": "Docker · Kubernetes · Ansible · CI/CD · Proxmox · Linux · Git"
+  },
+  {
+   "domain": "Langues",
+   "items": "Français (natif) · Anglais (C1) · Espagnol (B1)"
   }
  ],
  "languagesLine": "Français (natif) · Anglais (C1) · Espagnol (B1)",

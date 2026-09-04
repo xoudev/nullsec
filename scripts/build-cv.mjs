@@ -18,6 +18,8 @@ const require = createRequire(import.meta.url);
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 const { profile } = await import(join(root, "profile.ts"));
+const { work } = await import(join(root, "content/work.ts"));
+const { toolkitDomains } = await import(join(root, "content/toolkit.ts"));
 const { NodeCompiler } = require("@myriaddreamin/typst-ts-node-compiler");
 
 // ── Per-language data assembly ──────────────────────────────────────────────
@@ -31,6 +33,25 @@ const ats = (v) => {
   if (v && typeof v === "object") return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, ats(x)]));
   return v;
 };
+
+// ── Projects and skills come from the site's content, not from this file ────
+// The CV used to carry its own hardcoded copy of both. When content/work.ts was
+// corrected, the CV kept advertising the old version: the published PDF still
+// described a Zero Trust project that had never been delivered. The single
+// source of truth now runs all the way to the PDF.
+const cvProjects = work
+  .filter((w) => w.cv)
+  .sort((a, b) => a.cv.order - b.cv.order);
+
+for (const w of cvProjects) {
+  const stray = w.cv.stack.filter((x) => !w.tags.includes(x));
+  if (stray.length > 0) {
+    throw new Error(
+      `${w.slug}: cv.stack items are not in tags: ${stray.join(", ")}. ` +
+        "Fix the tags or the stack — the CV must not claim a technology the site does not.",
+    );
+  }
+}
 
 function build(loc) {
   const t = (v) => pick(loc, v);
@@ -61,19 +82,13 @@ function build(loc) {
       period: t(xp.period),
       focus: [...t(xp.focus)],
     })),
-    projects: en
-      ? [
-          { name: "CyberLearn", year: "2025", stack: "Next.js · Supabase · PostgreSQL RLS", line: "Full-stack cybersecurity learning platform; row-level-security authorisation, gamification, automated video pipeline.", link: "cyberlearn.fr" },
-          { name: "Zero Trust Architecture", year: "2026", stack: "EBIOS RM · Stormshield · Wazuh XDR", line: "Final-year dossier, three-site supply-chain operation: EBIOS RM analysis, 11-VLAN segmentation with a deny-by-default flow matrix, hybrid AD tiering, SIEM and supervision stack.", link: "" },
-          { name: "Cryptographic audit (STM32)", year: "2025", stack: "Side-channel · UART/JTAG · Python", line: "Timing attack recovering a password from an early-exit comparison; median-based measurement methodology and hardening report.", link: "" },
-          { name: "NULLSEC", year: "2025", stack: "Next.js 16 · GSAP · Typst", line: "This portfolio: typed content as single source of truth; this CV compiles from the same data.", link: "github.com/xoudev/nullsec" },
-        ]
-      : [
-          { name: "CyberLearn", year: "2025", stack: "Next.js · Supabase · PostgreSQL RLS", line: "Plateforme full-stack d'apprentissage de la cybersécurité ; autorisation par Row-Level Security, gamification, pipeline vidéo automatisé.", link: "cyberlearn.fr" },
-          { name: "Architecture Zero Trust", year: "2026", stack: "EBIOS RM · Stormshield · Wazuh XDR", line: "Dossier de fin d'études, activité logistique sur trois sites : analyse EBIOS RM, segmentation en 11 VLANs avec matrice de flux en refus par défaut, AD hybride en tiering, socle SIEM et supervision.", link: "" },
-          { name: "Audit cryptographique (STM32)", year: "2025", stack: "Canal auxiliaire · UART/JTAG · Python", line: "Attaque temporelle récupérant un mot de passe sur une comparaison à sortie anticipée ; méthodologie de mesure par médiane et rapport de durcissement.", link: "" },
-          { name: "NULLSEC", year: "2025", stack: "Next.js 16 · GSAP · Typst", line: "Ce portfolio : contenu typé comme source unique de vérité ; ce CV se compile depuis les mêmes données.", link: "github.com/xoudev/nullsec" },
-        ],
+    projects: cvProjects.map((w) => ({
+      name: t(w.cv.name),
+      year: w.year,
+      stack: w.cv.stack.join(" · "),
+      line: t(w.cv.line),
+      link: w.cv.link ?? "",
+    })),
     certifications: profile.certifications.map((c) => ({
       name: t(c.name),
       status: t(c.status),
@@ -101,19 +116,21 @@ function build(loc) {
         period: "2023 – 2025",
       },
     ],
-    skills: en
-      ? [
-          { domain: "GRC / Risk", items: "ISO 27001 · EBIOS RM · NIS2 · ISREG · PSSI · risk analysis · vulnerability management (CVSS · SLA) · supplier assessments · security audit" },
-          { domain: "Blue team", items: "Stormshield · Wazuh · Wireshark · MITRE ATT&CK · detection engineering · log analysis · incident management" },
-          { domain: "Offensive", items: "Burp Suite · Metasploit · Nmap · Kali Linux · OSINT" },
-          { domain: "Dev / Infra", items: "TypeScript · Next.js · Python · Docker · Kubernetes · Ansible · CI/CD · Proxmox · Linux · Active Directory · network segmentation / VLANs · IPSec · pfSense" },
-        ]
-      : [
-          { domain: "GRC / Risque", items: "ISO 27001 · EBIOS RM · NIS2 · ISREG · PSSI · analyse de risques · gestion des vulnérabilités (CVSS · SLA) · évaluation des tiers · audit de sécurité" },
-          { domain: "Blue team", items: "Stormshield · Wazuh · Wireshark · MITRE ATT&CK · ingénierie de détection · analyse de journaux · gestion des incidents" },
-          { domain: "Offensif", items: "Burp Suite · Metasploit · Nmap · Kali Linux · OSINT" },
-          { domain: "Dev / Infra", items: "TypeScript · Next.js · Python · Docker · Kubernetes · Ansible · CI/CD · Proxmox · Linux · Active Directory · segmentation réseau / VLAN · IPSec · pfSense" },
-        ],
+    // Languages ride in the skills grid rather than owning a section header:
+    // one line of content does not earn a heading, a rule and its spacing, and
+    // a language IS a competence.
+    skills: [
+      ...toolkitDomains.map((d) => ({
+        domain: t(d.title),
+        items: d.entries.map((e) => e.label).join(" · "),
+      })),
+      {
+        domain: en ? "Languages" : "Langues",
+        items: en
+          ? "French (native) · English (C1) · Spanish (B1)"
+          : "Français (natif) · Anglais (C1) · Espagnol (B1)",
+      },
+    ],
     languagesLine: en
       ? "French (native) · English (C1) · Spanish (B1)"
       : "Français (natif) · Anglais (C1) · Espagnol (B1)",

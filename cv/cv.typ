@@ -116,10 +116,10 @@
 #section(data.labels.skills)
 #for s in data.skills [
   #grid(
-    columns: (2.6cm, 1fr),
+    columns: (3.4cm, 1fr),
     column-gutter: 0.35cm,
-    mono(size: 6.6pt, fill: void, weight: 700, upper(s.domain)),
-    text(size: 7.8pt, fill: void.lighten(10%), s.items),
+    mono(size: 6.5pt, fill: void, weight: 700, upper(s.domain)),
+    text(size: 7.7pt, fill: void.lighten(10%), s.items),
   )
   #v(1.5pt)
 ]
@@ -137,6 +137,3 @@
   #v(1.5pt)
 ]
 
-// ═ Languages ═
-#section(data.labels.languages)
-#text(size: 7.9pt, data.languagesLine)
