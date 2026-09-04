@@ -79,8 +79,8 @@ function build(loc) {
       status: t(c.status),
     })),
     certPreparing: en
-      ? "In preparation: ISO/IEC 27001 Lead Implementer (target 2027) · CISSP (target 2028)"
-      : "En préparation : ISO/IEC 27001 Lead Implementer (objectif 2027) · CISSP (objectif 2028)",
+      ? "Certification targets: ISO/IEC 27001 Lead Implementer 2027 · CISSP 2028"
+      : "Objectifs de certification : ISO/IEC 27001 Lead Implementer 2027 · CISSP 2028",
     // The RNCP level is dropped here only: the code identifies the diploma on
     // its own, and the extra ", level 6" pushed the degree onto a second line,
     // leaving a two-character widow. The site keeps the full label.
