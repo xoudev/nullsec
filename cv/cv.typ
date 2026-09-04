@@ -14,7 +14,11 @@
 // ── NULLSEC tokens ──────────────────────────────────────────────────────────
 #let void = rgb("#0F0F12")
 #let bone = rgb("#F2EFE8")
-#let blood = rgb("#E63946")
+// Deepened form of the site accent (--color-blood #FF6B1A). The site value
+// itself only reaches 2.5:1 on this ivory page, and the accent carries small
+// 6.4-7pt mono text, not just rules. Same hue (21deg) and saturation, lowered
+// lightness: 4.6:1, WCAG AA for small text, and it survives print.
+#let blood = rgb("#BD4300")
 #let ash = rgb("#6E6E6E")
 
 #let mono(body, size: 7pt, fill: ash, weight: 400) = text(
@@ -125,8 +129,9 @@
 #for e in data.education [
   #grid(
     columns: (1fr, auto),
+    column-gutter: 0.3cm,
     align: (left, right),
-    text(size: 8.2pt, weight: 600, e.degree),
+    text(size: 8.0pt, weight: 600, e.degree),
     mono(size: 6.6pt, upper(e.school + " · " + e.period)),
   )
   #v(1.5pt)
