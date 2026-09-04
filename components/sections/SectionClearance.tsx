@@ -302,8 +302,15 @@ export function SectionClearance() {
                 <div
                   ref={(el) => { validateRefs.current[i] = el; }}
                   style={{ overflow: "hidden" }}
-                  aria-label={`${tr("Validates", "Valide")}: ${t(item.validates)}`}
                 >
+                  {/* The visible copy is collapsed and animated, so it is hidden
+                      from assistive tech and the text is exposed here instead.
+                      This used to be an aria-label on the wrapper, which is
+                      prohibited on a div with no role: screen readers dropped it
+                      and the content reached nobody. */}
+                  <span className="sr-only">
+                    {`${tr("Validates", "Valide")}: ${t(item.validates)}`}
+                  </span>
                   <div
                     aria-hidden="true"
                     style={{

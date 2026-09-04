@@ -219,9 +219,11 @@ export default async function DispatchesIndexPage({
               </div>
 
               {/* Ghost article number */}
-              <span aria-hidden="true" className="dispatch-number">
-                {String(i + 1).padStart(3, "0")}
-              </span>
+              <span
+                aria-hidden="true"
+                className="dispatch-number"
+                data-numeral={String(i + 1).padStart(3, "0")}
+              />
             </Link>
           </li>
         ))}

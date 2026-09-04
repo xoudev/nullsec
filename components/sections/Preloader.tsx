@@ -5,7 +5,7 @@ import { gsap } from "@/lib/gsap";
 import { splitChars } from "@/lib/splitText";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useT } from "@/lib/i18n";
-import { unlockAudio, playAmbient, playFirst, preloadSound } from "@/lib/audio";
+import { unlockAudio, playAmbient, playFirst, preloadSound, isAudioUnlocked } from "@/lib/audio";
 
 const LOG_LINES = [
   "[ok] mounting /dev/identity",
@@ -37,14 +37,20 @@ export function Preloader({ onComplete }: PreloaderProps) {
     setIsTouch(window.matchMedia("(pointer: coarse)").matches);
   }, []);
 
-  // Called from user gesture — unlocks AudioContext before starting the sequence.
-  const triggerBoot = useCallback(() => {
-    try {
-      unlockAudio();
-      void playFirst("/loading.mp3");
-      void preloadSound("/click.mp3");
-    } catch {
-      // Audio is optional — boot regardless of AudioContext availability.
+  // Boot the sequence. Audio is touched ONLY on a real user gesture: without
+  // one the autoplay policy leaves the AudioContext suspended, so unlocking on
+  // the auto-boot path downloaded ~1 MB (loading.mp3 + sound.mp3) that could
+  // never be played — the bulk of the page weight, on mobile especially, spent
+  // on silence. A later gesture still starts the ambient loop via AudioBootstrap.
+  const triggerBoot = useCallback((fromGesture: boolean) => {
+    if (fromGesture) {
+      try {
+        unlockAudio();
+        void playFirst("/loading.mp3");
+        void preloadSound("/click.mp3");
+      } catch {
+        // Audio is optional — boot regardless of AudioContext availability.
+      }
     }
     setBooting(true);
   }, []);
@@ -63,7 +69,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
     const onKey = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       if (e.key !== "Enter" && e.key !== " ") return;
-      triggerBoot();
+      triggerBoot(true);
     };
     window.addEventListener("keydown", onKey);
     return () => {
@@ -81,7 +87,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
     try {
       returning = localStorage.getItem("nullsec_returning") === "1";
     } catch { /* storage unavailable */ }
-    const t = setTimeout(triggerBoot, returning ? 600 : 2500);
+    const t = setTimeout(() => triggerBoot(false), returning ? 600 : 2500);
     return () => clearTimeout(t);
   }, [booting, triggerBoot]);
 
@@ -111,7 +117,9 @@ export function Preloader({ onComplete }: PreloaderProps) {
     const complete = () => {
       clearTimeout(fallback);
       if (overlayRef.current) overlayRef.current.style.display = "none";
-      void playAmbient("/sound.mp3");
+      // Only when a gesture actually unlocked audio — otherwise this fetches a
+      // 926 KB loop into a suspended context.
+      if (isAudioUnlocked()) void playAmbient("/sound.mp3");
       onComplete();
     };
 
@@ -188,7 +196,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
       ref={overlayRef}
       aria-label={tr("Loading NULLSEC", "Chargement de NULLSEC")}
       role="status"
-      onClick={!booting ? triggerBoot : undefined}
+      onClick={!booting ? () => triggerBoot(true) : undefined}
       style={{
         position: "fixed",
         inset: 0,
@@ -225,7 +233,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
           }}
         >
           <button
-            onClick={triggerBoot}
+            onClick={() => triggerBoot(true)}
             aria-label={tr("Start — press Enter or click to boot", "Lancer le démarrage : appuyez sur Entrée ou cliquez")}
             style={{
               background: "none",
