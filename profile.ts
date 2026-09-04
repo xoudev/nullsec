@@ -111,11 +111,11 @@ export const profile = {
         fr: "Assistant LISO (Local Information Security Officer)",
       },
       company: "Arvato",
-      period: { en: "Oct 2025 — Sept 2026", fr: "oct. 2025 – sept. 2026" },
+      period: { en: "Oct 2025 — Sept 2028", fr: "oct. 2025 – sept. 2028" },
       focus: {
         en: [
           "EBIOS RM risk analyses (GRC, second line)",
-          "ISO 27001 / ISREG alignment",
+          "ISO 27001 certification programme · ISREG · ISMS continuous improvement",
           "PSSI and security-policy drafting",
           "Third-party / supplier security assessments",
           "Vulnerability management via JIRA (CVSS · SLA)",
@@ -123,7 +123,7 @@ export const profile = {
         ],
         fr: [
           "Analyses de risques EBIOS RM (GRC, deuxième ligne de défense)",
-          "Mise en conformité ISO 27001 / ISREG",
+          "Certification ISO 27001 · ISREG · amélioration continue du SMSI",
           "Rédaction de la PSSI et des politiques de sécurité",
           "Évaluation du niveau de sécurité des tiers et des fournisseurs",
           "Gestion des vulnérabilités sous JIRA (CVSS · SLA)",

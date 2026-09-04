@@ -25,13 +25,13 @@
 #set page(
   paper: "a4",
   fill: bone,
-  margin: (x: 1.5cm, top: 1.05cm, bottom: 0.95cm),
+  margin: (x: 1.5cm, top: 1.0cm, bottom: 0.8cm),
   footer: align(center, mono(size: 6pt,
     data.footer + " · " + builddate,
   )),
 )
 #set text(font: "Inter", size: 8.1pt, fill: void)
-#set par(leading: 0.52em)
+#set par(leading: 0.49em)
 
 // ── Header ──────────────────────────────────────────────────────────────────
 #grid(
