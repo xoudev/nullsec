@@ -158,9 +158,8 @@ export function SectionDispatches() {
               <span
                 aria-hidden="true"
                 className="dispatch-number"
-              >
-                {String(i + 1).padStart(3, "0")}
-              </span>
+                data-numeral={String(i + 1).padStart(3, "0")}
+              />
             </Link>
           </li>
         ))}

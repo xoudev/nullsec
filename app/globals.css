@@ -344,6 +344,25 @@ section[data-section-id] { isolation: isolate; }
   text-decoration: none;
 }
 
+/* Ghost numerals are decoration, so they live in CSS rather than in the
+   document. As DOM text they were real, visible text at 1.16:1 against the
+   void — an automated contrast failure that aria-hidden does not excuse, since
+   a sighted low-vision reader still sees them. Generated content states the
+   decorative intent unambiguously and keeps the look identical. It does NOT
+   make them more legible: that is the point, they are not information. */
+.dispatch-number::before { content: attr(data-numeral); }
+.ghost-year::before { content: attr(data-year); }
+
+.ghost-year {
+  font-family: var(--font-instrument-serif);
+  font-style: italic;
+  font-size: clamp(4rem, 7vw, 7rem);
+  line-height: 1;
+  color: rgba(139, 92, 246, 0.16);
+  letter-spacing: -0.03em;
+  user-select: none;
+}
+
 .dispatch-number {
   font-family: var(--font-jetbrains-mono);
   font-size: clamp(4rem, 8vw, 8rem);

@@ -410,20 +410,7 @@ export function WorkArticle({
           </ul>
 
           {/* Year — large ghost */}
-          <div
-            aria-hidden="true"
-            style={{
-              fontFamily: "var(--font-instrument-serif)",
-              fontStyle: "italic",
-              fontSize: "clamp(4rem, 7vw, 7rem)",
-              lineHeight: 1,
-              color: "rgba(139,92,246,0.16)",
-              letterSpacing: "-0.03em",
-              userSelect: "none",
-            }}
-          >
-            {item.year}
-          </div>
+          <div aria-hidden="true" className="ghost-year" data-year={item.year} />
         </aside>
       </div>
 

@@ -46,6 +46,15 @@ function persistPrefs(): void {
   }
 }
 
+/**
+ * True only when a real user gesture has resumed the AudioContext. Creating
+ * the context is allowed without a gesture, but it stays suspended, so callers
+ * must not spend bandwidth decoding audio that can never be heard.
+ */
+export function isAudioUnlocked(): boolean {
+  return ctx !== null && ctx.state === "running";
+}
+
 /** Must be called inside a user-gesture handler (click / keydown). */
 export function unlockAudio(): void {
   if (typeof window === "undefined") return;
