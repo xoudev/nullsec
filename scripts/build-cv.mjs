@@ -46,8 +46,8 @@ function build(loc) {
       ? "Assistant LISO (apprenticeship) in Internal Control at Arvato; cybersecurity bachelor at Guardia, Mastère (offensive & defensive) from Sept 2026. Focus: GRC, blue-team detection, and network security."
       : "Assistant LISO en alternance au Contrôle Interne d'Arvato ; Bachelor cybersécurité à Guardia, Mastère (offensif et défensif) dès sept. 2026. Axe : GRC, détection blue team et sécurité réseau.",
     availability: en
-      ? "APPRENTICE @ ARVATO UNTIL SEPT 2026 · MASTÈRE 2026-2028 · FULL-TIME FROM SEPT 2028"
-      : "ALTERNANT @ ARVATO JUSQU'À SEPT. 2026 · MASTÈRE 2026-2028 · TEMPS PLEIN DÈS SEPT. 2028",
+      ? "APPRENTICE @ ARVATO UNTIL SEPT 2028 · MASTÈRE 2026-2028 · FULL-TIME FROM SEPT 2028"
+      : "ALTERNANT @ ARVATO JUSQU'À SEPT. 2028 · MASTÈRE 2026-2028 · TEMPS PLEIN DÈS SEPT. 2028",
     contact: {
       email: profile.email,
       location: `${profile.city}, ${en ? profile.country : "France"}`,
@@ -64,13 +64,13 @@ function build(loc) {
     projects: en
       ? [
           { name: "CyberLearn", year: "2025", stack: "Next.js · Supabase · PostgreSQL RLS", line: "Full-stack cybersecurity learning platform; row-level-security authorisation, gamification, automated video pipeline.", link: "cyberlearn.fr" },
-          { name: "Zero Trust Architecture", year: "2025", stack: "NIST SP 800-207 · OPNsense · Wazuh", line: "Migration design for a multi-site logistics company: identity stack (Step-CA, Authentik, Teleport), inter-VLAN traffic matrix, 3-year TCO, NIS2 art. 21 compliance mapping.", link: "" },
+          { name: "Zero Trust Architecture", year: "2026", stack: "EBIOS RM · Stormshield · Wazuh XDR", line: "Final-year dossier, three-site supply-chain operation: EBIOS RM analysis, 11-VLAN segmentation with a deny-by-default flow matrix, hybrid AD tiering, SIEM and supervision stack.", link: "" },
           { name: "Cryptographic audit (STM32)", year: "2025", stack: "Side-channel · UART/JTAG · Python", line: "Timing attack recovering a password from an early-exit comparison; median-based measurement methodology and hardening report.", link: "" },
           { name: "NULLSEC", year: "2025", stack: "Next.js 16 · GSAP · Typst", line: "This portfolio: typed content as single source of truth; this CV compiles from the same data.", link: "github.com/xoudev/nullsec" },
         ]
       : [
           { name: "CyberLearn", year: "2025", stack: "Next.js · Supabase · PostgreSQL RLS", line: "Plateforme full-stack d'apprentissage de la cybersécurité ; autorisation par Row-Level Security, gamification, pipeline vidéo automatisé.", link: "cyberlearn.fr" },
-          { name: "Architecture Zero Trust", year: "2025", stack: "NIST SP 800-207 · OPNsense · Wazuh", line: "Conception de migration pour une entreprise logistique multi-sites : pile d'identité (Step-CA, Authentik, Teleport), matrice de flux inter-VLAN, TCO sur 3 ans, cartographie de conformité NIS2 art. 21.", link: "" },
+          { name: "Architecture Zero Trust", year: "2026", stack: "EBIOS RM · Stormshield · Wazuh XDR", line: "Dossier de fin d'études, activité logistique sur trois sites : analyse EBIOS RM, segmentation en 11 VLANs avec matrice de flux en refus par défaut, AD hybride en tiering, socle SIEM et supervision.", link: "" },
           { name: "Audit cryptographique (STM32)", year: "2025", stack: "Canal auxiliaire · UART/JTAG · Python", line: "Attaque temporelle récupérant un mot de passe sur une comparaison à sortie anticipée ; méthodologie de mesure par médiane et rapport de durcissement.", link: "" },
           { name: "NULLSEC", year: "2025", stack: "Next.js 16 · GSAP · Typst", line: "Ce portfolio : contenu typé comme source unique de vérité ; ce CV se compile depuis les mêmes données.", link: "github.com/xoudev/nullsec" },
         ],
@@ -81,11 +81,18 @@ function build(loc) {
     certPreparing: en
       ? "In preparation: ISO/IEC 27001 Lead Implementer (target 2027) · CISSP (target 2028)"
       : "En préparation : ISO/IEC 27001 Lead Implementer (objectif 2027) · CISSP (objectif 2028)",
+    // The RNCP level is dropped here only: the code identifies the diploma on
+    // its own, and the extra ", level 6" pushed the degree onto a second line,
+    // leaving a two-character widow. The site keeps the full label.
     // The two EPSI years collapse into one CV row — same data, one page.
     education: [
       ...profile.education
         .filter((e) => e.school !== "EPSI")
-        .map((e) => ({ degree: t(e.degree), school: e.school, period: e.period })),
+        .map((e) => ({
+          degree: t(e.degree).replace(/,\s*(?:level|niveau)\s*\d+/i, ""),
+          school: e.school,
+          period: e.period,
+        })),
       {
         degree: en
           ? "Computer Science — 1st & 2nd year · DevOps, systems & networks"
@@ -99,13 +106,13 @@ function build(loc) {
           { domain: "GRC / Risk", items: "ISO 27001 · EBIOS RM · NIS2 · ISREG · PSSI · risk analysis · vulnerability management (CVSS · SLA) · supplier assessments · security audit" },
           { domain: "Blue team", items: "Stormshield · Wazuh · Wireshark · MITRE ATT&CK · detection engineering · log analysis · incident management" },
           { domain: "Offensive", items: "Burp Suite · Metasploit · Nmap · Kali Linux · OSINT" },
-          { domain: "Dev / Infra", items: "TypeScript · Next.js · Python · Docker · Kubernetes · Ansible · CI/CD · Proxmox · Linux · network segmentation / VLANs · pfSense" },
+          { domain: "Dev / Infra", items: "TypeScript · Next.js · Python · Docker · Kubernetes · Ansible · CI/CD · Proxmox · Linux · Active Directory · network segmentation / VLANs · IPSec · pfSense" },
         ]
       : [
           { domain: "GRC / Risque", items: "ISO 27001 · EBIOS RM · NIS2 · ISREG · PSSI · analyse de risques · gestion des vulnérabilités (CVSS · SLA) · évaluation des tiers · audit de sécurité" },
           { domain: "Blue team", items: "Stormshield · Wazuh · Wireshark · MITRE ATT&CK · ingénierie de détection · analyse de journaux · gestion des incidents" },
           { domain: "Offensif", items: "Burp Suite · Metasploit · Nmap · Kali Linux · OSINT" },
-          { domain: "Dev / Infra", items: "TypeScript · Next.js · Python · Docker · Kubernetes · Ansible · CI/CD · Proxmox · Linux · segmentation réseau / VLAN · pfSense" },
+          { domain: "Dev / Infra", items: "TypeScript · Next.js · Python · Docker · Kubernetes · Ansible · CI/CD · Proxmox · Linux · Active Directory · segmentation réseau / VLAN · IPSec · pfSense" },
         ],
     languagesLine: en
       ? "French (native) · English (C1) · Spanish (B1)"

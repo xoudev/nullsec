@@ -174,8 +174,8 @@ function runCommand(raw: string, t: T, tr: Tr, history: string[] = []): OutputLi
 
     case "hire":
       return [
-        { type: "output", text: tr("currently: Assistant LISO @ Arvato (apprenticeship), Oct 2025 — Sept 2026.", "en poste : Assistant LISO @ Arvato (alternance), oct. 2025 à sept. 2026.") },
-        { type: "output", text: tr("next: Mastère offensive/defensive apprenticeship, 2026 — 2028 (host company secured).", "ensuite : Mastère offensif/défensif en alternance, 2026 à 2028 (entreprise d'accueil trouvée).") },
+        { type: "output", text: tr("currently: Assistant LISO @ Arvato (apprenticeship), Oct 2025 — Sept 2028.", "en poste : Assistant LISO @ Arvato (alternance), oct. 2025 à sept. 2028.") },
+        { type: "output", text: tr("next: Mastère offensive/defensive apprenticeship, 2026 — 2028, same host company.", "ensuite : Mastère offensif/défensif en alternance, 2026 à 2028, même entreprise d'accueil.") },
         { type: "output", text: tr(`open to full-time from ${profile.available}. happy to talk before then.`, "ouvert à un CDI dès sept. 2028. ravi d'échanger d'ici là.") },
         { type: "output", text: tr("domains: GRC · Blue Team · DevSecOps.", "domaines : GRC · Blue Team · DevSecOps.") },
         { type: "output", text: tr(`contact: ${profile.email}`, `contact : ${profile.email}`) },
