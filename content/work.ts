@@ -21,11 +21,39 @@ export type WorkItem = {
   image?: string;   // optional path relative to /public — omit when no asset exists yet
   liveUrl?: string; // optional public / live site link
   repoUrl?: string; // optional public source repository
+  /**
+   * Present when the project appears on the compiled CV. The CV needs a much
+   * shorter summary than `excerpt`, so it gets its own line — but the name, the
+   * year and the stack are read from the fields above, so the two can no longer
+   * disagree. Before this, scripts/build-cv.mjs carried its own hardcoded copy
+   * of every project and silently kept advertising a case study the site had
+   * already corrected.
+   */
+  cv?: {
+    order: number;              // position in the CV's Projects section
+    name: Localized<string>;    // display casing; `title` is upper-case for the site
+    /** Up to three items, every one of which MUST also appear in `tags` above.
+     *  scripts/build-cv.mjs asserts this, so removing a tag from the site breaks
+     *  the CV build loudly instead of letting the two drift apart in silence. */
+    stack: string[];
+    line: Localized<string>;    // one sentence, ~180 characters
+    link?: string;              // shown after the line, e.g. "cyberlearn.fr"
+  };
 };
 
 export const work: WorkItem[] = [
   {
     slug: "cyberlearn",
+    cv: {
+      name: { en: "CyberLearn", fr: "CyberLearn" },
+      stack: ["Next.js 15", "Supabase", "PostgreSQL RLS"],
+      order: 1,
+      line: {
+        en: "Full-stack cybersecurity learning platform; row-level-security authorisation, gamification, automated video pipeline.",
+        fr: "Plateforme full-stack d'apprentissage de la cybersécurité ; autorisation par Row-Level Security, gamification, pipeline vidéo automatisé.",
+      },
+      link: "cyberlearn.fr",
+    },
     index: "001",
     title: { en: "CYBERLEARN", fr: "CYBERLEARN" },
     image: "/Log_blanc_large.png",
@@ -59,6 +87,16 @@ export const work: WorkItem[] = [
   },
   {
     slug: "nullsec",
+    cv: {
+      name: { en: "NULLSEC", fr: "NULLSEC" },
+      stack: ["Next.js 16", "GSAP", "Typst"],
+      order: 4,
+      line: {
+        en: "This portfolio: typed content as single source of truth; this CV compiles from the same data.",
+        fr: "Ce portfolio : contenu typé comme source unique de vérité ; ce CV se compile depuis les mêmes données.",
+      },
+      link: "github.com/xoudev/nullsec",
+    },
     index: "002",
     title: { en: "NULLSEC", fr: "NULLSEC" },
     repoUrl: "https://github.com/xoudev/nullsec",
@@ -89,6 +127,15 @@ export const work: WorkItem[] = [
   },
   {
     slug: "zero-trust-architecture",
+    cv: {
+      name: { en: "Zero Trust Architecture", fr: "Architecture Zero Trust" },
+      stack: ["EBIOS RM", "Stormshield SNS", "Wazuh XDR"],
+      order: 2,
+      line: {
+        en: "Final-year dossier, three-site supply-chain operation: EBIOS RM analysis, 11-VLAN segmentation with a deny-by-default flow matrix, hybrid AD tiering, SIEM and supervision stack.",
+        fr: "Dossier de fin d'études, activité logistique sur trois sites : analyse EBIOS RM, segmentation en 11 VLANs avec matrice de flux en refus par défaut, AD hybride en tiering, socle SIEM et supervision.",
+      },
+    },
     index: "003",
     title: { en: "ZERO TRUST ARCHITECTURE", fr: "ARCHITECTURE ZERO TRUST" },
     image: "/ZeroTrust.png",
@@ -153,6 +200,15 @@ export const work: WorkItem[] = [
   },
   {
     slug: "cryptographic-audit",
+    cv: {
+      name: { en: "Cryptographic audit (STM32)", fr: "Audit cryptographique (STM32)" },
+      stack: ["Side-Channel", "STM32", "Python"],
+      order: 3,
+      line: {
+        en: "Timing attack recovering a password from an early-exit comparison; median-based measurement methodology and hardening report.",
+        fr: "Attaque temporelle récupérant un mot de passe sur une comparaison à sortie anticipée ; méthodologie de mesure par médiane et rapport de durcissement.",
+      },
+    },
     index: "005",
     title: { en: "CRYPTOGRAPHIC AUDIT", fr: "AUDIT CRYPTOGRAPHIQUE" },
     image: "/stm32-blue-pill.jpg",
