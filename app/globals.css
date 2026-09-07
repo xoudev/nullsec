@@ -457,6 +457,18 @@ section[data-section-id] { isolation: isolate; }
 
 /* ─── Print — case studies go into candidate packets; make them legible on
    paper instead of void-black pages stamped with fixed chrome. ─── */
+/* ─── Konami easter egg (components/EasterEgg.tsx) ───────────────────────────
+   Suppressed entirely under prefers-reduced-motion: the component drops the
+   class rather than relying on the media query, so nothing animates at all. */
+@keyframes easter-egg-pulse {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25%      { transform: translateY(-6px) rotate(-1.2deg); }
+  75%      { transform: translateY(6px) rotate(1.2deg); }
+}
+.easter-egg-pulse {
+  animation: easter-egg-pulse 0.9s ease-in-out infinite;
+}
+
 @media print {
   html, body {
     background: #ffffff !important;
@@ -468,6 +480,7 @@ section[data-section-id] { isolation: isolate; }
   .custom-cursor,
   .skip-link,
   .ghost-numeral,
+  .easter-egg,
   .site-footer {
     display: none !important;
   }
