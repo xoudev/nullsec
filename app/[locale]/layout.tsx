@@ -8,6 +8,7 @@ import { SmoothScroll } from "@/components/SmoothScroll";
 import { ScanHUD } from "@/components/ScanHUD";
 import { CustomCursor } from "@/components/CustomCursor";
 import { AudioBootstrap } from "@/components/AudioBootstrap";
+import { EasterEgg } from "@/components/EasterEgg";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { SkipLink } from "@/components/SkipLink";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -103,6 +104,7 @@ export default async function LocaleLayout({
           <SkipLink />
           <SmoothScroll>
             <AudioBootstrap />
+            <EasterEgg />
             <CustomCursor />
             <ScanHUD />
             <AudioControl />

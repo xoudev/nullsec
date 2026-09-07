@@ -6,6 +6,7 @@ import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { profile } from "@/profile";
 import { useT } from "@/lib/i18n";
+import { TWERK_BANNER } from "@/components/EasterEgg";
 
 type OutputLine = {
   type: "input" | "output" | "error" | "system";
@@ -127,6 +128,20 @@ function runCommand(raw: string, t: T, tr: Tr, history: string[] = []): OutputLi
   }
   if (bin === "rm") {
     return [{ type: "error", text: tr("rm: read-only filesystem. grab the cv instead.", "rm : système de fichiers en lecture seule. prenez plutôt le CV.") }];
+  }
+  // Undocumented on purpose: absent from `help`, like rm and sudo. Shares its
+  // payload with the Konami easter egg so the two can never drift apart.
+  if (bin === "twerk") {
+    return [
+      { type: "system", text: TWERK_BANNER },
+      {
+        type: "output",
+        text: tr(
+          "protocol status: nominal. no further documentation exists.",
+          "état du protocole : nominal. aucune documentation supplémentaire.",
+        ),
+      },
+    ];
   }
   if (bin === "exit" || bin === "logout" || bin === "quit") {
     return [{ type: "output", text: tr("there is no exit. just scroll.", "pas de sortie : il suffit de remonter.") }];
