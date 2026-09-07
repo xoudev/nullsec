@@ -6,7 +6,7 @@ import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { profile } from "@/profile";
 import { useT } from "@/lib/i18n";
-import { TWERK_BANNER } from "@/components/EasterEgg";
+import { TWERK_BANNER, fireTwerk } from "@/components/EasterEgg";
 
 type OutputLine = {
   type: "input" | "output" | "error" | "system";
@@ -137,8 +137,8 @@ function runCommand(raw: string, t: T, tr: Tr, history: string[] = []): OutputLi
       {
         type: "output",
         text: tr(
-          "protocol status: nominal. no further documentation exists.",
-          "état du protocole : nominal. aucune documentation supplémentaire.",
+          "protocol status: nominal. opening incident 0xDA7CE.",
+          "état du protocole : nominal. ouverture de l'incident 0xDA7CE.",
         ),
       },
     ];
@@ -386,6 +386,9 @@ export function SectionHandshake() {
 
   const execute = useCallback((raw: string) => {
     const { t: tt, tr: ttr } = i18nRef.current;
+    // The undocumented command shares its payload with the Konami egg, so it
+    // raises the same full-screen incident rather than a lonely banner.
+    if (raw.trim().toLowerCase().split(/\s+/)[0] === "twerk") fireTwerk();
     if (raw.trim()) {
       history.current.push(raw);
       historyPos.current = -1;
