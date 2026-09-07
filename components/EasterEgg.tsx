@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useT } from "@/lib/i18n";
+import { unlockAudio, preloadSound, playClick, playOnce } from "@/lib/audio";
 import { profile } from "@/profile";
 
 /**
@@ -38,6 +39,27 @@ const KONAMI = [
   "a",
 ] as const;
 
+const TICK_SRC = "/konami.wav";
+const SCENE_SRC = "/twerk.mp3";
+// Every correct key lifts the tick, so the sequence audibly tightens as it
+// completes: one 14 KB sample resampled ten times, rather than ten files.
+const TICK_STEP = 0.06;
+
+/** Length of the longest tail of `buf` that is also a prefix of KONAMI. */
+function matchLength(buf: readonly string[]): number {
+  for (let k = Math.min(buf.length, KONAMI.length); k > 0; k--) {
+    let ok = true;
+    for (let i = 0; i < k; i++) {
+      if (buf[buf.length - k + i] !== KONAMI[i]) {
+        ok = false;
+        break;
+      }
+    }
+    if (ok) return k;
+  }
+  return 0;
+}
+
 const STEP_MS = 850;
 // Long enough for the runbook to play out and still be read, then it clears
 // itself. Any key, any click and Escape cut it short.
@@ -67,6 +89,14 @@ export function EasterEgg() {
     buffer.current = [];
     setStep(0);
     setOpen(true);
+    try {
+      // Both entrances (the sequence and the terminal command) reach here from
+      // inside a real gesture, so the context is allowed to resume.
+      unlockAudio();
+      void playOnce(SCENE_SRC);
+    } catch {
+      // Sound is optional — never let it hold up the scene.
+    }
   }, []);
 
   // Bound once for the life of the component: `open` lives in a ref so the
@@ -81,6 +111,9 @@ export function EasterEgg() {
         (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable);
 
       if (openRef.current) {
+        // Auto-repeat from the key that opened the scene must not dismiss it:
+        // that would cut the visuals and leave the sound playing over nothing.
+        if (e.repeat) return;
         // Any key dismisses — except while typing, so the terminal underneath
         // stays usable. Escape always works.
         if (!typing || e.key === "Escape") close();
@@ -93,7 +126,27 @@ export function EasterEgg() {
       const buf = buffer.current;
       buf.push(e.key.toLowerCase());
       if (buf.length > KONAMI.length) buf.shift();
-      if (buf.length === KONAMI.length && KONAMI.every((k, i) => buf[i] === k)) launch();
+
+      const hit = matchLength(buf);
+      if (hit === KONAMI.length) {
+        launch();
+        return;
+      }
+      if (hit === 1) {
+        // The first key of the sequence is a genuine gesture, and the only
+        // moment we know someone is attempting the code: nothing is fetched
+        // for the visitors who never try it, which is nearly all of them.
+        try {
+          unlockAudio();
+          void preloadSound(TICK_SRC);
+          void preloadSound(SCENE_SRC);
+        } catch {
+          // Sound is optional.
+        }
+      }
+      // Silent on the very first attempt of a session, since the sample is
+      // still in flight; playClick no-ops on a cold cache rather than lagging.
+      if (hit >= 1) playClick(TICK_SRC, 1 + (hit - 1) * TICK_STEP);
     };
 
     window.addEventListener("keydown", onKey);
