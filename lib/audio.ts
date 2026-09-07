@@ -102,13 +102,17 @@ export async function preloadSound(src: string): Promise<void> {
 /**
  * Play a pre-loaded buffer as a one-shot (no loop).
  * No-op if the buffer hasn't been preloaded yet.
+ *
+ * `rate` resamples the buffer, so one short sample can carry a rising
+ * sequence without shipping a file per step.
  */
-export function playClick(src: string): void {
+export function playClick(src: string, rate = 1): void {
   if (!ctx || !gain) return;
   const buf = bufferCache.get(src);
   if (!buf) return;
   const node = ctx.createBufferSource();
   node.buffer = buf;
+  if (rate !== 1) node.playbackRate.value = rate;
   node.connect(gain);
   node.start();
 }
