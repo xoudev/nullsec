@@ -8,7 +8,6 @@
 // all information as real text (nothing lives in images).
 
 #let lang = sys.inputs.at("lang", default: "en")
-#let builddate = sys.inputs.at("builddate", default: "")
 #let data = json("data-" + lang + ".json")
 
 // ── NULLSEC tokens ──────────────────────────────────────────────────────────
@@ -26,13 +25,15 @@
   tracking: 0.05em, body,
 )
 
+// Contact line: a real PDF link annotation around unchanged printed text.
+// Deliberately not recoloured — the header palette was chosen for contrast on
+// this ivory page, and three orange lines would shout.
+#let clink(url, label) = link(url, mono(size: 6.8pt, label))
+
 #set page(
   paper: "a4",
   fill: bone,
   margin: (x: 1.5cm, top: 1.0cm, bottom: 0.8cm),
-  footer: align(center, mono(size: 6pt,
-    data.footer + " · " + builddate,
-  )),
 )
 #set text(font: "Inter", size: 8.1pt, fill: void)
 #set par(leading: 0.49em)
@@ -47,9 +48,9 @@
     #mono(size: 7.6pt, fill: void, weight: 700, upper(data.role))
   ],
   [
-    #mono(size: 6.8pt, data.contact.email) \
-    #mono(size: 6.8pt, "nullsec.fr · github.com/xoudev") \
-    #mono(size: 6.8pt, "linkedin.com/in/jordan-turnaco") \
+    #clink("mailto:" + data.contact.email, data.contact.email) \
+    #clink(data.contact.site.url, data.contact.site.label) #mono(size: 6.8pt, "·") #clink(data.contact.github.url, data.contact.github.label) \
+    #clink(data.contact.linkedin.url, data.contact.linkedin.label) \
     #mono(size: 6.8pt, data.contact.location)
   ],
 )
@@ -97,8 +98,8 @@
   )
   #v(-2pt)
   #text(size: 7.8pt, p.line)
-  #if p.at("link", default: "") != "" [
-    #h(4pt) #mono(size: 6.4pt, fill: blood, p.link)
+  #if p.at("link", default: none) != none [
+    #h(4pt) #link(p.link.url, mono(size: 6.4pt, fill: blood, p.link.label))
   ]
   #v(1.5pt)
 ]

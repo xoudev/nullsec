@@ -34,6 +34,13 @@ const ats = (v) => {
   return v;
 };
 
+// Contact and project entries carry both halves: `label` is what is printed
+// (and what an ATS parses), `url` is what the PDF link annotation points at.
+// Deriving one from the other here keeps profile.ts and content/work.ts free
+// of duplicated protocol prefixes.
+const linkFrom = (url) => ({ label: url.replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/\/$/, ""), url });
+const urlFrom = (label) => ({ label, url: `https://${label}` });
+
 // ── Projects and skills come from the site's content, not from this file ────
 // The CV used to carry its own hardcoded copy of both. When content/work.ts was
 // corrected, the CV kept advertising the old version: the published PDF still
@@ -72,6 +79,9 @@ function build(loc) {
     contact: {
       email: profile.email,
       location: `${profile.city}, ${en ? profile.country : "France"}`,
+      site: linkFrom(profile.siteUrl),
+      github: linkFrom(profile.github),
+      linkedin: linkFrom(profile.linkedin),
     },
     labels: en
       ? { experience: "Experience", projects: "Projects", certifications: "Certifications", education: "Education", skills: "Skills", languages: "Languages" }
@@ -87,7 +97,7 @@ function build(loc) {
       year: w.year,
       stack: w.cv.stack.join(" · "),
       line: t(w.cv.line),
-      link: w.cv.link ?? "",
+      link: w.cv.link ? urlFrom(w.cv.link) : null,
     })),
     certifications: profile.certifications.map((c) => ({
       name: t(c.name),
@@ -131,17 +141,10 @@ function build(loc) {
           : "Français (natif) · Anglais (C1) · Espagnol (B1)",
       },
     ],
-    languagesLine: en
-      ? "French (native) · English (C1) · Spanish (B1)"
-      : "Français (natif) · Anglais (C1) · Espagnol (B1)",
-    footer: en
-      ? "compiled from source · github.com/xoudev/nullsec"
-      : "compilé depuis les sources · github.com/xoudev/nullsec",
   });
 }
 
 // ── Generate data + compile ─────────────────────────────────────────────────
-const builddate = new Date().toISOString().slice(0, 10);
 const compiler = NodeCompiler.create({
   workspace: join(root, "cv"),
   fontArgs: [{ fontPaths: [join(root, "cv", "fonts")] }],
@@ -154,7 +157,7 @@ for (const [loc, outfile] of [
   writeFileSync(join(root, "cv", `data-${loc}.json`), JSON.stringify(build(loc), null, 1));
   const pdf = compiler.pdf({
     mainFilePath: join(root, "cv", "cv.typ"),
-    inputs: { lang: loc, builddate },
+    inputs: { lang: loc },
   });
   writeFileSync(join(root, outfile), pdf);
   console.log(`${outfile}: ${pdf.length} bytes`);

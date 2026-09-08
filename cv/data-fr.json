@@ -4,7 +4,19 @@
  "availability": "ALTERNANT @ ARVATO JUSQU'À SEPT. 2028 · MASTÈRE 2026-2028 · TEMPS PLEIN DÈS SEPT. 2028",
  "contact": {
   "email": "jordan.turnaco.pro@gmail.com",
-  "location": "Paris, France"
+  "location": "Paris, France",
+  "site": {
+   "label": "nullsec.fr",
+   "url": "https://nullsec.fr"
+  },
+  "github": {
+   "label": "github.com/xoudev",
+   "url": "https://github.com/xoudev"
+  },
+  "linkedin": {
+   "label": "linkedin.com/in/jordan-turnaco",
+   "url": "https://www.linkedin.com/in/jordan-turnaco"
+  }
  },
  "labels": {
   "experience": "Expérience",
@@ -55,28 +67,34 @@
    "year": "2025",
    "stack": "Next.js 15 · Supabase · PostgreSQL RLS",
    "line": "Plateforme full-stack d'apprentissage de la cybersécurité ; autorisation par Row-Level Security, gamification, pipeline vidéo automatisé.",
-   "link": "cyberlearn.fr"
+   "link": {
+    "label": "cyberlearn.fr",
+    "url": "https://cyberlearn.fr"
+   }
   },
   {
    "name": "Architecture Zero Trust",
    "year": "2026",
    "stack": "EBIOS RM · Stormshield SNS · Wazuh XDR",
    "line": "Dossier de fin d'études, activité logistique sur trois sites : analyse EBIOS RM, segmentation en 11 VLANs avec matrice de flux en refus par défaut, AD hybride en tiering, socle SIEM et supervision.",
-   "link": ""
+   "link": null
   },
   {
    "name": "Audit cryptographique (STM32)",
    "year": "2025",
    "stack": "Side-Channel · STM32 · Python",
    "line": "Attaque temporelle récupérant un mot de passe sur une comparaison à sortie anticipée ; méthodologie de mesure par médiane et rapport de durcissement.",
-   "link": ""
+   "link": null
   },
   {
    "name": "NULLSEC",
    "year": "2025",
    "stack": "Next.js 16 · GSAP · Typst",
    "line": "Ce portfolio : contenu typé comme source unique de vérité ; ce CV se compile depuis les mêmes données.",
-   "link": "github.com/xoudev/nullsec"
+   "link": {
+    "label": "github.com/xoudev/nullsec",
+    "url": "https://github.com/xoudev/nullsec"
+   }
   }
  ],
  "certifications": [
@@ -132,7 +150,5 @@
    "domain": "Langues",
    "items": "Français (natif) · Anglais (C1) · Espagnol (B1)"
   }
- ],
- "languagesLine": "Français (natif) · Anglais (C1) · Espagnol (B1)",
- "footer": "compilé depuis les sources · github.com/xoudev/nullsec"
+ ]
 }

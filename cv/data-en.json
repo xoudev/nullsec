@@ -4,7 +4,19 @@
  "availability": "APPRENTICE @ ARVATO UNTIL SEPT 2028 · MASTÈRE 2026-2028 · FULL-TIME FROM SEPT 2028",
  "contact": {
   "email": "jordan.turnaco.pro@gmail.com",
-  "location": "Paris, France"
+  "location": "Paris, France",
+  "site": {
+   "label": "nullsec.fr",
+   "url": "https://nullsec.fr"
+  },
+  "github": {
+   "label": "github.com/xoudev",
+   "url": "https://github.com/xoudev"
+  },
+  "linkedin": {
+   "label": "linkedin.com/in/jordan-turnaco",
+   "url": "https://www.linkedin.com/in/jordan-turnaco"
+  }
  },
  "labels": {
   "experience": "Experience",
@@ -55,28 +67,34 @@
    "year": "2025",
    "stack": "Next.js 15 · Supabase · PostgreSQL RLS",
    "line": "Full-stack cybersecurity learning platform; row-level-security authorisation, gamification, automated video pipeline.",
-   "link": "cyberlearn.fr"
+   "link": {
+    "label": "cyberlearn.fr",
+    "url": "https://cyberlearn.fr"
+   }
   },
   {
    "name": "Zero Trust Architecture",
    "year": "2026",
    "stack": "EBIOS RM · Stormshield SNS · Wazuh XDR",
    "line": "Final-year dossier, three-site supply-chain operation: EBIOS RM analysis, 11-VLAN segmentation with a deny-by-default flow matrix, hybrid AD tiering, SIEM and supervision stack.",
-   "link": ""
+   "link": null
   },
   {
    "name": "Cryptographic audit (STM32)",
    "year": "2025",
    "stack": "Side-Channel · STM32 · Python",
    "line": "Timing attack recovering a password from an early-exit comparison; median-based measurement methodology and hardening report.",
-   "link": ""
+   "link": null
   },
   {
    "name": "NULLSEC",
    "year": "2025",
    "stack": "Next.js 16 · GSAP · Typst",
    "line": "This portfolio: typed content as single source of truth; this CV compiles from the same data.",
-   "link": "github.com/xoudev/nullsec"
+   "link": {
+    "label": "github.com/xoudev/nullsec",
+    "url": "https://github.com/xoudev/nullsec"
+   }
   }
  ],
  "certifications": [
@@ -132,7 +150,5 @@
    "domain": "Languages",
    "items": "French (native) · English (C1) · Spanish (B1)"
   }
- ],
- "languagesLine": "French (native) · English (C1) · Spanish (B1)",
- "footer": "compiled from source · github.com/xoudev/nullsec"
+ ]
 }
