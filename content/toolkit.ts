@@ -80,6 +80,27 @@ export const toolkitDomains: ToolkitDomain[] = [
         },
         proofHref: "/work/zero-trust-architecture",
       },
+      {
+        label: "JIRA",
+        proof: {
+          en: "Vulnerability management, CVSS and SLA · Arvato",
+          fr: "Gestion des vulnérabilités, CVSS et SLA · Arvato",
+        },
+      },
+      {
+        label: "SharePoint",
+        proof: {
+          en: "ISMS documentation and application register · Arvato",
+          fr: "Documentation du SMSI et registre applicatif · Arvato",
+        },
+      },
+      {
+        label: "Power Automate",
+        proof: {
+          en: "Application register workflow, Forms to SharePoint · Arvato",
+          fr: "Workflow du registre applicatif, de Forms à SharePoint · Arvato",
+        },
+      },
     ],
   },
   {

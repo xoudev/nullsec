@@ -60,19 +60,56 @@ for (const w of cvProjects) {
   }
 }
 
+// ── Skills: a selection, not the whole toolkit ──────────────────────────────
+// The CV used to print all six toolkit domains, 44 entries. That reads as
+// exposure, not command: nobody believes a junior masters 44 technologies, and
+// the GRC lines it is actually hired for were buried among build tools. The CV
+// now carries four domains and 24 entries, GRC first.
+//
+// It is a selection, never an addition: every label below must exist in
+// content/toolkit.ts, asserted at build time, so the CV still cannot claim a
+// technology the site does not show.
+const CV_SKILLS = [
+  {
+    domain: { en: "GRC / Risk", fr: "GRC / Risque" },
+    labels: ["EBIOS RM", "ISO 27001", "NIS2", "PSSI & Policy", "Vulnerability Mgmt (CVSS)", "MITRE ATT&CK", "Training & Awareness"],
+  },
+  {
+    domain: { en: "GRC tooling", fr: "Outils GRC" },
+    labels: ["JIRA", "SharePoint", "Power Automate"],
+  },
+  {
+    domain: { en: "Blue team / Network", fr: "Blue team / Réseau" },
+    labels: ["Stormshield", "Wazuh", "Wireshark", "Log & Traffic Analysis", "Active Directory", "VLAN Segmentation", "MFA & Privileged Access"],
+  },
+  {
+    domain: { en: "Engineering", fr: "Ingénierie" },
+    labels: ["TypeScript", "Next.js", "React", "PostgreSQL", "Docker", "CI/CD", "Linux"],
+  },
+];
+
+const toolkitLabels = new Set(toolkitDomains.flatMap((d) => d.entries.map((e) => e.label)));
+for (const g of CV_SKILLS) {
+  const stray = g.labels.filter((l) => !toolkitLabels.has(l));
+  if (stray.length > 0) {
+    throw new Error(
+      `CV skills not present in content/toolkit.ts: ${stray.join(", ")}. ` +
+        "Add them to the site's toolkit or drop them — the CV must not claim a technology the site does not.",
+    );
+  }
+}
+
 function build(loc) {
   const t = (v) => pick(loc, v);
   const en = loc === "en";
 
   return ats({
-    role: en
-      ? "Cybersecurity — GRC · Blue Team · DevSecOps"
-      : "Cybersécurité · GRC · Blue Team · DevSecOps",
+    role: en ? "Cybersecurity — GRC & ISMS" : "Cybersécurité · GRC & SMSI",
     // Factual summary — ATS reads it first. Keyword detail lives in Skills, so
     // this stays two lines and names only the through-line.
     pitch: en
-      ? "Assistant LISO (apprenticeship) in Internal Control at Arvato; cybersecurity bachelor at Guardia, Mastère (offensive & defensive) from Sept 2026. Focus: GRC, blue-team detection, and network security."
-      : "Assistant LISO en alternance au Contrôle Interne d'Arvato ; Bachelor cybersécurité à Guardia, Mastère (offensif et défensif) dès sept. 2026. Axe : GRC, détection blue team et sécurité réseau.",
+      ? "Assistant LISO (apprenticeship), second line of defence at Arvato: building and improving an ISMS, from EBIOS RM risk analysis to ISO 27001 compliance, policy and third-party assessment. Mastère (offensive & defensive) from Sept 2026."
+      : "Assistant LISO en alternance, deuxième ligne de défense chez Arvato : construction et amélioration continue du SMSI, de l'analyse de risques EBIOS RM à la conformité ISO 27001, aux politiques et à l'évaluation des tiers. Mastère offensif et défensif dès sept. 2026.",
     availability: en
       ? "APPRENTICE @ ARVATO UNTIL SEPT 2028 · MASTÈRE 2026-2028 · FULL-TIME FROM SEPT 2028"
       : "ALTERNANT @ ARVATO JUSQU'À SEPT. 2028 · MASTÈRE 2026-2028 · TEMPS PLEIN DÈS SEPT. 2028",
@@ -86,11 +123,16 @@ function build(loc) {
     labels: en
       ? { experience: "Experience", projects: "Projects", certifications: "Certifications", education: "Education", skills: "Skills", languages: "Languages" }
       : { experience: "Expérience", projects: "Projets", certifications: "Certifications", education: "Formation", skills: "Compétences", languages: "Langues" },
-    experience: profile.experience.map((xp) => ({
+    // Only the current role is worth bullets on one page. The two 2024/2025
+    // dev internships predate the cybersecurity track and were each taking
+    // three lines, so Projects ended up rivalling Experience for weight; they
+    // collapse to a single summary line here. The site keeps the full detail —
+    // it has the room, a one-page CV does not.
+    experience: profile.experience.map((xp, i) => ({
       title: t(xp.title),
       company: xp.company,
       period: t(xp.period),
-      focus: [...t(xp.focus)],
+      focus: i === 0 ? [...t(xp.focus)] : [t(xp.focus).join(en ? "; " : " ; ")],
     })),
     projects: cvProjects.map((w) => ({
       name: t(w.cv.name),
@@ -130,9 +172,9 @@ function build(loc) {
     // one line of content does not earn a heading, a rule and its spacing, and
     // a language IS a competence.
     skills: [
-      ...toolkitDomains.map((d) => ({
-        domain: t(d.title),
-        items: d.entries.map((e) => e.label).join(" · "),
+      ...CV_SKILLS.map((g) => ({
+        domain: t(g.domain),
+        items: g.labels.join(" · "),
       })),
       {
         domain: en ? "Languages" : "Langues",
