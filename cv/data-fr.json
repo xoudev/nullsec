@@ -119,20 +119,28 @@
  ],
  "skills": [
   {
-   "domain": "GRC / Risque",
-   "items": "EBIOS RM · ISO 27001 · NIS2 · PSSI & Policy · Vulnerability Mgmt (CVSS) · MITRE ATT&CK · Training & Awareness"
+   "domain": "GRC / RISQUE",
+   "items": "EBIOS RM · ISO 27001 · NIS2 · MITRE ATT&CK · Vulnerability Mgmt (CVSS) · PSSI & Policy · Training & Awareness · CIS Benchmark"
   },
   {
-   "domain": "Outils GRC",
-   "items": "JIRA · SharePoint · Power Automate"
+   "domain": "BLUE TEAM / DÉFENSE",
+   "items": "Stormshield · Wazuh · Zabbix · Wireshark · Log & Traffic Analysis · Grafana / Prometheus"
   },
   {
-   "domain": "Blue team / Réseau",
-   "items": "Stormshield · Wazuh · Wireshark · Log & Traffic Analysis · Active Directory · VLAN Segmentation · MFA & Privileged Access"
+   "domain": "RÉSEAU / IDENTITÉ",
+   "items": "Active Directory · VLAN Segmentation · IPSec VPN · MFA & Privileged Access · Teleport · PowerShell"
   },
   {
-   "domain": "Ingénierie",
-   "items": "TypeScript · Next.js · React · PostgreSQL · Docker · CI/CD · Linux"
+   "domain": "OFFENSIF / RECONNAISSANCE",
+   "items": "Burp Suite · Metasploit · Kali · Nmap · cURL · OSINT"
+  },
+  {
+   "domain": "INGÉNIERIE / WEB",
+   "items": "TypeScript · Next.js · React · Turborepo · Supabase · PostgreSQL · Prisma · Tailwind · GSAP · Lenis · Typst"
+  },
+  {
+   "domain": "INFRA / DEVSECOPS",
+   "items": "Docker · Kubernetes · Ansible · CI/CD · Proxmox · Linux · Git"
   },
   {
    "domain": "Langues",

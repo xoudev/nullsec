@@ -60,45 +60,6 @@ for (const w of cvProjects) {
   }
 }
 
-// ── Skills: a selection, not the whole toolkit ──────────────────────────────
-// The CV used to print all six toolkit domains, 44 entries. That reads as
-// exposure, not command: nobody believes a junior masters 44 technologies, and
-// the GRC lines it is actually hired for were buried among build tools. The CV
-// now carries four domains and 24 entries, GRC first.
-//
-// It is a selection, never an addition: every label below must exist in
-// content/toolkit.ts, asserted at build time, so the CV still cannot claim a
-// technology the site does not show.
-const CV_SKILLS = [
-  {
-    domain: { en: "GRC / Risk", fr: "GRC / Risque" },
-    labels: ["EBIOS RM", "ISO 27001", "NIS2", "PSSI & Policy", "Vulnerability Mgmt (CVSS)", "MITRE ATT&CK", "Training & Awareness"],
-  },
-  {
-    domain: { en: "GRC tooling", fr: "Outils GRC" },
-    labels: ["JIRA", "SharePoint", "Power Automate"],
-  },
-  {
-    domain: { en: "Blue team / Network", fr: "Blue team / Réseau" },
-    labels: ["Stormshield", "Wazuh", "Wireshark", "Log & Traffic Analysis", "Active Directory", "VLAN Segmentation", "MFA & Privileged Access"],
-  },
-  {
-    domain: { en: "Engineering", fr: "Ingénierie" },
-    labels: ["TypeScript", "Next.js", "React", "PostgreSQL", "Docker", "CI/CD", "Linux"],
-  },
-];
-
-const toolkitLabels = new Set(toolkitDomains.flatMap((d) => d.entries.map((e) => e.label)));
-for (const g of CV_SKILLS) {
-  const stray = g.labels.filter((l) => !toolkitLabels.has(l));
-  if (stray.length > 0) {
-    throw new Error(
-      `CV skills not present in content/toolkit.ts: ${stray.join(", ")}. ` +
-        "Add them to the site's toolkit or drop them — the CV must not claim a technology the site does not.",
-    );
-  }
-}
-
 function build(loc) {
   const t = (v) => pick(loc, v);
   const en = loc === "en";
@@ -172,9 +133,9 @@ function build(loc) {
     // one line of content does not earn a heading, a rule and its spacing, and
     // a language IS a competence.
     skills: [
-      ...CV_SKILLS.map((g) => ({
-        domain: t(g.domain),
-        items: g.labels.join(" · "),
+      ...toolkitDomains.map((d) => ({
+        domain: t(d.title),
+        items: d.entries.map((e) => e.label).join(" · "),
       })),
       {
         domain: en ? "Languages" : "Langues",
