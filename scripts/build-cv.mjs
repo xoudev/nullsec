@@ -65,14 +65,12 @@ function build(loc) {
   const en = loc === "en";
 
   return ats({
-    role: en
-      ? "Cybersecurity — GRC · Blue Team · DevSecOps"
-      : "Cybersécurité · GRC · Blue Team · DevSecOps",
+    role: en ? "Cybersecurity — GRC & ISMS" : "Cybersécurité · GRC & SMSI",
     // Factual summary — ATS reads it first. Keyword detail lives in Skills, so
     // this stays two lines and names only the through-line.
     pitch: en
-      ? "Assistant LISO (apprenticeship) in Internal Control at Arvato; cybersecurity bachelor at Guardia, Mastère (offensive & defensive) from Sept 2026. Focus: GRC, blue-team detection, and network security."
-      : "Assistant LISO en alternance au Contrôle Interne d'Arvato ; Bachelor cybersécurité à Guardia, Mastère (offensif et défensif) dès sept. 2026. Axe : GRC, détection blue team et sécurité réseau.",
+      ? "Assistant LISO (apprenticeship), second line of defence at Arvato: building and improving an ISMS, from EBIOS RM risk analysis to ISO 27001 compliance, policy and third-party assessment. Mastère (offensive & defensive) from Sept 2026."
+      : "Assistant LISO en alternance, deuxième ligne de défense chez Arvato : construction et amélioration continue du SMSI, de l'analyse de risques EBIOS RM à la conformité ISO 27001, aux politiques et à l'évaluation des tiers. Mastère offensif et défensif dès sept. 2026.",
     availability: en
       ? "APPRENTICE @ ARVATO UNTIL SEPT 2028 · MASTÈRE 2026-2028 · FULL-TIME FROM SEPT 2028"
       : "ALTERNANT @ ARVATO JUSQU'À SEPT. 2028 · MASTÈRE 2026-2028 · TEMPS PLEIN DÈS SEPT. 2028",
@@ -86,11 +84,16 @@ function build(loc) {
     labels: en
       ? { experience: "Experience", projects: "Projects", certifications: "Certifications", education: "Education", skills: "Skills", languages: "Languages" }
       : { experience: "Expérience", projects: "Projets", certifications: "Certifications", education: "Formation", skills: "Compétences", languages: "Langues" },
-    experience: profile.experience.map((xp) => ({
+    // Only the current role is worth bullets on one page. The two 2024/2025
+    // dev internships predate the cybersecurity track and were each taking
+    // three lines, so Projects ended up rivalling Experience for weight; they
+    // collapse to a single summary line here. The site keeps the full detail —
+    // it has the room, a one-page CV does not.
+    experience: profile.experience.map((xp, i) => ({
       title: t(xp.title),
       company: xp.company,
       period: t(xp.period),
-      focus: [...t(xp.focus)],
+      focus: i === 0 ? [...t(xp.focus)] : [t(xp.focus).join(en ? "; " : " ; ")],
     })),
     projects: cvProjects.map((w) => ({
       name: t(w.cv.name),
