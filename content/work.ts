@@ -22,6 +22,18 @@ export type WorkItem = {
   liveUrl?: string; // optional public / live site link
   repoUrl?: string; // optional public source repository
   /**
+   * Public PDFs attached to the case study (feature specification, design
+   * system). Opened in a new tab: the CSP forbids embedding them. `lang` is the
+   * document's own language when it exists in only one, so the English site can
+   * say a document is in French before the reader clicks.
+   */
+  documents?: {
+    label: Localized<string>;
+    href: string;          // path under /public, e.g. "/docs/toron-fonctionnalites.pdf"
+    pages: number;
+    lang?: "en" | "fr";
+  }[];
+  /**
    * Present when the project appears on the compiled CV. The CV needs a much
    * shorter summary than `excerpt`, so it gets its own line — but the name, the
    * year and the stack are read from the fields above, so the two can no longer
@@ -43,6 +55,86 @@ export type WorkItem = {
 
 export const work: WorkItem[] = [
   {
+    slug: "toron",
+    index: "001",
+    title: { en: "TORON", fr: "TORON" },
+    image: "/toron.png",
+    year: "2026",
+    tags: ["ISO 27001", "NIS2", "EBIOS RM", "PostgreSQL RLS", "Better Auth", "Scaleway"],
+    documents: [
+      {
+        label: { en: "Features", fr: "Fonctionnalités" },
+        href: "/docs/toron-fonctionnalites.pdf",
+        pages: 6,
+        lang: "fr",
+      },
+    ],
+    excerpt: {
+      en: "A compliance platform built on one idea: prove it once, cover everything. One internal control is mapped to every requirement it satisfies, across every framework — so a single piece of evidence serves ISO 27001, NIS2 and a customer's security questionnaire at the same time.",
+      fr: "Une plateforme de conformité bâtie sur une seule idée : prouvez une fois, couvrez tout. Un contrôle interne est rattaché à toutes les exigences qu'il satisfait, dans tous les référentiels : une même preuve sert à ISO 27001, à NIS2 et au questionnaire sécurité d'un client.",
+    },
+    facts: [
+      { label: { en: "CONTEXT", fr: "CONTEXTE" }, value: { en: "Personal product in development, for French SMEs and mid-sized companies", fr: "Produit personnel en développement, pour les PME et ETI françaises" } },
+      { label: { en: "ROLE", fr: "RÔLE" }, value: { en: "Product design, functional specification, brand, architecture", fr: "Conception produit, spécification fonctionnelle, identité, architecture" } },
+      { label: { en: "DELIVERABLES", fr: "LIVRABLES" }, value: { en: "Functional specification: 13 core modules, a 4-module GRC pack and a quality pack; design system; dashboard mock-ups", fr: "Spécification fonctionnelle : 13 modules de socle, un pack GRC de 4 modules et un pack qualité ; système de design ; maquettes du tableau de bord" } },
+      { label: { en: "STATUS", fr: "STATUT" }, value: { en: "Five-phase roadmap; the first ships no feature, it proves tenant isolation", fr: "Feuille de route en cinq phases ; la première ne livre aucune fonctionnalité, elle prouve l'isolation entre clients" } },
+    ],
+    body: {
+      en: [
+        "Toron is a compliance platform for French SMEs and mid-sized companies. It covers ISO 27001, NIS2 through ANSSI's ReCyF and the GDPR on a single foundation, with ISO 9001 to follow, and it is hosted in the European Union on Scaleway. The whole product rests on one engine: frameworks are loaded as data, and every internal control is linked many-to-many to the requirements it satisfies. Everything else — assessments, risks, the action plan, the evidence vault — hangs off that mapping. Deposit a piece of evidence once and it counts for ISO 27001, for NIS2 and for the customer questionnaire that lands next month.",
+        "Most of the design work went into business rules that refuse to let a compliance programme lie to itself. A requirement marked not applicable without a justification is rejected, and N/A never counts towards the score. A risk marked accepted without a signature stays \"acceptance pending\" and surfaces at management review. Lateness is computed, never typed in. A published document is immutable; any change is a new version. An expired piece of evidence flags the requirements it covers without changing their status, because that call belongs to a human. Every figure on a dashboard leads back to the data it came from.",
+        "A compliance tool has to pass its own customers' supplier questionnaire, so its trust features are visible to the user, not buried in the code. Every export — Statement of Applicability, risk register, audit report, management-review minutes, incident declaration — is sealed with the SHA-256 fingerprint of the file, and a public page confirms it has not been altered. That seal is an integrity mark, not a qualified eIDAS signature, and the product says so. Tenants are isolated by PostgreSQL row-level security, backed by a test suite that attempts cross-tenant reads and writes with forged identifiers and blocks any merge when one succeeds. The audit log has no delete function.",
+        "The roadmap runs in five phases, and none starts before the previous one meets its definition of done. The first ships no visible feature at all: its only job is to prove that a second tenant can read nothing of the first. Just as deliberate is the list of what Toron will never be — a vulnerability scanner, a phishing simulator, a full DPIA tool, a CMDB. Knowing where a product stops is part of the specification.",
+      ],
+      fr: [
+        "Toron est une plateforme de conformité pour les PME et ETI françaises. Elle couvre ISO 27001, NIS2 via le ReCyF de l'ANSSI et le RGPD sur un socle unique, avant ISO 9001, et elle est hébergée dans l'Union européenne, chez Scaleway. Tout le produit repose sur un seul moteur : les référentiels sont chargés comme des données, et chaque contrôle interne est rattaché en n-n aux exigences qu'il satisfait. Le reste (évaluations, risques, plan d'action, coffre de preuves) s'accroche à ce rapprochement. Une preuve déposée une fois compte pour ISO 27001, pour NIS2 et pour le questionnaire client qui arrivera le mois prochain.",
+        "L'essentiel de la conception est passé dans des règles métier qui empêchent un programme de conformité de se mentir à lui-même. Une exigence déclarée non applicable sans justification est refusée, et un « non applicable » ne compte jamais dans le score. Un risque « accepté » sans signature reste en « acceptation en attente » et remonte en revue de direction. Le retard est calculé, jamais saisi. Un document publié est immuable : toute modification crée une nouvelle version. Une preuve expirée signale les exigences qu'elle couvre sans changer leur statut, parce que cette décision revient à un humain. Chaque chiffre d'un tableau de bord mène à la donnée qui le produit.",
+        "Un outil de conformité doit lui-même passer le questionnaire fournisseur de ses clients : ses garanties sont donc visibles par l'utilisateur, pas enfouies dans le code. Chaque export (déclaration d'applicabilité, registre des risques, rapport d'audit, PV de revue de direction, déclaration d'incident) est scellé avec l'empreinte SHA-256 du fichier, et une page publique confirme qu'il n'a pas été modifié. Ce poinçon est un sceau d'intégrité, pas une signature qualifiée eIDAS, et le produit le dit. Les clients sont isolés par la Row Level Security de PostgreSQL, adossée à une suite de tests qui tente des lectures et des écritures croisées avec des identifiants forgés et bloque toute fusion si l'une d'elles aboutit. Le journal d'audit n'a aucune fonction d'effacement.",
+        "La feuille de route avance en cinq phases, et aucune ne démarre avant que la précédente ait rempli sa définition de terminé. La première ne livre aucune fonctionnalité visible : son seul objet est de prouver qu'un second client ne lit rien du premier. Tout aussi délibérée, la liste de ce que Toron ne sera jamais : un scanner de vulnérabilités, un simulateur d'hameçonnage, un outil d'AIPD complète, une CMDB. Savoir où un produit s'arrête fait partie de sa spécification.",
+      ],
+    },
+  },
+  {
+    slug: "hune",
+    index: "002",
+    title: { en: "HUNE", fr: "HUNE" },
+    image: "/hune.png",
+    year: "2026",
+    tags: ["RMM", "mTLS", "Ed25519", "gRPC", "Apache Guacamole", "PostgreSQL RLS"],
+    documents: [
+      {
+        label: { en: "Features", fr: "Fonctionnalités" },
+        href: "/docs/hune-fonctionnalites.pdf",
+        pages: 6,
+        lang: "fr",
+      },
+    ],
+    excerpt: {
+      en: "An endpoint-management platform designed around one uncomfortable fact: an RMM is an attack tool that has not been used as one yet. Kaseya proved it in 2021. Hune is built so that a compromised server still cannot push code to the fleet.",
+      fr: "Une plateforme de gestion de parc conçue autour d'un constat inconfortable : un RMM est un outil d'attaque qui n'a pas encore servi comme tel. Kaseya l'a prouvé en 2021. Hune est pensé pour qu'un serveur compromis ne puisse toujours pas pousser de code sur le parc.",
+    },
+    facts: [
+      { label: { en: "CONTEXT", fr: "CONTEXTE" }, value: { en: "Student project, run in a lab at zero cost", fr: "Projet étudiant, mené en labo, à 0 €" } },
+      { label: { en: "ROLE", fr: "RÔLE" }, value: { en: "Product design, security architecture, threat model", fr: "Conception produit, architecture de sécurité, modèle de menace" } },
+      { label: { en: "DELIVERABLES", fr: "LIVRABLES" }, value: { en: "Functional specification: some fifty features across 11 domains, a five-role rights matrix, a seven-phase roadmap", fr: "Spécification fonctionnelle : une cinquantaine de fonctionnalités sur 11 domaines, une matrice de droits à cinq rôles, une feuille de route en sept phases" } },
+      { label: { en: "STATUS", fr: "STATUT" }, value: { en: "Docker Compose and local VMs on a single tower; remote access only arrives in phase 3", fr: "Docker Compose et VM locales sur une tour ; l'accès distant n'arrive qu'en phase 3" } },
+    ],
+    body: {
+      en: [
+        "Hune is an endpoint-management platform (RMM) that brings together three jobs usually split across several tools: monitoring and maintaining machines, helping the people who use them, and proving that the ISMS actually works. What separates it from a classic RMM is that every piece of data an agent reports is used twice — once by the technician who fixes the problem, once by the security officer who has to demonstrate that the fix happened. A deployed patch becomes evidence attached to an ISO 27001 control, exportable to Toron.",
+        "The design starts from the threat model rather than the feature list. An RMM is an administration tool that can become an attack tool: in 2021, the Kaseya VSA incident pushed ransomware to the customers of several managed-service providers through their own RMM. Hune is built so that a compromised server cannot push arbitrary code to the fleet. Commands carry two signatures: the API signs the dispatch, but the script itself must have been approved with an offline Ed25519 key through a dedicated CLI and a hardware key, and that signature never transits through the server. The agent checks both before it runs anything. Agents enrol over mTLS through step-ca with a one-time token, with the tenant and the device written into the certificate, so revocation is immediate.",
+        "Remote access opens RDP, SSH and VNC sessions without a single inbound port on the endpoint. The agent calls the server, never the other way round: it opens an outbound gRPC stream over mTLS, Apache Guacamole speaks the protocols, and Hune only copies bytes between the two. Around it sits a separation of duties that makes one person insufficient: five roles, and nobody can both approve and execute. The administrator manages people but never acts on endpoints, so introducing new code on the fleet takes at least two people. Remote access itself only arrives in phase three, after signed scripts and the audit log, so the most sensitive function sits on a foundation that has already been proven.",
+        "Part of the specification is a list of refusals. Hune will never hide its service, icon or files, disable an antivirus or an EDR, log keystrokes, capture the screen or the webcam without consent, watch a session without warning, extract passwords or cookies, uninstall without a trace, or open a tunnel to a target that is not listed — and it will publish the indicators defenders need to spot its agent. Today it is a student project at zero cost: everything runs in a lab on a single tower, with Docker Compose and local virtual machines.",
+      ],
+      fr: [
+        "Hune est une plateforme de gestion de parc informatique (RMM) qui réunit trois métiers d'ordinaire éclatés entre plusieurs outils : superviser et maintenir les postes, aider leurs utilisateurs, et prouver que le SMSI fonctionne vraiment. Ce qui la distingue d'un RMM classique, c'est que chaque information remontée par un agent sert deux fois : une première pour le technicien qui corrige, une seconde pour le responsable sécurité qui doit démontrer que la correction a eu lieu. Un correctif déployé devient une preuve rattachée à une mesure ISO 27001, exportable vers Toron.",
+        "La conception part du modèle de menace, pas de la liste de fonctionnalités. Un RMM est un outil d'administration qui peut devenir un outil d'attaque : en 2021, l'incident Kaseya VSA a propagé un rançongiciel chez les clients de plusieurs infogéreurs, par leur propre RMM. Hune est pensé pour qu'un serveur compromis ne puisse pas pousser de code arbitraire sur le parc. Les commandes portent deux signatures : l'API signe l'envoi, mais le script lui-même doit avoir été approuvé avec une clé Ed25519 hors ligne, via une CLI dédiée et une clé matérielle, et cette signature ne transite jamais par le serveur. L'agent vérifie les deux avant d'exécuter quoi que ce soit. L'enrôlement passe par mTLS auprès de step-ca avec un jeton à usage unique ; le client et l'appareil sont inscrits dans le certificat, et la révocation est immédiate.",
+        "L'accès distant ouvre des sessions RDP, SSH et VNC sans qu'aucun port ne soit ouvert sur le poste. C'est l'agent qui appelle le serveur, jamais l'inverse : il ouvre un flux gRPC sortant chiffré en mTLS, Apache Guacamole parle les protocoles, et Hune ne fait que recopier des octets entre les deux. Autour, une séparation des tâches rend une seule personne insuffisante : cinq rôles, et personne ne peut à la fois approuver et exécuter. L'administrateur gère les personnes mais n'agit jamais sur les postes : introduire du code nouveau sur le parc demande donc au moins deux personnes. L'accès distant lui-même n'arrive qu'en phase 3, après les scripts signés et le journal d'audit, pour que la fonction la plus sensible repose sur un socle déjà prouvé.",
+        "Une partie de la spécification est une liste de refus. Hune ne se cachera jamais (service, icône ou fichiers), ne désactivera ni antivirus ni EDR, n'enregistrera pas les frappes, ne capturera ni l'écran ni la webcam sans consentement, n'observera pas une session sans prévenir, n'extraira ni mots de passe ni cookies, ne se désinstallera pas sans trace et n'ouvrira pas de tunnel vers une cible non listée ; il publiera en outre les indicateurs qui permettent aux défenseurs de repérer son agent. Aujourd'hui, c'est un projet étudiant à 0 € : tout tourne en labo sur une tour, avec Docker Compose et des machines virtuelles locales.",
+      ],
+    },
+  },
+  {
     slug: "cyberlearn",
     cv: {
       name: { en: "CyberLearn", fr: "CyberLearn" },
@@ -54,7 +146,7 @@ export const work: WorkItem[] = [
       },
       link: "cyberlearn.fr",
     },
-    index: "001",
+    index: "003",
     title: { en: "CYBERLEARN", fr: "CYBERLEARN" },
     image: "/Log_blanc_large.png",
     liveUrl: "https://cyberlearn.fr",
@@ -97,7 +189,7 @@ export const work: WorkItem[] = [
       },
       link: "github.com/xoudev/nullsec",
     },
-    index: "002",
+    index: "004",
     title: { en: "NULLSEC", fr: "NULLSEC" },
     repoUrl: "https://github.com/xoudev/nullsec",
     year: "2025",
@@ -136,7 +228,7 @@ export const work: WorkItem[] = [
         fr: "Dossier de fin d'études, activité logistique sur trois sites : analyse EBIOS RM, segmentation en 11 VLANs avec matrice de flux en refus par défaut, AD hybride en tiering, socle SIEM et supervision.",
       },
     },
-    index: "003",
+    index: "005",
     title: { en: "ZERO TRUST ARCHITECTURE", fr: "ARCHITECTURE ZERO TRUST" },
     image: "/ZeroTrust.png",
     year: "2026",
@@ -168,7 +260,7 @@ export const work: WorkItem[] = [
   },
   {
     slug: "space-grc-mission",
-    index: "004",
+    index: "006",
     title: { en: "SPACE GRC MISSION", fr: "MISSION GRC SPATIALE" },
     image: "/GuardianSpace.png",
     year: "2025",
@@ -209,7 +301,7 @@ export const work: WorkItem[] = [
         fr: "Attaque temporelle récupérant un mot de passe sur une comparaison à sortie anticipée ; méthodologie de mesure par médiane et rapport de durcissement.",
       },
     },
-    index: "005",
+    index: "007",
     title: { en: "CRYPTOGRAPHIC AUDIT", fr: "AUDIT CRYPTOGRAPHIQUE" },
     image: "/stm32-blue-pill.jpg",
     year: "2025",
@@ -241,7 +333,7 @@ export const work: WorkItem[] = [
   },
   {
     slug: "tower-defense-game",
-    index: "007",
+    index: "009",
     tier: "side",
     title: { en: "TOWER DEFENSE GAME", fr: "JEU TOWER DEFENSE" },
     year: "2026",
@@ -271,7 +363,7 @@ export const work: WorkItem[] = [
   },
   {
     slug: "homelab-proxmox",
-    index: "006",
+    index: "008",
     title: { en: "HOMELAB · PROXMOX", fr: "HOMELAB · PROXMOX" },
     year: "2026",
     tags: ["Proxmox", "Wazuh", "Self-hosted", "Linux", "Networking"],
