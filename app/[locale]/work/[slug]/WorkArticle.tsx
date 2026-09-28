@@ -274,12 +274,13 @@ export function WorkArticle({
             </div>
           )}
 
-          {/* Live / source links — only when the project has them */}
-          {(item.liveUrl || item.repoUrl) && (
+          {/* Live / source / document links — only when the project has them */}
+          {(item.liveUrl || item.repoUrl || item.documents?.length) && (
             <div
               style={{
                 display: "flex",
-                gap: "1.25rem",
+                flexWrap: "wrap",
+                gap: "0.75rem 1.25rem",
                 marginBottom: "clamp(1.5rem, 2.5vw, 2rem)",
               }}
             >
@@ -321,6 +322,30 @@ export function WorkArticle({
                   {tr("[ source → ]", "[ code source → ]")}
                 </a>
               )}
+              {item.documents?.map((doc) => (
+                <a
+                  key={doc.href}
+                  href={doc.href}
+                  type="application/pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    fontFamily: "var(--font-jetbrains-mono)",
+                    fontSize: "0.7rem",
+                    color: "var(--color-blood)",
+                    letterSpacing: "0.08em",
+                    textDecoration: "none",
+                  }}
+                >
+                  {tr(
+                    `[ pdf · ${doc.label.en.toLowerCase()}${doc.lang === "fr" ? " (fr)" : ""} · ${doc.pages} pp. → ]`,
+                    `[ pdf · ${doc.label.fr.toLowerCase()}${doc.lang === "en" ? " (en)" : ""} · ${doc.pages} p. → ]`,
+                  )}
+                </a>
+              ))}
             </div>
           )}
 
