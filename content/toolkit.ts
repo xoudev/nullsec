@@ -386,3 +386,25 @@ export const toolkitEntryCount = toolkitDomains.reduce(
   (n, d) => n + d.entries.length,
   0,
 );
+
+/**
+ * Where a domain's proofs come from, read off its entries so it can never
+ * drift from them: the case studies they link to (in order of first use) and
+ * the contexts their proof lines name. Shown under each domain without any
+ * hover, so a visitor sees at a glance that the skills are backed, then
+ * hovers one for its own proof.
+ */
+const EVIDENCE_CONTEXTS = ["Arvato", "CSNA", "Root-Me"];
+
+export function domainEvidence(domain: ToolkitDomain): { contexts: string[]; works: string[] } {
+  const contexts = EVIDENCE_CONTEXTS.filter((name) =>
+    domain.entries.some((e) => e.proof?.en.includes(name) || e.proof?.fr.includes(name)),
+  );
+  const works: string[] = [];
+  for (const e of domain.entries) {
+    const slug = e.proofHref?.replace(/^\/work\//, "");
+    if (slug && !works.includes(slug)) works.push(slug);
+  }
+  return { contexts, works };
+}
+
