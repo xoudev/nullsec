@@ -56,15 +56,16 @@ export function SectionExperience() {
         style={{
           display: "flex",
           justifyContent: "space-between",
+          flexWrap: "wrap",
           alignItems: "baseline",
           gap: "1rem",
           marginBottom: "clamp(2rem, 4vw, 3rem)",
         }}
       >
-        <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.65rem", color: "var(--color-blood)", letterSpacing: "0.1em" }}>
+        <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.75rem", color: "var(--color-blood)", letterSpacing: "0.1em", whiteSpace: "nowrap" }}>
           {tr(sectionLabel("experience", "en"), sectionLabel("experience", "fr"))}
         </span>
-        <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-ash)", letterSpacing: "0.1em", whiteSpace: "nowrap" }}>
+        <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.75rem", color: "var(--color-ash)", letterSpacing: "0.1em", whiteSpace: "nowrap" }}>
           {`${String(profile.experience.length).padStart(2, "0")} ${tr("ROLES · SINCE 2024", "RÔLES · DEPUIS 2024")}`}
         </span>
       </div>
@@ -108,13 +109,13 @@ export function SectionExperience() {
                   marginBottom: "clamp(0.85rem, 1.8vw, 1.25rem)",
                 }}
               >
-                <span style={{ fontFamily: MONO, fontSize: "0.62rem", color: "var(--color-ash)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                <span style={{ fontFamily: MONO, fontSize: "0.75rem", color: "var(--color-ash)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
                   {t(xp.period)}
                   {current && (
                     <span style={{ color: "var(--color-blood)", marginLeft: "0.9rem" }}>{tr("// CURRENT", "// EN COURS")}</span>
                   )}
                 </span>
-                <span style={{ fontFamily: MONO, fontSize: "0.65rem", color: "var(--color-blood)", letterSpacing: "0.08em" }}>
+                <span style={{ fontFamily: MONO, fontSize: "0.75rem", color: "var(--color-blood)", letterSpacing: "0.08em" }}>
                   {xp.company}
                 </span>
               </div>
@@ -160,7 +161,7 @@ export function SectionExperience() {
                       alignItems: "baseline",
                       gap: "0.5rem",
                       fontFamily: MONO,
-                      fontSize: "clamp(0.66rem, 0.9vw, 0.76rem)",
+                      fontSize: "clamp(0.8rem, 0.9vw, 0.875rem)",
                       color: "rgba(242,239,232,0.72)",
                       letterSpacing: "0.02em",
                       lineHeight: 1.6,
@@ -185,7 +186,7 @@ export function SectionExperience() {
           justifyContent: "space-between",
           marginTop: "clamp(1.5rem, 3vw, 2.5rem)",
           fontFamily: MONO,
-          fontSize: "0.6rem",
+          fontSize: "0.75rem",
           color: "var(--color-ash)",
           letterSpacing: "0.08em",
         }}

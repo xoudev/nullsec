@@ -30,7 +30,7 @@ export function NotFoundBody({ bilingual = false }: { bilingual?: boolean }) {
 
   const linkStyle = {
     fontFamily: "var(--font-jetbrains-mono)",
-    fontSize: "0.7rem",
+    fontSize: "0.8rem",
     letterSpacing: "0.06em",
     alignItems: "center",
     gap: "0.5rem",
@@ -52,7 +52,7 @@ export function NotFoundBody({ bilingual = false }: { bilingual?: boolean }) {
         aria-hidden="true"
         style={{
           fontFamily: "var(--font-jetbrains-mono)",
-          fontSize: "0.65rem",
+          fontSize: "0.75rem",
           color: "var(--color-blood)",
           letterSpacing: "0.1em",
           marginBottom: "2rem",

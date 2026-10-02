@@ -169,6 +169,7 @@ export function SectionToolkit() {
         style={{
           display: "flex",
           justifyContent: "space-between",
+          flexWrap: "wrap",
           alignItems: "baseline",
           gap: "1rem",
           marginBottom: "clamp(2.5rem, 5vw, 4rem)",
@@ -178,9 +179,10 @@ export function SectionToolkit() {
           aria-hidden="true"
           style={{
             fontFamily: "var(--font-jetbrains-mono)",
-            fontSize: "0.65rem",
+            fontSize: "0.75rem",
             color: "var(--color-blood)",
             letterSpacing: "0.1em",
+            whiteSpace: "nowrap",
           }}
         >
           {tr(sectionLabel("toolkit", "en"), sectionLabel("toolkit", "fr"))}
@@ -189,7 +191,7 @@ export function SectionToolkit() {
           aria-hidden="true"
           style={{
             fontFamily: "var(--font-jetbrains-mono)",
-            fontSize: "0.6rem",
+            fontSize: "0.75rem",
             color: "var(--color-ash)",
             letterSpacing: "0.1em",
             whiteSpace: "nowrap",
@@ -260,7 +262,7 @@ export function SectionToolkit() {
                   aria-hidden="true"
                   style={{
                     fontFamily: "var(--font-jetbrains-mono)",
-                    fontSize: "0.6rem",
+                    fontSize: "0.75rem",
                     color: "rgba(10,10,11,0.72)",
                     letterSpacing: "0.12em",
                     marginBottom: "0.85rem",
@@ -309,7 +311,7 @@ export function SectionToolkit() {
 
                     const itemStyle: React.CSSProperties = {
                       fontFamily: "var(--font-jetbrains-mono)",
-                      fontSize: "clamp(0.68rem, 0.85vw, 0.8rem)",
+                      fontSize: "clamp(0.78rem, 0.85vw, 0.875rem)",
                       letterSpacing: "0.04em",
                       textTransform: "uppercase",
                       color: isActive ? "var(--color-blood)" : "var(--color-bone)",
@@ -370,7 +372,7 @@ export function SectionToolkit() {
                     marginTop: "clamp(0.9rem, 2vw, 1.4rem)",
                     minHeight: "1.1em",
                     fontFamily: "var(--font-jetbrains-mono)",
-                    fontSize: "0.62rem",
+                    fontSize: "0.75rem",
                     letterSpacing: "0.04em",
                     color: proofHint
                       ? "rgba(242,239,232,0.78)"
@@ -405,12 +407,12 @@ export function SectionToolkit() {
           justifyContent: "space-between",
           marginTop: "clamp(1.25rem, 2.5vw, 2rem)",
           fontFamily: "var(--font-jetbrains-mono)",
-          fontSize: "0.6rem",
+          fontSize: "0.75rem",
           color: "var(--color-ash)",
           letterSpacing: "0.08em",
         }}
       >
-        <span>{"// INDEX 03"}</span>
+        <span>{`// INDEX ${section("toolkit").id}`}</span>
         <span>{"// ENV prod.nullsec"}</span>
       </div>
     </section>

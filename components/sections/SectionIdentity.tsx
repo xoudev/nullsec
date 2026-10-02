@@ -34,7 +34,6 @@ export function SectionIdentity() {
         backgroundColor: "var(--color-void)",
         display:         "flex",
         flexDirection:   "column",
-        justifyContent:  "center",
         padding:         "clamp(1.5rem, 4vw, 3rem)",
         position:        "relative",
         overflow:        "hidden",
@@ -48,7 +47,7 @@ export function SectionIdentity() {
           top:           "clamp(1.5rem, 4vw, 3rem)",
           left:          "clamp(1.5rem, 4vw, 3rem)",
           fontFamily:    "var(--font-jetbrains-mono)",
-          fontSize:      "0.65rem",
+          fontSize:      "0.75rem",
           color:         "var(--color-blood)",
           letterSpacing: "0.1em",
           zIndex:        2,
@@ -57,6 +56,19 @@ export function SectionIdentity() {
         {tr(sectionLabel("identity", "en"), sectionLabel("identity", "fr"))}
       </div>
 
+      {/* Title block: takes the height the bottom row leaves and centres
+          itself in it. The bottom row used to be absolutely positioned, so on
+          a short phone (360 × 640) the two overlapped; in the flow, the hero
+          simply grows instead. */}
+      <div
+        style={{
+          flex:           1,
+          display:        "flex",
+          flexDirection:  "column",
+          justifyContent: "center",
+          padding:        "clamp(3rem, 7vw, 4.5rem) 0 clamp(2rem, 4vw, 3rem)",
+        }}
+      >
       {/* The h1 is the name. It used to be the slogan, with the name only in
           an aria-label: a recruiter landing here could read "I map the blind
           spots" and nowhere, above the fold, whose page this was. */}
@@ -126,14 +138,12 @@ export function SectionIdentity() {
           }}
         />
       </p>
+      </div>
 
-      {/* Bottom row: metadata + scroll arrow */}
+      {/* Bottom row: metadata + scroll arrow, in the flow */}
       <div
         style={{
-          position:       "absolute",
-          bottom:         "clamp(1.5rem, 4vw, 3rem)",
-          left:           "clamp(1.5rem, 4vw, 3rem)",
-          right:          "clamp(1.5rem, 4vw, 3rem)",
+          position:       "relative",
           display:        "flex",
           alignItems:     "flex-end",
           justifyContent: "space-between",
@@ -145,7 +155,7 @@ export function SectionIdentity() {
             position:      "relative",
             zIndex:        1,
             fontFamily:    "var(--font-jetbrains-mono)",
-            fontSize:      "clamp(0.6rem, 0.9vw, 0.75rem)",
+            fontSize:      "clamp(0.75rem, 0.9vw, 0.85rem)",
             color:         "var(--color-ash)",
             letterSpacing: "0.06em",
             lineHeight:    1.8,

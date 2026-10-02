@@ -466,7 +466,7 @@ export function SectionHandshake() {
         aria-hidden="true"
         style={{
           fontFamily: "var(--font-jetbrains-mono)",
-          fontSize: "0.65rem",
+          fontSize: "0.75rem",
           color: "var(--color-blood)",
           letterSpacing: "0.1em",
           marginBottom: "clamp(1.25rem, 2.5vw, 2rem)",
@@ -502,7 +502,7 @@ export function SectionHandshake() {
         style={{
           alignSelf: "flex-start",
           fontFamily: "var(--font-jetbrains-mono)",
-          fontSize: "clamp(0.7rem, 1vw, 0.8rem)",
+          fontSize: "clamp(0.8rem, 1vw, 0.875rem)",
           letterSpacing: "0.06em",
           marginBottom: "clamp(1.5rem, 3vw, 2.5rem)",
           padding: "0.4rem 0",
@@ -571,7 +571,7 @@ export function SectionHandshake() {
               top: "50%",
               transform: "translate(-50%, -50%)",
               fontFamily: "var(--font-jetbrains-mono)",
-              fontSize: "0.63rem",
+              fontSize: "0.75rem",
               color: "var(--color-ash)",
               letterSpacing: "0.08em",
               whiteSpace: "nowrap",
@@ -584,7 +584,7 @@ export function SectionHandshake() {
           <span
             style={{
               fontFamily: "var(--font-jetbrains-mono)",
-              fontSize: "0.58rem",
+              fontSize: "0.75rem",
               color: "var(--color-ash)",
               letterSpacing: "0.05em",
             }}
@@ -625,7 +625,7 @@ export function SectionHandshake() {
               overflowX: "auto",
               padding: "clamp(1rem, 2vw, 1.5rem)",
               fontFamily: "var(--font-jetbrains-mono)",
-              fontSize: "clamp(0.72rem, 1vw, 0.88rem)",
+              fontSize: "clamp(0.8rem, 1vw, 0.9rem)",
               lineHeight: 1.9,
               letterSpacing: "0.03em",
               position: "relative",
@@ -736,7 +736,7 @@ export function SectionHandshake() {
               border: "1px solid rgba(107,107,107,0.35)",
               color: "var(--color-ash)",
               fontFamily: "var(--font-jetbrains-mono)",
-              fontSize: "0.68rem",
+              fontSize: "0.8rem",
               letterSpacing: "0.08em",
               padding: "0.55rem 0.9rem",
               whiteSpace: "nowrap",
@@ -771,7 +771,7 @@ export function SectionHandshake() {
             target={href && href.startsWith("http") ? "_blank" : undefined}
             style={{
               fontFamily: "var(--font-jetbrains-mono)",
-              fontSize: "0.7rem",
+              fontSize: "0.8rem",
               color: href ? "var(--color-ash)" : "rgba(107,107,107,0.3)",
               letterSpacing: "0.08em",
               textDecoration: "none",
@@ -805,7 +805,7 @@ export function SectionHandshake() {
         style={{
           marginTop: "clamp(1.5rem, 3vw, 2rem)",
           fontFamily: "var(--font-jetbrains-mono)",
-          fontSize: "0.6rem",
+          fontSize: "0.75rem",
           color: "var(--color-ash)",
           letterSpacing: "0.06em",
         }}

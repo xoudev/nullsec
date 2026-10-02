@@ -110,7 +110,7 @@ export default async function DispatchesIndexPage({
           className="hover-to-bone"
           style={{
             fontFamily: "var(--font-jetbrains-mono)",
-            fontSize: "0.7rem",
+            fontSize: "0.8rem",
             letterSpacing: "0.06em",
           }}
         >
@@ -120,7 +120,7 @@ export default async function DispatchesIndexPage({
           aria-hidden="true"
           style={{
             fontFamily: "var(--font-jetbrains-mono)",
-            fontSize: "0.65rem",
+            fontSize: "0.75rem",
             color: "var(--color-blood)",
             letterSpacing: "0.1em",
           }}
@@ -135,7 +135,7 @@ export default async function DispatchesIndexPage({
           aria-hidden="true"
           style={{
             fontFamily: "var(--font-jetbrains-mono)",
-            fontSize: "0.65rem",
+            fontSize: "0.75rem",
             color: "var(--color-blood)",
             letterSpacing: "0.1em",
             marginBottom: "1.25rem",
@@ -184,7 +184,7 @@ export default async function DispatchesIndexPage({
                     display: "flex",
                     gap: "1.5rem",
                     fontFamily: "var(--font-jetbrains-mono)",
-                    fontSize: "0.65rem",
+                    fontSize: "0.75rem",
                     color: "var(--color-ash)",
                     letterSpacing: "0.06em",
                     marginBottom: "0.75rem",

@@ -9,6 +9,9 @@ import { useT } from "@/lib/i18n";
 import { section, sectionLabel } from "@/lib/sections";
 import { orderedWork } from "@/content/work";
 
+// Summary colour at rest: bone at 68 % (8.6:1 on the void).
+const EXCERPT_REST = "rgba(242,239,232,0.68)";
+
 export function SectionFieldwork() {
   const sectionRef = useRef<HTMLElement>(null);
   const bgRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -17,6 +20,7 @@ export function SectionFieldwork() {
   const indexRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const yearRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const tagRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const excerptRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const prefersReduced = useReducedMotion();
   const { t, tr, lp } = useT();
 
@@ -30,6 +34,7 @@ export function SectionFieldwork() {
     indexRefs.current.forEach((el) => { if (el) gsap.set(el, { color: "var(--color-ash)" }); });
     yearRefs.current.forEach((el) => { if (el) gsap.set(el, { color: "var(--color-ash)" }); });
     tagRefs.current.forEach((el) => { if (el) gsap.set(el, { color: "var(--color-ash)" }); });
+    excerptRefs.current.forEach((el) => { if (el) gsap.set(el, { color: EXCERPT_REST }); });
   }, [prefersReduced]);
 
   // Staggered scroll-entrance
@@ -75,11 +80,20 @@ export function SectionFieldwork() {
     const tag = tagRefs.current[i];
 
     // Kill any in-flight tweens before starting new ones
-    if (bg) { gsap.killTweensOf(bg); gsap.to(bg, { clipPath: "inset(0 0% 0 0)", duration: 0.55, ease: "expo.inOut" }); }
+    const excerpt = excerptRefs.current[i];
+
+    // Kill any in-flight tweens before starting new ones
+    if (bg) {
+      gsap.killTweensOf(bg);
+      gsap.set(bg, { visibility: "visible" });
+      gsap.to(bg, { clipPath: "inset(0 0% 0 0)", duration: 0.55, ease: "expo.inOut" });
+    }
     if (title) { gsap.killTweensOf(title); gsap.to(title, { color: "var(--color-void)", duration: 0.28, ease: "power2.out" }); }
     if (year) { gsap.killTweensOf(year); gsap.to(year, { color: "rgba(10,10,11,0.7)", duration: 0.28, ease: "power2.out" }); }
     if (tag) { gsap.killTweensOf(tag); gsap.to(tag, { color: "rgba(10,10,11,0.7)", duration: 0.28, ease: "power2.out" }); }
-    if (idx) { gsap.killTweensOf(idx); gsap.to(idx, { color: "var(--color-blood)", duration: 0.18, ease: "power2.out" }); }
+    if (excerpt) { gsap.killTweensOf(excerpt); gsap.to(excerpt, { color: "rgba(10,10,11,0.75)", duration: 0.28, ease: "power2.out" }); }
+    // The bright orange is 2.5:1 on bone; this darker one clears 5:1.
+    if (idx) { gsap.killTweensOf(idx); gsap.to(idx, { color: "#B23E00", duration: 0.18, ease: "power2.out" }); }
   };
 
   const handleRowLeave = (i: number) => {
@@ -90,10 +104,21 @@ export function SectionFieldwork() {
     const year = yearRefs.current[i];
     const tag = tagRefs.current[i];
 
-    if (bg) { gsap.killTweensOf(bg); gsap.to(bg, { clipPath: "inset(0 100% 0 0)", duration: 0.45, ease: "expo.inOut" }); }
+    const excerpt = excerptRefs.current[i];
+
+    if (bg) {
+      gsap.killTweensOf(bg);
+      gsap.to(bg, {
+        clipPath: "inset(0 100% 0 0)",
+        duration: 0.45,
+        ease: "expo.inOut",
+        onComplete: () => { gsap.set(bg, { visibility: "hidden" }); },
+      });
+    }
     if (title) { gsap.killTweensOf(title); gsap.to(title, { color: "var(--color-bone)", duration: 0.28, ease: "power2.out" }); }
     if (year) { gsap.killTweensOf(year); gsap.to(year, { color: "var(--color-ash)", duration: 0.28, ease: "power2.out" }); }
     if (tag) { gsap.killTweensOf(tag); gsap.to(tag, { color: "var(--color-ash)", duration: 0.28, ease: "power2.out" }); }
+    if (excerpt) { gsap.killTweensOf(excerpt); gsap.to(excerpt, { color: EXCERPT_REST, duration: 0.28, ease: "power2.out" }); }
     if (idx) { gsap.killTweensOf(idx); gsap.to(idx, { color: "var(--color-ash)", duration: 0.18, ease: "power2.out" }); }
   };
 
@@ -114,7 +139,7 @@ export function SectionFieldwork() {
         aria-hidden="true"
         style={{
           fontFamily: "var(--font-jetbrains-mono)",
-          fontSize: "0.65rem",
+          fontSize: "0.75rem",
           color: "var(--color-blood)",
           letterSpacing: "0.1em",
           marginBottom: "clamp(2rem, 4vw, 3rem)",
@@ -152,7 +177,7 @@ export function SectionFieldwork() {
                   aria-hidden="true"
                   style={{
                     fontFamily: "var(--font-jetbrains-mono)",
-                    fontSize: "0.6rem",
+                    fontSize: "0.75rem",
                     color: "var(--color-ash)",
                     letterSpacing: "0.14em",
                     padding: "clamp(2.5rem, 5vw, 4rem) 0 clamp(1rem, 2vw, 1.5rem)",
@@ -175,6 +200,10 @@ export function SectionFieldwork() {
                   inset: 0,
                   backgroundColor: "var(--color-bone)",
                   clipPath: "inset(0 100% 0 0)",
+                  // Hidden as well as clipped while at rest: tools that ignore
+                  // clip-path (contrast checkers) read every row as text on
+                  // bone otherwise. The hover handlers toggle it.
+                  visibility: "hidden",
                   willChange: "clip-path",
                   pointerEvents: "none",
                   zIndex: 0,
@@ -204,7 +233,7 @@ export function SectionFieldwork() {
                   aria-hidden="true"
                   style={{
                     fontFamily: "var(--font-jetbrains-mono)",
-                    fontSize: "clamp(0.65rem, 0.9vw, 0.8rem)",
+                    fontSize: "clamp(0.75rem, 0.9vw, 0.85rem)",
                     color: "var(--color-ash)",
                     minWidth: "2.5rem",
                     letterSpacing: "0.05em",
@@ -228,20 +257,24 @@ export function SectionFieldwork() {
                   >
                     {t(item.title)}
                   </span>
-                  {/* Excerpt stays visible on mobile — without it the section
-                      is seven context-free title rows on a phone. */}
+                  {/* The short summary (meta.description, at most ~155
+                      characters), not the 200 to 340 character excerpt: a list
+                      is for scanning, the case study keeps the long version.
+                      Set in the sans at a reading size; it used to be grey mono
+                      at 10.9 px. Stays visible on mobile: without it the
+                      section is nine context-free title rows on a phone. */}
                   <span
+                    ref={(el) => { excerptRefs.current[i] = el; }}
                     className="fieldwork-excerpt"
                     style={{
-                      fontFamily: "var(--font-jetbrains-mono)",
-                      fontSize: "0.68rem",
-                      color: "var(--color-ash)",
-                      lineHeight: 1.55,
-                      letterSpacing: "0.02em",
-                      maxWidth: "72ch",
+                      fontFamily: "var(--font-sans)",
+                      fontSize: "clamp(0.9375rem, 1.05vw, 1rem)",
+                      color: EXCERPT_REST,
+                      lineHeight: 1.6,
+                      maxWidth: "62ch",
                     }}
                   >
-                    {t(item.excerpt)}
+                    {t(item.meta.description)}
                   </span>
                 </div>
 
@@ -251,7 +284,7 @@ export function SectionFieldwork() {
                   aria-hidden="true"
                   style={{
                     fontFamily: "var(--font-jetbrains-mono)",
-                    fontSize: "0.6rem",
+                    fontSize: "0.75rem",
                     color: "var(--color-ash)",
                     letterSpacing: "0.04em",
                     gap: "0.5rem",
@@ -267,7 +300,7 @@ export function SectionFieldwork() {
                   aria-hidden="true"
                   style={{
                     fontFamily: "var(--font-jetbrains-mono)",
-                    fontSize: "clamp(0.65rem, 0.9vw, 0.8rem)",
+                    fontSize: "clamp(0.75rem, 0.9vw, 0.85rem)",
                     color: "var(--color-ash)",
                     letterSpacing: "0.05em",
                     whiteSpace: "nowrap",

@@ -11,6 +11,15 @@ import type { ClearanceStatus } from "@/content/clearances";
 import { ClearanceRadar } from "@/components/sections/ClearanceRadar";
 import { spell } from "@/lib/spell";
 
+// The status tag, in the page's language: "[GRANTED]" on the French site was
+// one of a dozen English labels left over from before the translation.
+const STATUS_LABEL: Record<ClearanceStatus, { en: string; fr: string }> = {
+  GRANTED: { en: "GRANTED", fr: "OBTENUE" },
+  PENDING: { en: "PENDING", fr: "EN COURS" },
+  EXPIRED: { en: "EXPIRED", fr: "EXPIRÉE" },
+  REVOKED: { en: "REVOKED", fr: "RÉVOQUÉE" },
+};
+
 const HELD = clearances.filter((c) => c.status === "GRANTED").length;
 const PENDING = clearances.filter((c) => c.status === "PENDING").length;
 
@@ -159,7 +168,7 @@ export function SectionClearance() {
           aria-hidden="true"
           style={{
             fontFamily:    "var(--font-jetbrains-mono)",
-            fontSize:      "0.65rem",
+            fontSize:      "0.75rem",
             color:         "var(--color-blood)",
             letterSpacing: "0.1em",
             marginBottom:  "1.25rem",
@@ -235,16 +244,16 @@ export function SectionClearance() {
                     gap:           "0.75rem",
                     marginBottom:  "0.55rem",
                     fontFamily:    "var(--font-jetbrains-mono)",
-                    fontSize:      "0.65rem",
+                    fontSize:      "0.75rem",
                     letterSpacing: "0.1em",
                   }}
                 >
                   <span style={{ color: statusColor(item.status), flexShrink: 0 }}>
-                    [{item.status}]
+                    [{tr(STATUS_LABEL[item.status].en, STATUS_LABEL[item.status].fr)}]
                   </span>
                   {item.score && (
                     <span style={{ color: "var(--color-blood)", flexShrink: 0 }}>
-                      {item.score}
+                      {tr(item.score, item.score.replace("%", "\u202F%"))}
                     </span>
                   )}
                   <span style={{ color: "var(--color-ash)", flexShrink: 0 }}>
@@ -265,7 +274,7 @@ export function SectionClearance() {
                   />
 
                   <span style={{ color: "var(--color-ash)", flexShrink: 0 }}>
-                    LEVEL {item.level}
+                    {tr("LEVEL", "NIVEAU")} {item.level}
                   </span>
                 </div>
 
@@ -287,7 +296,7 @@ export function SectionClearance() {
                 <div
                   style={{
                     fontFamily:    "var(--font-jetbrains-mono)",
-                    fontSize:      "0.63rem",
+                    fontSize:      "0.75rem",
                     color:         "var(--color-ash)",
                     letterSpacing: "0.04em",
                     marginBottom:  "0.2rem",
@@ -296,7 +305,7 @@ export function SectionClearance() {
                   {item.issuer}
                   {item.credentialId && (
                     <>
-                      {` · ${tr("Credential ID", "Identifiant de la certification")}: `}
+                      {tr(" · Credential ID: ", " · Identifiant de la certification : ")}
                       {item.credentialUrl ? (
                         <a
                           href={item.credentialUrl}
@@ -324,19 +333,19 @@ export function SectionClearance() {
                       prohibited on a div with no role: screen readers dropped it
                       and the content reached nobody. */}
                   <span className="sr-only">
-                    {`${tr("Validates", "Valide")}: ${t(item.validates)}`}
+                    {tr(`Validates: ${t(item.validates)}`, `Valide : ${t(item.validates)}`)}
                   </span>
                   <div
                     aria-hidden="true"
                     style={{
                       fontFamily:    "var(--font-jetbrains-mono)",
-                      fontSize:      "0.6rem",
+                      fontSize:      "0.75rem",
                       color:         "var(--color-ash)",
                       letterSpacing: "0.04em",
                       paddingTop:    "0.3rem",
                     }}
                   >
-                    {`// validates: ${t(item.validates)}`}
+                    {tr(`// validates: ${t(item.validates)}`, `// valide : ${t(item.validates)}`)}
                   </div>
                 </div>
               </div>

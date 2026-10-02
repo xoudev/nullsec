@@ -63,10 +63,10 @@ export function SectionOffDuty() {
           marginBottom: "clamp(2rem, 4vw, 3rem)",
         }}
       >
-        <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.65rem", color: "var(--color-blood)", letterSpacing: "0.1em" }}>
+        <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.75rem", color: "var(--color-blood)", letterSpacing: "0.1em" }}>
           {tr(sectionLabel("offduty", "en"), sectionLabel("offduty", "fr"))}
         </span>
-        <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-ash)", letterSpacing: "0.1em", whiteSpace: "nowrap" }}>
+        <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.75rem", color: "var(--color-ash)", letterSpacing: "0.1em", whiteSpace: "nowrap" }}>
           {`${String(offDutyEntryCount).padStart(2, "0")} ${tr("ENTRIES · 00 LICENSES", "ENTRÉES · 00 PERMIS")}`}
         </span>
       </div>
@@ -113,7 +113,7 @@ export function SectionOffDuty() {
 
             {/* Foreground */}
             <div className="offduty-row-inner">
-              <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.7rem", color: "var(--color-ash)", letterSpacing: "0.05em", minWidth: "1.5rem" }}>
+              <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.8rem", color: "var(--color-ash)", letterSpacing: "0.05em", minWidth: "1.5rem" }}>
                 {String(i + 1).padStart(2, "0")}
               </span>
 
@@ -133,14 +133,14 @@ export function SectionOffDuty() {
                 >
                   {t(row.title)}
                 </h3>
-                <p className="offduty-subtitle" style={{ fontFamily: MONO, fontSize: "clamp(0.64rem, 0.95vw, 0.72rem)", color: "var(--color-ash)", letterSpacing: "0.03em", margin: 0 }}>
+                <p className="offduty-subtitle" style={{ fontFamily: MONO, fontSize: "clamp(0.75rem, 0.95vw, 0.85rem)", color: "var(--color-ash)", letterSpacing: "0.03em", margin: 0 }}>
                   {t(row.subtitle)}
                 </p>
               </div>
 
               {/* No arrow here: these rows don't navigate — the image reveal is
                   the reward, and a sliding → promised a link that never came. */}
-              <span className="offduty-tags" aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-ash)", letterSpacing: "0.08em", whiteSpace: "nowrap" }}>
+              <span className="offduty-tags" aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.75rem", color: "var(--color-ash)", letterSpacing: "0.08em", whiteSpace: "nowrap" }}>
                 {t(row.tags).join("  ·  ")}
               </span>
             </div>
@@ -157,7 +157,7 @@ export function SectionOffDuty() {
           justifyContent: "space-between",
           marginTop: "clamp(1.5rem, 3vw, 2.5rem)",
           fontFamily: MONO,
-          fontSize: "0.6rem",
+          fontSize: "0.75rem",
           color: "var(--color-ash)",
           letterSpacing: "0.08em",
         }}

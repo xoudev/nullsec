@@ -39,7 +39,7 @@ export function WorkArticle({
           gap: "0.6rem",
           marginBottom: "clamp(4rem, 8vw, 7rem)",
           fontFamily: "var(--font-jetbrains-mono)",
-          fontSize: "0.7rem",
+          fontSize: "0.8rem",
           letterSpacing: "0.06em",
         }}
       >
@@ -60,7 +60,7 @@ export function WorkArticle({
           aria-hidden="true"
           style={{
             fontFamily: "var(--font-jetbrains-mono)",
-            fontSize: "0.65rem",
+            fontSize: "0.75rem",
             color: "var(--color-ash)",
             letterSpacing: "0.1em",
             marginBottom: "1.25rem",
@@ -91,7 +91,7 @@ export function WorkArticle({
             gap: "1.5rem",
             alignItems: "center",
             fontFamily: "var(--font-jetbrains-mono)",
-            fontSize: "0.65rem",
+            fontSize: "0.75rem",
             letterSpacing: "0.06em",
             marginBottom: "clamp(2rem, 4vw, 3.5rem)",
           }}
@@ -136,7 +136,7 @@ export function WorkArticle({
                   <dt
                     style={{
                       fontFamily: "var(--font-jetbrains-mono)",
-                      fontSize: "0.62rem",
+                      fontSize: "0.75rem",
                       letterSpacing: "0.12em",
                       color: "var(--color-blood)",
                       paddingTop: "0.15rem",
@@ -207,8 +207,9 @@ export function WorkArticle({
                   maxHeight: "140px",
                   objectFit: "contain",
                   // Third-party artwork conforms to the 4-colour system, same
-                  // treatment as the off-duty photography.
-                  filter: "grayscale(1) contrast(1.05)",
+                  // treatment as the off-duty photography. A project's own
+                  // mark keeps its colours (see WorkItem.ownMark).
+                  filter: item.ownMark ? undefined : "grayscale(1) contrast(1.05)",
                 }}
               />
             </div>
@@ -233,7 +234,7 @@ export function WorkArticle({
                   position: "relative",
                   zIndex: 1,
                   fontFamily: "var(--font-jetbrains-mono)",
-                  fontSize: "0.6rem",
+                  fontSize: "0.75rem",
                   color: "var(--color-blood)",
                   letterSpacing: "0.12em",
                 }}
@@ -264,7 +265,7 @@ export function WorkArticle({
                   position: "relative",
                   zIndex: 1,
                   fontFamily: "var(--font-jetbrains-mono)",
-                  fontSize: "0.62rem",
+                  fontSize: "0.75rem",
                   color: "var(--color-ash)",
                   letterSpacing: "0.06em",
                 }}
@@ -294,7 +295,7 @@ export function WorkArticle({
                     alignItems: "center",
                     gap: "0.5rem",
                     fontFamily: "var(--font-jetbrains-mono)",
-                    fontSize: "0.7rem",
+                    fontSize: "0.8rem",
                     color: "var(--color-blood)",
                     letterSpacing: "0.08em",
                     textDecoration: "none",
@@ -313,7 +314,7 @@ export function WorkArticle({
                     alignItems: "center",
                     gap: "0.5rem",
                     fontFamily: "var(--font-jetbrains-mono)",
-                    fontSize: "0.7rem",
+                    fontSize: "0.8rem",
                     color: "var(--color-blood)",
                     letterSpacing: "0.08em",
                     textDecoration: "none",
@@ -334,7 +335,7 @@ export function WorkArticle({
                     alignItems: "center",
                     gap: "0.5rem",
                     fontFamily: "var(--font-jetbrains-mono)",
-                    fontSize: "0.7rem",
+                    fontSize: "0.8rem",
                     color: "var(--color-blood)",
                     letterSpacing: "0.08em",
                     textDecoration: "none",
@@ -379,7 +380,7 @@ export function WorkArticle({
           <div
             style={{
               fontFamily: "var(--font-jetbrains-mono)",
-              fontSize: "0.65rem",
+              fontSize: "0.75rem",
               color: "var(--color-ash)",
               letterSpacing: "0.15em",
               marginBottom: "1rem",
@@ -423,7 +424,7 @@ export function WorkArticle({
                 <span
                   style={{
                     fontFamily: "var(--font-jetbrains-mono)",
-                    fontSize: "0.7rem",
+                    fontSize: "0.8rem",
                     color: "var(--color-ash)",
                     letterSpacing: "0.04em",
                   }}
@@ -474,7 +475,7 @@ export function WorkArticle({
             <span
               style={{
                 fontFamily: "var(--font-jetbrains-mono)",
-                fontSize: "0.6rem",
+                fontSize: "0.75rem",
                 color: "var(--color-ash)",
                 letterSpacing: "0.08em",
               }}
@@ -513,7 +514,7 @@ export function WorkArticle({
             <span
               style={{
                 fontFamily: "var(--font-jetbrains-mono)",
-                fontSize: "0.6rem",
+                fontSize: "0.75rem",
                 color: "var(--color-ash)",
                 letterSpacing: "0.08em",
               }}

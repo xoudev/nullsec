@@ -48,7 +48,7 @@ export function AudioControl() {
         minHeight: "2.75rem",
         padding: "0.5rem 0.75rem",
         fontFamily: "var(--font-jetbrains-mono), monospace",
-        fontSize: "0.62rem",
+        fontSize: "0.75rem",
         letterSpacing: "0.08em",
         color: muted ? "var(--color-blood)" : "var(--color-ash)",
         transition: "color 0.2s ease",

@@ -50,7 +50,7 @@ export function SectionAbout() {
         aria-hidden="true"
         style={{
           fontFamily:    "var(--font-jetbrains-mono)",
-          fontSize:      "0.65rem",
+          fontSize:      "0.75rem",
           color:         "var(--color-blood)",
           letterSpacing: "0.1em",
           marginBottom:  "clamp(3rem, 6vw, 5rem)",
@@ -137,7 +137,7 @@ export function SectionAbout() {
                 <div
                   style={{
                     fontFamily:    "var(--font-jetbrains-mono)",
-                    fontSize:      "0.65rem",
+                    fontSize:      "0.75rem",
                     color:         "var(--color-ash)",
                     letterSpacing: "0.15em",
                     marginBottom:  "0.4rem",
@@ -148,7 +148,7 @@ export function SectionAbout() {
                 <div
                   style={{
                     fontFamily:    "var(--font-jetbrains-mono)",
-                    fontSize:      "0.72rem",
+                    fontSize:      "0.8rem",
                     color:         "var(--color-bone)",
                     letterSpacing: "0.04em",
                     lineHeight:    1.5,
