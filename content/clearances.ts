@@ -79,28 +79,4 @@ export const clearances: Clearance[] = [
       COMPLIANCE: 90,
     },
   },
-  {
-    status: "PENDING",
-    date: "→ 2028",
-    level: "03",
-    title: {
-      en: "CISSP — CERTIFIED INFORMATION SYSTEMS SECURITY PROFESSIONAL",
-      fr: "CISSP · CERTIFIED INFORMATION SYSTEMS SECURITY PROFESSIONAL",
-    },
-    issuer: "ISC2",
-    credentialId: null,
-    credentialUrl: null,
-    validates: {
-      en: "security and risk management, asset security, architecture, IAM, security operations",
-      fr: "management de la sécurité et du risque, sécurité des actifs, architecture, IAM, opérations de sécurité",
-    },
-    radar: {
-      GOVERNANCE: 75,
-      NETWORK:    55,
-      DEFENSE:    65,
-      RISK:       75,
-      AUDIT:      55,
-      COMPLIANCE: 65,
-    },
-  },
 ];
