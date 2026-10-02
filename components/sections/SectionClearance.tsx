@@ -205,8 +205,11 @@ export function SectionClearance() {
                 onMouseLeave={() => handleLeave(i)}
                 className={isPending ? "clearance-pending" : undefined}
                 style={{
+                  // Pending rows rest on the dim end of the pulse; the bright
+                  // end is a ::before layer whose opacity the compositor
+                  // animates (see .clearance-pending in globals.css).
                   borderLeft:  isPending
-                    ? "2px solid var(--color-blood)"
+                    ? "2px solid rgba(255,107,26,0.25)"
                     : "2px solid rgba(107,107,107,0.22)",
                   paddingLeft: "clamp(1rem, 2vw, 1.5rem)",
                 }}

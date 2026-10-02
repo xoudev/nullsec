@@ -328,10 +328,64 @@ section[data-section-id] { isolation: isolate; }
   *, *::before, *::after { cursor: none; }
 }
 
-/* ─── Preloader boot prompt blink ─── */
-@keyframes preloader-blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
+/* ─── Off-screen sections sleep (components/OffscreenPause.tsx) ───────────
+   A looping animation the compositor cannot take still costs the main thread
+   a style recalculation per frame, wherever it is on the page. Sections out of
+   view carry data-offscreen; everything animated inside them pauses. */
+[data-offscreen] *,
+[data-offscreen] *::before,
+[data-offscreen] *::after {
+  animation-play-state: paused !important;
+}
+
+/* ─── Boot ticker (components/BootTicker.tsx) ───────────────────────────
+   The boot sequence as one line over the hero, never a gate. Fixed, no
+   pointer, no layout space: it cannot shift the page or swallow a click.
+   The bar fills with a transform, so the compositor animates it. ─── */
+.boot-ticker {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 60;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.boot-ticker--out { opacity: 0; }
+.boot-ticker-bar {
+  height: 2px;
+  background: var(--color-blood);
+  transform-origin: left center;
+  animation: boot-ticker-fill 0.86s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.boot-ticker-line {
+  padding: 0.45rem clamp(1.5rem, 4vw, 3rem);
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: var(--color-ash);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.boot-ticker-count { color: var(--color-bone); margin-right: 0.9em; }
+@keyframes boot-ticker-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* ─── Hero entrance: motion that never hides content ─────────────────────
+   Pure CSS, so it runs before hydration and costs the main thread nothing.
+   The arrow bobs six times and rests: a scroll hint does not need to move
+   for as long as the tab stays open. ─── */
+.hero-rule {
+  transform-origin: left center;
+  animation: hero-rule-draw 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+@keyframes hero-rule-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.hero-scroll-arrow {
+  animation:
+    hero-arrow-in 0.4s ease-out 0.6s both,
+    hero-arrow-bob 0.8s ease-in-out 1s 6 alternate;
+}
+@keyframes hero-arrow-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes hero-arrow-bob { from { transform: translateY(0); } to { transform: translateY(10px); } }
+@media (prefers-reduced-motion: reduce) {
+  .hero-rule, .hero-scroll-arrow { animation: none; }
 }
 
 
@@ -431,22 +485,34 @@ section[data-section-id] { isolation: isolate; }
 }
 
 /* ─── Clearance section — PENDING pulse ─── */
+/* The pulse used to animate border-left-color, which only the main thread
+   can do: a style recalc and a repaint on every frame, for as long as the tab
+   stayed open, with the section nowhere near the viewport. The same pulse is
+   now an opacity change on an overlay of the border, which the compositor
+   runs on its own. The row's real border is the dim end of the pulse. */
 @keyframes clearance-pulse {
-  0%, 100% { border-left-color: var(--color-blood); }
-  50%       { border-left-color: rgba(255,107,26,0.25); }
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
 }
 
-.clearance-pending {
+.clearance-pending { position: relative; }
+.clearance-pending::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: -2px;
+  width: 2px;
+  background: var(--color-blood);
+  will-change: opacity;
   animation: clearance-pulse 2.4s ease-in-out infinite;
 }
 
 @media (max-width: 767px) {
-  .clearance-pending { animation: none; }
+  .clearance-pending::before { animation: none; }
 }
 
 /* ─── Reduced motion ─── */
 @media (prefers-reduced-motion: reduce) {
-  .clearance-pending { animation: none; }
+  .clearance-pending::before { animation: none; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
