@@ -457,7 +457,7 @@ export function SectionHandshake() {
       style={{
         backgroundColor: "var(--color-void)",
         padding: "clamp(3rem, 6vw, 6rem) clamp(1.5rem, 4vw, 3rem)",
-        minHeight: "100dvh",
+        minHeight: "100svh",
         display: "flex",
         flexDirection: "column",
         position: "relative",

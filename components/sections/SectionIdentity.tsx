@@ -32,7 +32,7 @@ export function SectionIdentity({ l }: { l: Locale }) {
       data-section-id={section("identity").id}
       aria-label={tr("Identity", "Identité")}
       style={{
-        minHeight:       "100dvh",
+        minHeight:       "100svh",
         backgroundColor: "var(--color-void)",
         display:         "flex",
         flexDirection:   "column",

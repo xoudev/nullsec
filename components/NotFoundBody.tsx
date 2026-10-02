@@ -39,7 +39,7 @@ export function NotFoundBody({ bilingual = false }: { bilingual?: boolean }) {
   return (
     <div
       style={{
-        minHeight: "100dvh",
+        minHeight: "100svh",
         backgroundColor: "var(--color-void)",
         color: "var(--color-bone)",
         display: "flex",

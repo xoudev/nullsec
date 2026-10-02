@@ -38,7 +38,7 @@ body {
   background-color: var(--color-void);
   color: var(--color-bone);
   font-family: var(--font-sans);
-  min-height: 100dvh;
+  min-height: 100svh;
   overflow-x: hidden;
   overscroll-behavior: none;
 }
@@ -267,7 +267,7 @@ section[data-section-id] { isolation: isolate; }
   50%      { opacity: 0; }
 }
 
-/* ─── Terminal on touch: cap the frame (a mostly-empty 100dvh box on a phone)
+/* ─── Terminal on touch: cap the frame (a mostly-empty 100svh box on a phone)
    and reveal the one-tap command chips. ─── */
 .terminal-chips { display: none; }
 @media (hover: none) {
@@ -863,8 +863,10 @@ section[data-section-id]:focus { outline: none; }
 @media (max-width: 767px) {
   .blindspot-legend { display: none; }
   /* [data-col] matches the desktop column rules' specificity; these come
-     later, so they win on a phone. */
-  .blindspot-note[data-col] { left: 6%; right: auto; top: var(--my); }
+     later, so they win on a phone. Lines a shade tighter than on a desktop:
+     a phone's free space comes in strips, and the 4 px this saves a note
+     are what fit the sixth one on an iPhone. */
+  .blindspot-note[data-col] { left: 6%; right: auto; top: var(--my); line-height: 1.4; }
   .blindspot-note[data-col][data-phone="right"] { left: auto; right: 6%; }
   .blindspot-note[data-phone="off"] { display: none; }
 }
@@ -1026,7 +1028,7 @@ section[data-section-id]:focus { outline: none; }
    each one so the text can be selected. Native scroll inside (the shell
    carries data-lenis-prevent). ─── */
 .doc-article {
-  min-height: 100dvh;
+  min-height: 100svh;
   padding: clamp(1.5rem, 4vw, 3rem);
   background-color: var(--color-void);
   color: var(--color-bone);

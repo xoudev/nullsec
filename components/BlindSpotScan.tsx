@@ -37,7 +37,7 @@ type Note = {
   // headline. Column "a" starts where the headline's ink ends (measured, see
   // fitColumns); column "b" is set from the right edge, so a note can never
   // run off the screen or into the vertical hint. y is in % of the hero.
-  // On a phone, rows are measured at run time instead (placePhoneNotes).
+  // On a phone, positions are fitted at run time instead (placePhoneNotes).
   col: "a" | "b";
   y: string;
 };
@@ -90,39 +90,105 @@ function fitColumns(layer: HTMLElement, hero: HTMLElement) {
   layer.toggleAttribute("data-no-b", width * 0.91 - widest(notes("b")) < ink);
 }
 
-const ROW = 44; // a phone note: two lines of 12 px mono and a gap
+const CLEAR_X = 14; // px between a phone note and the ink beside it
+const CLEAR_Y = 10; // and above or below it
+const CLEAR_UI = 12; // around the label, the hint and the fixed controls
+const SPACING = 12; // px between two notes
+const EDGE = 0.06; // phone notes keep to the hero's side margins (6%)
+const OFF_SIDE = 48; // px a note would rather move than change sides
+
+type Box = { l: number; t: number; r: number; b: number };
+const overlaps = (a: Box, b: Box) => a.l < b.r && b.l < a.r && a.t < b.b && b.t < a.b;
 
 /**
- * Phones vary too much for fixed positions: on a 360 × 640 screen the name
- * sits right under the section label. The free space is measured instead,
- * above the name and between the display line and the footer row, and the
- * notes take its rows in turn, alternating sides; a note with no row left
- * stays hidden (none at all on the shortest screens: a scan then reveals the
- * grid alone).
+ * What a phone note must stay clear of, in px from the hero's top-left and
+ * with the clearance added: the name and the display line line by line
+ * (text boxes, so the room right of a short line counts as free), the rule,
+ * the footer row whole (a note among the buttons would read as one), and,
+ * with more room, the label, the scan hint under it and the fixed controls.
+ */
+function inkBoxes(hero: HTMLElement, hr: DOMRect): Box[] {
+  const boxes: Box[] = [];
+  const add = (r: DOMRect, cx: number, cy: number) => {
+    if (r.width <= 0 || r.height <= 0) return;
+    boxes.push({ l: r.left - hr.left - cx, t: r.top - hr.top - cy, r: r.right - hr.left + cx, b: r.bottom - hr.top + cy });
+  };
+  const text = (root: Element, cx: number, cy: number) => {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    while (walker.nextNode()) {
+      const node = walker.currentNode;
+      if (!node.textContent?.trim() || node.parentElement?.closest(".sr-only")) continue;
+      const range = document.createRange();
+      range.selectNodeContents(node);
+      for (const r of range.getClientRects()) add(r, cx, cy);
+    }
+  };
+  for (const el of hero.querySelectorAll("h1, h1 + p")) text(el, CLEAR_X, CLEAR_Y);
+  for (const el of hero.querySelectorAll("[data-hero-foot], .hero-rule")) add(el.getBoundingClientRect(), CLEAR_X, CLEAR_Y);
+  for (const el of hero.querySelectorAll("[data-hero-label], .blindspot-hint")) text(el, CLEAR_UI, CLEAR_UI);
+  for (const el of document.querySelectorAll(".audio-control, .language-toggle")) add(el.getBoundingClientRect(), CLEAR_UI, CLEAR_UI);
+  return boxes;
+}
+
+/**
+ * Phones vary too much for fixed positions, and their free space is in
+ * pieces: the room right of the display line's shorter lines (and of the
+ * name), a band above the footer row, a strip above the name. So each note
+ * is fitted where it lands clear of everything (inkBoxes, and the notes
+ * already placed), flush with one side margin, as near as it can to its
+ * share of the height, sides alternating: the staggered desktop columns,
+ * folded around the headline.
+ *
+ * Around the headline first, from the name down: the strip above the name
+ * only takes the notes left over (a note up there reads as the label's, far
+ * from the map). Only the hero's part on screen counts (a scan shows what the
+ * visitor is looking at); a note with no room at all stays hidden.
+ *
+ * The notes are measured, so this runs while the map is shown: play() calls
+ * it as each scan starts, and the hero's ResizeObserver mid-scan.
  */
 function placePhoneNotes(layer: HTMLElement, hero: HTMLElement) {
-  if (window.innerWidth >= 768) return;
+  if (window.innerWidth >= 768 || layer.dataset.mode === "off") return;
+  const notes = [...layer.querySelectorAll<HTMLElement>(".blindspot-note")];
+  for (const n of notes) n.dataset.phone = "left"; // shown, to be measured
   const hr = hero.getBoundingClientRect();
-  const box = (sel: string) => hero.querySelector(sel)?.getBoundingClientRect();
-  const labelBottom = box("[data-hero-label]")?.bottom ?? hr.top + 48;
-  const nameTop = box("h1")?.top ?? hr.top + 200;
-  const lineBottom = box("h1 + p")?.bottom ?? nameTop;
-  const footTop = box("[data-hero-foot]")?.top ?? hr.bottom;
-  const rows: number[] = [];
-  for (const [from, to] of [
-    [labelBottom + 14, nameTop - 14],
-    [lineBottom + 18, footTop - 14],
-  ]) {
-    for (let y = from; y + ROW - 8 <= to; y += ROW) rows.push(y - hr.top);
-  }
-  layer.querySelectorAll<HTMLElement>(".blindspot-note").forEach((n, i) => {
-    if (i < rows.length) {
-      n.style.setProperty("--my", `${rows[i]}px`);
-      n.dataset.phone = i % 2 ? "right" : "left";
-    } else {
-      n.dataset.phone = "off";
+  const taken = inkBoxes(hero, hr);
+  const edge = hr.width * EDGE;
+  const top = Math.max(0, -hr.top);
+  const bottom = Math.min(hr.height, window.innerHeight - hr.top);
+  const nameTop = (hero.querySelector("h1")?.getBoundingClientRect().top ?? hr.top) - hr.top - CLEAR_Y;
+  const unplaced = new Set(notes);
+
+  const fit = (n: HTMLElement, i: number, from: number) => {
+    const w = n.offsetWidth;
+    const h = n.offsetHeight;
+    const target = from + ((i + 0.5) * (bottom - from)) / notes.length;
+    const prefer = i % 2 ? "left" : "right";
+    let best: { x: number; y: number; side: "left" | "right"; cost: number } | null = null;
+    // The nearest free spot to the target is the target itself or flush
+    // with an edge of something taken: those are the only heights to try.
+    const ys = [from, target - h / 2];
+    for (const o of taken) ys.push(o.b, o.t - h);
+    for (const side of ["left", "right"] as const) {
+      const x = side === "left" ? edge : hr.width - edge - w;
+      for (const y of ys) {
+        if (y < from || y + h > bottom) continue;
+        const box = { l: x, t: y, r: x + w, b: y + h };
+        if (taken.some((o) => overlaps(box, o))) continue;
+        const cost = Math.abs(y + h / 2 - target) + (side === prefer ? 0 : OFF_SIDE);
+        if (!best || cost < best.cost) best = { x, y, side, cost };
+      }
     }
-  });
+    if (!best) return;
+    taken.push({ l: best.x - SPACING, t: best.y - SPACING, r: best.x + w + SPACING, b: best.y + h + SPACING });
+    n.style.setProperty("--my", `${best.y}px`);
+    n.dataset.phone = best.side;
+    unplaced.delete(n);
+  };
+
+  notes.forEach((n, i) => fit(n, i, Math.max(top, nameTop)));
+  notes.forEach((n, i) => unplaced.has(n) && fit(n, i, top));
+  for (const n of unplaced) n.dataset.phone = "off";
 }
 
 export function BlindSpotScan() {
@@ -173,11 +239,12 @@ export function BlindSpotScan() {
     };
 
     // A sweep or a ping: a CSS animation, restarted from its first frame.
+    // The notes are laid out once the map is shown, in the same frame.
     const play = (mode: "sweep" | "ping") => {
       layer.dataset.mode = "off";
       void layer.offsetWidth;
-      placePhoneNotes(layer, hero);
       layer.dataset.mode = mode;
+      layout();
     };
     const ping = (clientX: number, clientY: number) => {
       const r = hero.getBoundingClientRect();
@@ -224,10 +291,17 @@ export function BlindSpotScan() {
     const onEnd = (e: AnimationEvent) => {
       if (e.animationName === "blindspot-fade") layer.dataset.mode = "off";
     };
-    const onResize = () => {
-      measure();
-      layout();
-    };
+    // The hero's size, not the window's: it also changes when the fonts
+    // arrive or the text wraps anew, and a phone's address bar folding away
+    // resizes the window without touching the hero (100svh).
+    let sizeFrame = 0;
+    const resized = new ResizeObserver(() => {
+      cancelAnimationFrame(sizeFrame);
+      sizeFrame = requestAnimationFrame(() => {
+        measure();
+        layout();
+      });
+    });
 
     // Where to start: a touch screen in touch mode, anything else on the beam.
     let cancelSweep = () => {};
@@ -256,7 +330,7 @@ export function BlindSpotScan() {
     hero.addEventListener("pointermove", onMove, { passive: true });
     hero.addEventListener("pointerleave", onLeave);
     layer.addEventListener("animationend", onEnd);
-    window.addEventListener("resize", onResize, { passive: true });
+    resized.observe(hero);
     return () => {
       cancelSweep();
       hero.removeEventListener("pointerdown", onDown);
@@ -265,7 +339,8 @@ export function BlindSpotScan() {
       hero.removeEventListener("pointermove", onMove);
       hero.removeEventListener("pointerleave", onLeave);
       layer.removeEventListener("animationend", onEnd);
-      window.removeEventListener("resize", onResize);
+      resized.disconnect();
+      cancelAnimationFrame(sizeFrame);
       if (frame) cancelAnimationFrame(frame);
     };
   }, []);
