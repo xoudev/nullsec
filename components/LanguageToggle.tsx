@@ -29,8 +29,7 @@ export function LanguageToggle() {
   });
 
   return (
-    <div
-      role="group"
+    <nav
       aria-label="Language / Langue"
       className="language-toggle"
       style={{
@@ -69,6 +68,6 @@ export function LanguageToggle() {
       >
         FR
       </button>
-    </div>
+    </nav>
   );
 }

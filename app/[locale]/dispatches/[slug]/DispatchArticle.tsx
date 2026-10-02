@@ -28,7 +28,7 @@ export function DispatchArticle({
   const body = t(post.body);
 
   return (
-    <article
+    <main
       id="main-content"
       tabIndex={-1}
       style={{
@@ -306,6 +306,6 @@ export function DispatchArticle({
           <div />
         )}
       </nav>
-    </article>
+    </main>
   );
 }

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useT } from "@/lib/i18n";
 import type { WorkItem } from "@/content/work";
 import { docPath, docSlug } from "@/lib/doc-routes";
+import { VideoPlayer } from "@/components/VideoPlayer";
 
 export function WorkArticle({
   item,
@@ -21,7 +22,7 @@ export function WorkArticle({
   const body = t(item.body);
 
   return (
-    <article
+    <main
       id="main-content"
       tabIndex={-1}
       style={{
@@ -115,6 +116,19 @@ export function WorkArticle({
         />
       </header>
 
+
+      {/* The project in motion, before the reading. */}
+      {item.video && (
+        <figure className="work-video">
+          <VideoPlayer
+            sources={item.video.sources}
+            poster={item.video.poster}
+            title={tr(`${title}, demo`, `${title}, démo`)}
+            hasAudio={item.video.audio}
+          />
+          <figcaption>{t(item.video.caption)}</figcaption>
+        </figure>
+      )}
 
       {/* ── Two-column body ── */}
       <div className="article-grid">
@@ -243,8 +257,12 @@ export function WorkArticle({
                 {item.index} {"//"}
               </span>
 
-              {/* Oversized ghost index — the cover's only graphic. */}
+              {/* Oversized ghost index, the cover's only graphic. Generated
+                  content (.cover-ghost in globals.css), like the dispatch
+                  ghosts: as DOM text it was text at 1.1:1 contrast. */}
               <span
+                className="cover-ghost"
+                data-numeral={item.index}
                 style={{
                   position: "absolute",
                   right: "-0.5rem",
@@ -257,9 +275,7 @@ export function WorkArticle({
                   letterSpacing: "-0.03em",
                   userSelect: "none",
                 }}
-              >
-                {item.index}
-              </span>
+              />
 
               <span
                 style={{
@@ -535,6 +551,6 @@ export function WorkArticle({
           <div />
         )}
       </nav>
-    </article>
+    </main>
   );
 }
