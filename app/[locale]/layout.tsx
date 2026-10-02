@@ -14,6 +14,8 @@ import { LanguageToggle } from "@/components/LanguageToggle";
 import { SkipLink } from "@/components/SkipLink";
 import { SiteFooter } from "@/components/SiteFooter";
 import { AudioControl } from "@/components/AudioControl";
+import { PageTransition } from "@/components/PageTransition";
+import { curtainLabels } from "@/lib/curtain-labels";
 import { Analytics } from "@vercel/analytics/next";
 
 export function generateStaticParams() {
@@ -123,6 +125,10 @@ export default async function LocaleLayout({
             <ScanHUD />
             <AudioControl />
             <LanguageToggle />
+            {/* Inside SmoothScroll: it holds Lenis still while it runs. The
+                labels are built here, on the server, so the client gets a
+                title per page and none of the content behind it. */}
+            <PageTransition labels={curtainLabels(locale)} />
             {children}
             <SiteFooter />
           </SmoothScroll>

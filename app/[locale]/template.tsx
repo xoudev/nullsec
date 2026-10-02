@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { curtainUp } from "@/lib/curtain";
 
 // template.tsx re-mounts on every route change (unlike layout.tsx which
 // persists across navigations). This gives each page a clean fade entrance.
@@ -30,11 +31,12 @@ export default function Template({ children }: { children: React.ReactNode }) {
       return;
     }
     if (!ref.current) return;
-    // Where the View Transitions API exists, the route change is already
-    // animated by the browser (a cross-fade, and the title morph; see
-    // next.config.ts). Fading the new page in from 0 on top of that would
-    // show it twice as faint for a moment. The GSAP fade stays the fallback.
-    if (typeof document.startViewTransition === "function") return;
+    // Under the full-screen curtain (components/PageTransition.tsx) the new
+    // page is revealed by the curtain itself: fading it in from 0 underneath
+    // would show it half transparent as the strips lift. The fade stays for
+    // every navigation the curtain leaves alone (back and forward, the
+    // language toggle, reduced motion).
+    if (curtainUp()) return;
     // Reduced motion still gets a soft, quicker cross-fade — opacity-only is
     // vestibular-safe, so route transitions feel intentional rather than abrupt.
     gsap.fromTo(

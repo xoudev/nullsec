@@ -858,37 +858,118 @@ section[data-section-id]:focus { outline: none; }
   .blindspot-layer { display: none; }
 }
 
-/* ─── Route changes (View Transitions, see next.config.ts) ───────────────
-   The page cross-fades quickly; a project or dispatch title morphs from its
-   list row into the headline (lib/transitions.ts) on the house curve. The
-   cursor rides on top, live, instead of freezing in the page snapshot. ─── */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 0.28s;
+/* ─── Page curtain (components/PageTransition.tsx) ───────────────────────
+   Strips rise across the screen in a wave from the clicked column, orange
+   first, bone over it. Each bone strip carries its own slice of one sheet
+   laid out at full width, so the destination's title arrives assembled from
+   the strips and leaves sliced by them. Transforms only: every strip is its
+   own compositor layer, a strip's width, never the screen's. ─── */
+.pt {
+  position: fixed;
+  inset: 0;
+  z-index: 9990; /* over the HUD and the toggles; under the cursor (9999) */
+  contain: strict;
+  touch-action: none;
+  overscroll-behavior: contain;
 }
-::view-transition-group(*) {
-  animation-duration: 0.5s;
-  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+.pt-col {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  overflow: hidden;
 }
-::view-transition-group(nullsec-cursor-frame),
-::view-transition-group(nullsec-cursor-dot) {
-  animation: none;
-  z-index: 10000;
+.pt-strip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  transform: translate3d(0, 100%, 0);
+  will-change: transform;
 }
-::view-transition-old(nullsec-cursor-frame),
-::view-transition-old(nullsec-cursor-dot) {
-  display: none;
+.pt-strip-blood { background: var(--color-blood); }
+.pt-strip-bone  { background: var(--color-bone); }
+.pt-sheet {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  color: var(--color-void);
+  font-family: var(--font-jetbrains-mono), "Courier New", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
 }
-::view-transition-new(nullsec-cursor-frame),
-::view-transition-new(nullsec-cursor-dot) {
-  animation: none;
+.pt-top,
+.pt-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
 }
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation: none !important;
-  }
+.pt-top { flex-wrap: wrap; }
+.pt-brand::before {
+  content: "";
+  display: inline-block;
+  width: 0.6em;
+  height: 0.6em;
+  margin-right: 0.8em;
+  background: var(--color-blood);
+}
+.pt-title {
+  margin: auto 0 clamp(1.5rem, 4vw, 3rem);
+  font-family: var(--font-instrument-serif), "Georgia", serif;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 0.88;
+  letter-spacing: -0.025em;
+  overflow-wrap: break-word;
+}
+.pt-title[data-size="xl"] { font-size: clamp(4.2rem, 21vw, 15rem); }
+.pt-title[data-size="l"]  { font-size: clamp(3.2rem, 11vw, 9rem); }
+.pt-title[data-size="m"]  { font-size: clamp(2.4rem, 6.5vw, 5.75rem); max-width: 19ch; }
+.pt-foot {
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(15, 15, 18, 0.18);
+  white-space: nowrap;
+}
+.pt-path {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Waiting on the route: a cursor, until the measured answer replaces it. */
+.pt-status:empty::after {
+  content: "\258C";
+  animation: pt-blink 0.9s steps(1) infinite;
+}
+@keyframes pt-blink { 50% { opacity: 0; } }
+/* The decoder: each character keeps its final width (the glyph is there,
+   transparent) while mono noise flickers over it, then lands orange and
+   cools to ink. Inline spans, not inline-blocks, so kerning survives. */
+.pt-word { white-space: nowrap; }
+.pt-ch { position: relative; }
+.pt-ch-final { color: transparent; }
+.pt-ch[data-set] .pt-ch-final {
+  color: var(--color-void);
+  animation: pt-land 0.35s ease-out;
+}
+@keyframes pt-land { from { color: var(--color-blood); } }
+.pt-ch-noise {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-style: normal;
+  font-size: 0.4em;
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--color-blood);
+}
+.pt-ch[data-set] .pt-ch-noise { visibility: hidden; }
+@media print {
+  .pt { display: none; }
 }
 
 /* ─── Scroll reveal for the server-rendered sections (components/Reveal) ──

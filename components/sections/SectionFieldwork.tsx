@@ -1,8 +1,6 @@
-import { ViewTransition } from "react";
 import Link from "next/link";
 import { getT } from "@/lib/i18n-static";
 import type { Locale } from "@/lib/locale";
-import { workTitleTransition } from "@/lib/transitions";
 import { section, sectionLabel } from "@/lib/sections";
 import { orderedWork } from "@/content/work";
 
@@ -123,23 +121,17 @@ export function SectionFieldwork({ l }: { l: Locale }) {
 
                   {/* Title + summary column */}
                   <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                    {/* Morphs into the case study's headline on navigation. */}
-                    <ViewTransition name={workTitleTransition(item.slug)}>
-                      <span
-                        className="fw-title"
-                        style={{
-                          fontFamily: "var(--font-sans)",
-                          fontSize: "clamp(1.05rem, 2.6vw, 2.1rem)",
-                          fontWeight: 400,
-                          letterSpacing: "0.04em",
-                          // A box as tight as the text, so the morph scales the
-                          // title, not a full-width strip of empty row.
-                          alignSelf: "flex-start",
-                        }}
-                      >
-                        {t(item.title)}
-                      </span>
-                    </ViewTransition>
+                    <span
+                      className="fw-title"
+                      style={{
+                        fontFamily: "var(--font-sans)",
+                        fontSize: "clamp(1.05rem, 2.6vw, 2.1rem)",
+                        fontWeight: 400,
+                        letterSpacing: "0.04em",
+                      }}
+                    >
+                      {t(item.title)}
+                    </span>
                     {/* The short summary (meta.description, at most ~155
                         characters), not the 200 to 340 character excerpt: a
                         list is for scanning, the case study keeps the long
