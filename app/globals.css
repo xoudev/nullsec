@@ -488,6 +488,7 @@ section[data-section-id] { isolation: isolate; }
    make them more legible: that is the point, they are not information. */
 .dispatch-number::before { content: attr(data-numeral); }
 .ghost-year::before { content: attr(data-year); }
+.cover-ghost::before { content: attr(data-numeral); }
 
 .ghost-year {
   font-family: var(--font-instrument-serif);
@@ -1236,6 +1237,137 @@ section[data-section-id]:focus { outline: none; }
 .doc-page .textLayer.selecting .endOfContent { top: 0; }
 @media print {
   .doc-toolbar { display: none; }
+}
+
+/* ─── Video player (components/VideoPlayer) ──────────────────────────────
+   The browser's <video> in a hairline frame, a single large control until
+   it starts, then a mono bar that steps aside while it plays. No gradient:
+   the scrubber is a track and a fill, with a transparent range on top. ─── */
+.work-video { margin: 0 0 clamp(2.5rem, 5vw, 4rem); }
+.work-video figcaption {
+  margin-top: 0.75rem;
+  max-width: 70ch;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  line-height: 1.6;
+  color: var(--color-ash);
+}
+.vid {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background-color: var(--color-void);
+  outline: 1px solid rgba(138, 138, 138, 0.28);
+}
+.vid:focus-visible { outline: 1px solid var(--color-blood); outline-offset: 3px; }
+.vid video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background-color: var(--color-void);
+}
+.vid[data-idle] { cursor: none; }
+.vid-big {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background-color: rgba(15, 15, 18, 0.35);
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+}
+.vid-big span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1.1em;
+  padding: 0.95rem 1.4rem;
+  border: 1px solid var(--color-blood);
+  background-color: rgba(15, 15, 18, 0.88);
+  color: var(--color-blood);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.vid-big em { font-style: normal; color: var(--color-ash); }
+.vid-big:hover span,
+.vid-big:focus-visible span { background-color: var(--color-blood); color: var(--color-void); }
+.vid-big:hover em,
+.vid-big:focus-visible em { color: var(--color-void); }
+.vid-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem 0.9rem;
+  padding: 0 0.75rem;
+  background-color: rgba(15, 15, 18, 0.88);
+  border-top: 1px solid rgba(138, 138, 138, 0.2);
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--color-ash);
+  transition: opacity 0.3s ease;
+}
+/* Out of the way while it plays and the pointer rests; back on focus. */
+.vid[data-idle] .vid-bar { opacity: 0; pointer-events: none; }
+.vid:focus-within .vid-bar { opacity: 1; pointer-events: auto; }
+.vid-bar button {
+  min-height: 2.75rem;
+  padding: 0 0.15rem;
+  border: 0;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  color: var(--color-bone);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.vid-bar button:hover { color: var(--color-blood); }
+.vid-time { color: var(--color-bone); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.vid-wait { white-space: nowrap; }
+.vid-scrub {
+  position: relative;
+  flex: 1;
+  min-width: 4rem;
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+}
+.vid-track {
+  position: relative;
+  width: 100%;
+  height: 2px;
+  background-color: rgba(138, 138, 138, 0.35);
+}
+.vid-fill {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-blood);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+.vid-range {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.vid-scrub:has(.vid-range:focus-visible) .vid-track { outline: 1px solid var(--color-blood); outline-offset: 6px; }
+@media (max-width: 479px) {
+  .vid-bar { gap: 0 0.6rem; padding: 0 0.5rem; }
+  .vid-wait { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vid-bar, .vid-big span { transition: none; }
 }
 
 /* ─── Scroll reveal for the server-rendered sections (components/Reveal) ──

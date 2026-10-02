@@ -94,7 +94,9 @@ export function SectionAbout({ l }: { l: Locale }) {
           </div>
 
           {/* Right — key facts */}
-          <aside className="article-sidebar" aria-label={tr("Profile facts", "Repères du profil")}>
+          {/* A labelled group, not an <aside>: a complementary landmark
+              inside the About region is one landmark nested in another. */}
+          <div className="article-sidebar" role="group" aria-label={tr("Profile facts", "Repères du profil")}>
             {(
               [
                 [tr("LOCATION", "LIEU"),     `${profile.city}, ${profile.country}`],
@@ -141,7 +143,7 @@ export function SectionAbout({ l }: { l: Locale }) {
               data-year={String(new Date().getFullYear())}
               style={{ marginTop: "clamp(2rem, 4vw, 3rem)" }}
             />
-          </aside>
+          </div>
         </div>
       </div>
     </section>

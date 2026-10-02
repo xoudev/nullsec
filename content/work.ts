@@ -35,6 +35,18 @@ export type WorkItem = {
    *  four-colour palette, but greying out Toron's orange or Hune's flag erased
    *  the identity of the very products the page is about. */
   ownMark?: boolean;
+  /**
+   * A video for the case study, played by the site's own player
+   * (components/VideoPlayer). Files under /public/media: WebM (VP9) first,
+   * MP4 (H.264) for Safari, and a poster frame. `audio` only when the video
+   * has a sound track.
+   */
+  video?: {
+    sources: { src: string; type: string }[];
+    poster: string;
+    caption: Localized<string>;
+    audio?: boolean;
+  };
   liveUrl?: string; // optional public / live site link
   repoUrl?: string; // optional public source repository
   /**
@@ -232,6 +244,18 @@ export const work: WorkItem[] = [
     },
     index: "004",
     title: { en: "NULLSEC", fr: "NULLSEC" },
+    // Recorded on the production build of this site, not a mock-up.
+    video: {
+      sources: [
+        { src: "/media/nullsec-demo.webm", type: "video/webm" },
+        { src: "/media/nullsec-demo.mp4", type: "video/mp4" },
+      ],
+      poster: "/media/nullsec-demo.jpg",
+      caption: {
+        en: "Recorded on this site: the scanner over the hero, the curtain between two pages, a document in the reader.",
+        fr: "Enregistré sur ce site : le scanner sur le hero, le rideau entre deux pages, un document dans le lecteur.",
+      },
+    },
     repoUrl: "https://github.com/xoudev/nullsec",
     year: "2025",
     tags: ["Next.js 16", "GSAP", "Lenis", "Tailwind v4", "Typst"],
