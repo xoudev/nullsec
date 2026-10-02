@@ -176,68 +176,245 @@ html[lang="fr"] .nf-en { display: none; }
   border-top: 1px solid rgba(107, 107, 107, 0.2);
 }
 
-/* ─── Off-duty (passions) — each row reveals its own image behind it ─── */
-.offduty-bg-img {
-  filter: grayscale(1) brightness(0.5) contrast(1.05);
+/* ─── Off-duty: the scope (components/OffDutyScope) ──────────────────────
+   The interests as a list of targets, and a scope acquiring the one picked:
+   standby, then acquire (its pixels, while the sharp image loads), scan (a
+   line sweeps it sharp), locked (the reticle closes on the subject). The
+   images in two of the four colours, void to blood: the grey image
+   multiplied into blood, its blacks lifted back to void. Over them, only
+   bone and void read, so the scope's marks are bone. ─── */
+.ods {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.75rem, 3vw, 2.5rem);
+}
+/* On a phone, the scope first and the targets under it, within one screen. */
+.ods-scope { order: -1; }
+@media (min-width: 900px) {
+  .ods {
+    grid-template-columns: minmax(15rem, 0.85fr) minmax(0, 1.5fr);
+    gap: clamp(2.5rem, 5vw, 5rem);
+    align-items: center;
+  }
+  .ods-scope { order: 0; }
 }
 
-.offduty-row {
-  position: relative;
-  overflow: hidden;
-  border-top: 1px solid rgba(107, 107, 107, 0.2);
+.ods-list {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  min-height: clamp(6.5rem, 12vw, 8.5rem);
-  transition: min-height 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  border-bottom: 1px solid rgba(107, 107, 107, 0.2);
 }
-.offduty-row-bg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-.offduty-row-bg .offduty-bg-veil {
-  position: absolute;
-  inset: 0;
-  background: rgba(10, 10, 11, 0.5);
-}
-/* Only real hover devices reveal the backdrop (no sticky-hover on touch). */
-@media (hover: hover) {
-  .offduty-row:hover { min-height: clamp(17rem, 30vw, 23rem); }
-  .offduty-row:hover .offduty-row-bg { opacity: 1; }
-}
-/* Touch devices have no hover — the imagery would otherwise never show. Reveal
-   each backdrop by default, with a lighter treatment than the desktop hover
-   (it's always-on here, not a transient reveal) so darker photos still read. */
-@media (hover: none) {
-  .offduty-row { min-height: clamp(11rem, 38vw, 15rem); }
-  .offduty-row-bg { opacity: 1; }
-  .offduty-bg-img { filter: grayscale(1) brightness(0.72) contrast(1.05); }
-  .offduty-row-bg .offduty-bg-veil { background: rgba(10, 10, 11, 0.45); }
-}
-
-.offduty-row-inner {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+.ods-tab {
+  display: flex;
   align-items: center;
-  gap: clamp(1rem, 3vw, 2.5rem);
-  padding: clamp(0.5rem, 1.5vw, 1rem) 0;
+  gap: clamp(0.9rem, 2vw, 1.5rem);
+  width: 100%;
+  padding: clamp(0.85rem, 1.7vw, 1.3rem) 0;
+  border: 0;
+  border-top: 1px solid rgba(107, 107, 107, 0.2);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
 }
-.offduty-title { transition: transform 0.35s ease, color 0.2s ease; }
-.offduty-arrow { display: inline-block; transition: transform 0.35s ease; }
-.offduty-tags { transition: color 0.2s ease; }
-.offduty-row:hover .offduty-title { transform: translateX(8px); }
-.offduty-row:hover .offduty-arrow { transform: translateX(8px); }
-.offduty-row:hover .offduty-tags { color: var(--color-bone); }
+.ods-num {
+  min-width: 1.6rem;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  color: var(--color-ash);
+  transition: color 0.2s ease;
+}
+.ods-title {
+  flex: 1;
+  font-family: var(--font-inter);
+  font-weight: 800;
+  font-size: clamp(1.4rem, 2.7vw, 2.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: rgba(242, 239, 232, 0.4);
+  transition: color 0.25s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ods-tab:hover .ods-title { color: rgba(242, 239, 232, 0.72); }
+.ods-tab[aria-selected="true"] .ods-title { color: var(--color-bone); transform: translateX(0.6rem); }
+.ods-tab[aria-selected="true"] .ods-num { color: var(--color-blood); }
+/* The survey mark: open on the other targets, filled on the one in the scope. */
+.ods-mark {
+  flex-shrink: 0;
+  width: 0.55rem;
+  height: 0.55rem;
+  border: 1px solid rgba(138, 138, 138, 0.5);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.ods-tab[aria-selected="true"] .ods-mark { border-color: var(--color-blood); background-color: var(--color-blood); }
 
-@media (max-width: 767px) {
-  .offduty-row-inner { grid-template-columns: auto 1fr; }
-  .offduty-tags { display: none; }
-  .offduty-row:hover .offduty-title { transform: none; }
+.ods-view {
+  --fx: 50;
+  --fy: 50;
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background-color: var(--color-void);
+  outline: 1px solid rgba(138, 138, 138, 0.28);
+  font-family: var(--font-jetbrains-mono);
+}
+@media (min-width: 900px) {
+  .ods-view { aspect-ratio: 16 / 10; }
+}
+.ods-img {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+  background-color: var(--color-blood);
+}
+.ods-img img { filter: grayscale(1) contrast(1.2); mix-blend-mode: multiply; }
+.ods-img::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-void);
+  mix-blend-mode: lighten;
+}
+.ods-low { opacity: 0; }
+.ods-low[data-on] { opacity: 1; }
+.ods-low img { image-rendering: pixelated; }
+.ods-view[data-phase="standby"] .ods-low[data-on] { opacity: 0.55; }
+/* The sharp image, revealed down to the scan line's edge. */
+.ods-high { clip-path: inset(0 0 100% 0); }
+.ods-view[data-phase="scan"] .ods-high { animation: ods-scan 0.9s cubic-bezier(0.65, 0, 0.35, 1) forwards; }
+.ods-view[data-phase="locked"] .ods-high { clip-path: none; }
+@keyframes ods-scan {
+  from { clip-path: inset(0 0 100% 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+.ods-scanline {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.ods-scanline::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--color-bone);
+}
+.ods-view[data-phase="scan"] .ods-scanline {
+  opacity: 1;
+  animation: ods-scanline 0.9s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+@keyframes ods-scanline {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+}
+/* An optic's lines over the picture, like the hero map's grid. */
+.ods-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(0deg, rgba(15, 15, 18, 0.3) 0 1px, transparent 1px 3px);
+}
+/* The crosshair and the reticle travel to the subject, then the reticle
+   closes on it. */
+.ods-cross {
+  position: absolute;
+  pointer-events: none;
+  background-color: rgba(242, 239, 232, 0.35);
+  transition: top 0.6s cubic-bezier(0.65, 0, 0.35, 1), left 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.ods-cross-x { left: 0; right: 0; height: 1px; top: calc(var(--fy) * 1%); }
+.ods-cross-y { top: 0; bottom: 0; width: 1px; left: calc(var(--fx) * 1%); }
+.ods-lock {
+  position: absolute;
+  left: calc(var(--fx) * 1%);
+  top: calc(var(--fy) * 1%);
+  width: 30%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition:
+    left 0.6s cubic-bezier(0.65, 0, 0.35, 1),
+    top 0.6s cubic-bezier(0.65, 0, 0.35, 1),
+    width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ods-view[data-phase="locked"] .ods-lock { width: 15%; }
+.ods-lock i {
+  position: absolute;
+  width: 24%;
+  height: 24%;
+  border: 0 solid var(--color-bone);
+}
+.ods-lock i:nth-child(1) { top: 0; left: 0; border-top-width: 2px; border-left-width: 2px; }
+.ods-lock i:nth-child(2) { top: 0; right: 0; border-top-width: 2px; border-right-width: 2px; }
+.ods-lock i:nth-child(3) { bottom: 0; left: 0; border-bottom-width: 2px; border-left-width: 2px; }
+.ods-lock i:nth-child(4) { bottom: 0; right: 0; border-bottom-width: 2px; border-right-width: 2px; }
+/* The subject, named once locked: under the reticle, on the side with room. */
+.ods-subject {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.45rem;
+  padding: 0.2em 0.5em;
+  background-color: var(--color-bone);
+  color: var(--color-void);
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.ods-lock[data-flip] .ods-subject { left: auto; right: 0; }
+.ods-view[data-phase="locked"] .ods-subject { opacity: 1; transition-delay: 0.15s; }
+.ods-hud {
+  position: absolute;
+  padding: 0.3em 0.55em;
+  background-color: rgba(15, 15, 18, 0.86);
+  color: var(--color-bone);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+}
+/* The telemetry is written once the scope runs: without JavaScript, no empty chips. */
+.ods-hud:empty { display: none; }
+.ods-tl { top: 0.75rem; left: 0.75rem; }
+.ods-tr { top: 0.75rem; right: 0.75rem; color: var(--color-ash); }
+.ods-bl { bottom: 0.75rem; left: 0.75rem; }
+.ods-br { bottom: 0.75rem; right: 0.75rem; color: var(--color-ash); font-variant-numeric: tabular-nums; }
+.ods-view[data-phase="locked"] .ods-bl { color: var(--color-blood); }
+.ods-view:not([data-phase="locked"]) .ods-bl::after { content: "▌"; animation: pt-blink 0.9s step-end infinite; }
+.ods-subtitle {
+  margin: 1rem 0 0.4rem;
+  font-family: var(--font-jetbrains-mono);
+  font-size: clamp(0.8rem, 1vw, 0.9rem);
+  letter-spacing: 0.03em;
+  color: var(--color-bone);
+}
+.ods-tags {
+  margin: 0;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--color-ash);
+}
+@media (max-width: 479px) {
+  .ods-hud { font-size: 0.6rem; }
+  .ods-tl, .ods-tr { top: 0.5rem; }
+  .ods-bl, .ods-br { bottom: 0.5rem; }
+  .ods-tl, .ods-bl { left: 0.5rem; }
+  .ods-tr, .ods-br { right: 0.5rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ods-cross, .ods-lock, .ods-title, .ods-mark, .ods-subject { transition: none; }
+  .ods-view .ods-high { clip-path: none; animation: none; }
+  .ods-scanline { display: none; }
 }
 
 /* Each numbered section is its own stacking context. It was introduced for
@@ -333,12 +510,6 @@ section[data-section-id] { isolation: isolate; }
   .toolkit-hint-coarse { display: inline; }
   /* Grow entry hit areas on touch without reflowing the desktop layout. */
   .toolkit-entry { padding: 0.45rem 0.2rem; margin: -0.45rem -0.2rem; }
-}
-
-/* ─── Off-duty subtitle over always-on mobile imagery: lift from ash to
-   near-bone so it stays readable against mid-gray artwork. ─── */
-@media (hover: none) {
-  .offduty-subtitle { color: rgba(242, 239, 232, 0.85) !important; }
 }
 
 /* ─── Custom cursor — hide native pointer only when the custom reticle is
