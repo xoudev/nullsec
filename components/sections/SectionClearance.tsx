@@ -8,6 +8,10 @@ import { useT } from "@/lib/i18n";
 import { clearances } from "@/content/clearances";
 import type { ClearanceStatus } from "@/content/clearances";
 import { ClearanceRadar } from "@/components/sections/ClearanceRadar";
+import { spell } from "@/lib/spell";
+
+const HELD = clearances.filter((c) => c.status === "GRANTED").length;
+const PENDING = clearances.filter((c) => c.status === "PENDING").length;
 
 function statusColor(status: ClearanceStatus): string {
   switch (status) {
@@ -164,21 +168,30 @@ export function SectionClearance() {
         >
           {"04 // CLEARANCE"}
         </div>
-        <div
-          aria-label={tr("Trust is earned, then documented.", "La confiance se mérite, puis se documente.")}
+        {/* Says what the section holds, counted from the data, rather than
+            one more slogan: every section used to open on one. */}
+        <h2
           style={{
             fontFamily:    "var(--font-instrument-serif)",
             fontStyle:     "italic",
             fontSize:      "clamp(2rem, 5vw, 4rem)",
+            fontWeight:    400,
             lineHeight:    1.05,
             color:         "var(--color-bone)",
             letterSpacing: "-0.02em",
+            margin:        0,
           }}
         >
-          {tr("Trust is earned,", "La confiance se mérite,")}
+          {tr(
+            `${spell(HELD, "en", { capital: true })} certification${HELD > 1 ? "s" : ""} held,`,
+            `${spell(HELD, "fr", { feminine: true, capital: true })} certification${HELD > 1 ? "s" : ""} obtenue${HELD > 1 ? "s" : ""},`,
+          )}
           <br />
-          {tr("then documented.", "puis se documente.")}
-        </div>
+          {tr(
+            `${spell(PENDING, "en")} in preparation.`,
+            `${spell(PENDING, "fr", { feminine: true })} en préparation.`,
+          )}
+        </h2>
       </div>
 
       {/* Two-column grid: entries left, radar right */}

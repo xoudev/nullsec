@@ -114,6 +114,9 @@ export const profile = {
       },
       company: "Arvato",
       period: { en: "Oct 2025 — Sept 2028", fr: "oct. 2025 – sept. 2028" },
+      // The size of the job, which the bullets alone do not give. Never the
+      // site names: those stay internal.
+      scope: { en: "4 sites · 300+ employees", fr: "4 sites · plus de 300 collaborateurs" },
       focus: {
         en: [
           "5 EBIOS RM risk analyses across five business units, one covering 28 risk scenarios",

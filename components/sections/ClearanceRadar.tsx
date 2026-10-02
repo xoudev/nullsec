@@ -211,12 +211,20 @@ export function ClearanceRadar({ clearances, activeCertIndex, prefersReduced }: 
 
   return (
     <div
+      style={{
+        width:          "100%",
+        display:        "flex",
+        flexDirection:  "column",
+        alignItems:     "center",
+        gap:            "0.65rem",
+      }}>
+    <div
       // One static summary for AT; the animated caption below is decorative
       // (an aria-live caption rewritten on every hover/scroll was a firehose
       // of announcements for screen-reader users).
       aria-label={tr(
-        "Skill radar chart across governance, network, defense, risk, audit and compliance.",
-        "Radar de compétences : gouvernance, réseau, défense, risque, audit et conformité.",
+        "Self-assessed skill radar across governance, network, defense, risk, audit and compliance.",
+        "Radar de compétences auto-évalué : gouvernance, réseau, défense, risque, audit et conformité.",
       )}
       role="img"
       style={{
@@ -281,6 +289,29 @@ export function ClearanceRadar({ clearances, activeCertIndex, prefersReduced }: 
       >
         {tr("// aggregate profile", "// profil global")}
       </div>
+    </div>
+
+      {/* The values are my own reading of what each certification covers.
+          Showing them without saying so would be the one unsourced claim on
+          a page whose motto is proof over promises. Outside role="img" so
+          assistive technology reads it too. */}
+      <p
+        style={{
+          fontFamily:    "var(--font-jetbrains-mono)",
+          fontSize:      "0.75rem",
+          lineHeight:    1.6,
+          color:         "var(--color-ash)",
+          letterSpacing: "0.02em",
+          textAlign:     "center",
+          maxWidth:      "40ch",
+          margin:        "0.35rem 0 0",
+        }}
+      >
+        {tr(
+          "Self-assessed: how far each certification reaches into each domain. An estimate, not a measurement.",
+          "Auto-évaluation : ce que chaque certification couvre dans chaque domaine. Une estimation, pas une mesure.",
+        )}
+      </p>
     </div>
   );
 }

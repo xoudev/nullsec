@@ -65,17 +65,50 @@ export function SectionIdentity() {
         01
       </span>
 
-      {/* Title — the page's real h1 (the preloader wordmark is decorative) */}
+      {/* The h1 is the name. It used to be the slogan, with the name only in
+          an aria-label: a recruiter landing here could read "I map the blind
+          spots" and nowhere, above the fold, whose page this was. */}
       <h1
-        style={{ position: "relative", zIndex: 2, margin: 0, fontWeight: 400 }}
-        aria-label={tr(
-          `${profile.fullName} — cybersecurity portfolio. I map the blind spots.`,
-          `${profile.fullName}, portfolio cybersécurité. Je cartographie les angles morts.`,
-        )}
+        style={{
+          position:     "relative",
+          zIndex:       2,
+          margin:       "0 0 clamp(1.25rem, 2.6vw, 2.25rem)",
+          fontWeight:   400,
+        }}
       >
-        <div
-          aria-hidden="true"
+        <span
           style={{
+            display:       "block",
+            fontFamily:    "var(--font-sans)",
+            fontSize:      "clamp(1.6rem, 3.2vw, 3rem)",
+            lineHeight:    1.05,
+            letterSpacing: "-0.02em",
+            color:         "var(--color-bone)",
+          }}
+        >
+          {profile.fullName}
+        </span>
+        <span className="sr-only">, </span>
+        <span
+          style={{
+            display:       "block",
+            marginTop:     "0.7rem",
+            fontFamily:    "var(--font-jetbrains-mono)",
+            fontSize:      "clamp(0.75rem, 1vw, 0.875rem)",
+            letterSpacing: "0.14em",
+            textTransform: "uppercase",
+            color:         "var(--color-blood)",
+          }}
+        >
+          {tr("Cybersecurity · GRC & ISMS", "Cybersécurité · GRC & SMSI")}
+        </span>
+      </h1>
+
+      {/* The display line: what the name does, at the scale of a headline */}
+      <p style={{ position: "relative", zIndex: 2, margin: 0 }}>
+        <span
+          style={{
+            display:       "block",
             fontFamily:    "var(--font-instrument-serif)",
             fontStyle:     "italic",
             fontSize:      "clamp(4rem, 11vw, 18rem)",
@@ -84,34 +117,23 @@ export function SectionIdentity() {
             letterSpacing: "-0.02em",
           }}
         >
-          {tr("I map the", "Je cartographie")}
-        </div>
-        <div
-          aria-hidden="true"
-          style={{
-            fontFamily:    "var(--font-instrument-serif)",
-            fontStyle:     "italic",
-            fontSize:      "clamp(4rem, 11vw, 18rem)",
-            lineHeight:    0.85,
-            color:         "var(--color-bone)",
-            letterSpacing: "-0.02em",
-          }}
-        >
-          {tr("blind spots.", "les angles morts.")}
-        </div>
+          {tr("I map the", "Je cartographie")}{" "}
+          <span style={{ display: "block" }}>{tr("blind spots.", "les angles morts.")}</span>
+        </span>
         {/* The page's one deliberate large-scale colour moment — the violet
             signature that pairs with the orange accents. */}
-        <div
+        <span
           aria-hidden="true"
           className="hero-rule"
           style={{
+            display: "block",
             height: "2px",
             width: "clamp(6rem, 20vw, 20rem)",
             backgroundColor: "var(--color-violet)",
             marginTop: "clamp(1.25rem, 3vw, 2.5rem)",
           }}
         />
-      </h1>
+      </p>
 
       {/* Bottom row: metadata + scroll arrow */}
       <div
@@ -142,10 +164,7 @@ export function SectionIdentity() {
             {" · "}{profile.city.toLowerCase()}
             {tr(" · full-time from ", " · temps plein dès ")}{t(profile.available).toLowerCase()}
           </div>
-          <div>{"// GRC · BLUE TEAM · DEVSECOPS"}</div>
-          <div style={{ marginTop: "0.4rem" }}>
-            {"// "}{t(profile.tagline)}
-          </div>
+          <div>{tr("// apprentice assistant LISO @ arvato", "// assistant LISO en alternance @ arvato")}</div>
           {/* Primary actions — a recruiter should never have to hunt. */}
           <div
             style={{
