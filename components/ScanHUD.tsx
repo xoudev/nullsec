@@ -252,8 +252,9 @@ export function ScanHUD() {
       {/* Mute toggle */}
       <button
         onClick={toggleMute}
-        aria-label={muted ? tr("Unmute ambient sound", "Rétablir le son ambiant") : tr("Mute ambient sound", "Couper le son ambiant")}
-        aria-pressed={muted}
+        // The name starts with the visible words ("SND", then the verb), so a
+        // voice user can say what they see (WCAG 2.5.3).
+        aria-label={muted ? tr("SND: unmute ambient sound", "SND : activer le son ambiant") : tr("SND: mute ambient sound", "SND : couper le son ambiant")}
         style={{
           display: "block",
           background: "none",
