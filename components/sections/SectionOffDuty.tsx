@@ -1,14 +1,13 @@
-import Image from "next/image";
 import { getT } from "@/lib/i18n-static";
 import type { Locale } from "@/lib/locale";
 import { section, sectionLabel } from "@/lib/sections";
 import { offDutyRows, offDutyEntryCount } from "@/content/offduty";
+import { OffDutyScope } from "@/components/OffDutyScope";
 
 const MONO = "var(--font-jetbrains-mono)";
 
 export function SectionOffDuty({ l }: { l: Locale }) {
   const { t, tr } = getT(l);
-
 
   return (
     <section
@@ -54,68 +53,26 @@ export function SectionOffDuty({ l }: { l: Locale }) {
         {tr("Same focus, different targets.", "La même concentration, d'autres cibles.")}
       </h2>
 
-      {/* Rows — each reveals its own image behind it on hover */}
-      <div>
-        {offDutyRows.map((row, i) => (
-          <div
-            key={row.image}
-            className="offduty-row"
-            data-reveal=""
-            style={{ "--reveal-delay": `${i * 0.06}s` } as React.CSSProperties}
-          >
-            {/* Per-row backdrop */}
-            <div className="offduty-row-bg" aria-hidden="true">
-              <Image
-                src={row.image}
-                alt=""
-                fill
-                // Veiled backdrops: q50 is indistinguishable here, and capping
-                // the srcset stops DPR-2 laptops fetching 3840px variants.
-                sizes="(max-width: 1920px) 100vw, 1920px"
-                quality={50}
-                className="offduty-bg-img"
-                style={{ objectFit: "cover", objectPosition: "center" }}
-              />
-              <div className="offduty-bg-veil" />
-            </div>
-
-            {/* Foreground */}
-            <div className="offduty-row-inner">
-              <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.8rem", color: "var(--color-ash)", letterSpacing: "0.05em", minWidth: "1.5rem" }}>
-                {String(i + 1).padStart(2, "0")}
-              </span>
-
-              <div>
-                <h3
-                  className="offduty-title"
-                  style={{
-                    fontFamily: "var(--font-inter)",
-                    fontWeight: 800,
-                    textTransform: "uppercase",
-                    fontSize: "clamp(1.5rem, 3.4vw, 2.5rem)",
-                    lineHeight: 1.05,
-                    letterSpacing: "-0.01em",
-                    color: "var(--color-bone)",
-                    margin: "0 0 0.5rem",
-                  }}
-                >
-                  {t(row.title)}
-                </h3>
-                <p className="offduty-subtitle" style={{ fontFamily: MONO, fontSize: "clamp(0.75rem, 0.95vw, 0.85rem)", color: "var(--color-ash)", letterSpacing: "0.03em", margin: 0 }}>
-                  {t(row.subtitle)}
-                </p>
-              </div>
-
-              {/* No arrow here: these rows don't navigate — the image reveal is
-                  the reward, and a sliding → promised a link that never came. */}
-              <span className="offduty-tags" aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.75rem", color: "var(--color-ash)", letterSpacing: "0.08em", whiteSpace: "nowrap" }}>
-                {t(row.tags).join("  ·  ")}
-              </span>
-            </div>
-          </div>
-        ))}
-        <div style={{ borderTop: "1px solid rgba(107,107,107,0.2)", height: 0 }} />
-      </div>
+      {/* The interests as targets, and a scope that acquires the one picked
+          (components/OffDutyScope): the display line above, taken at its word. */}
+      <OffDutyScope
+        targets={offDutyRows.map((row) => ({
+          title: t(row.title),
+          subtitle: t(row.subtitle),
+          tags: t(row.tags),
+          subject: t(row.subject),
+          image: row.image,
+          focus: row.focus,
+        }))}
+        labels={{
+          list: tr("Interests", "Centres d'intérêt"),
+          standby: tr("STANDBY", "EN ATTENTE"),
+          acquiring: tr("ACQUIRING…", "ACQUISITION…"),
+          scanning: tr("SCANNING…", "BALAYAGE…"),
+          locked: tr("TARGET LOCKED", "CIBLE VERROUILLÉE"),
+          subject: tr("SUBJECT", "SUJET"),
+        }}
+      />
 
       {/* Footer */}
       <div
