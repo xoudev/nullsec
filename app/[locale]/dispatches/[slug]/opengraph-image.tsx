@@ -10,6 +10,10 @@ export function generateStaticParams() {
   return LOCALES.flatMap((locale) => dispatches.map((d) => ({ locale, slug: d.slug })));
 }
 
+// Cards exist for the generated paths only: an unknown one is a 404, not a
+// freshly rendered image per request.
+export const dynamicParams = false;
+
 export default async function Image({
   params,
 }: {

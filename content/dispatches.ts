@@ -5,6 +5,9 @@ export type Dispatch = {
   date: string; // ISO 8601
   title: Localized<string>;
   excerpt: Localized<string>;
+  /** Search snippet, only where the excerpt runs past ~155 characters and
+   *  Google would cut it mid-sentence. Falls back to `excerpt`. */
+  description?: Partial<Localized<string>>;
   readTime: string;
   body: Localized<string[]>; // paragraphs
 };
@@ -20,6 +23,10 @@ export const dispatches: Dispatch[] = [
     excerpt: {
       en: "The org chart says: frameworks, policies, oversight. The calendar says: translation. Between what a standard requires and what a warehouse can execute, somebody has to carry the meaning across.",
       fr: "L'organigramme dit : référentiels, politiques, supervision. L'agenda, lui, dit : traduction. Entre ce qu'exige une norme et ce qu'un entrepôt peut réellement appliquer, il faut bien que quelqu'un fasse passer le sens.",
+    },
+    description: {
+      en: "The org chart says frameworks, policies, oversight. The calendar says translation: between what a standard requires and what a warehouse can execute.",
+      fr: "L'organigramme dit : référentiels, politiques, supervision. L'agenda dit : traduction, entre ce qu'exige une norme et ce qu'un entrepôt peut appliquer.",
     },
     readTime: "6 min",
     body: {
@@ -48,6 +55,10 @@ export const dispatches: Dispatch[] = [
       en: "I passed the CSNA in March. The exam verified that I can configure a Stormshield appliance. It could not verify the thing that matters: whether a firewall run by me would still be trustworthy a year later.",
       fr: "J'ai obtenu la CSNA en mars. L'examen a vérifié que je sais configurer un boîtier Stormshield. Il ne pouvait pas vérifier l'essentiel : si un pare-feu administré par mes soins serait encore digne de confiance un an plus tard.",
     },
+    description: {
+      en: "I passed the CSNA in March. The exam checks that you can configure a Stormshield, not that a firewall you run will still be trustworthy a year on.",
+      fr: "J'ai obtenu la CSNA en mars. L'examen vérifie qu'on sait configurer un Stormshield, pas qu'un pare-feu qu'on administre restera fiable un an plus tard.",
+    },
     readTime: "5 min",
     body: {
       en: [
@@ -74,6 +85,9 @@ export const dispatches: Dispatch[] = [
     excerpt: {
       en: "EDR vendors sell you a dashboard. The dashboard shows what the tool caught. The data you actually need is everything it didn't.",
       fr: "Les éditeurs d'EDR vous vendent un tableau de bord. Ce tableau de bord affiche ce que l'outil a intercepté. Or, ce dont vous avez vraiment besoin, c'est tout ce qui lui a échappé.",
+    },
+    description: {
+      fr: "Les éditeurs d'EDR vendent un tableau de bord de ce que l'outil a intercepté. Ce dont vous avez vraiment besoin, c'est tout ce qui lui a échappé.",
     },
     readTime: "6 min",
     body: {
@@ -128,6 +142,9 @@ export const dispatches: Dispatch[] = [
     excerpt: {
       en: "The first 300 traces produced a uniform noise floor. The next 4,500 produced a key. The difference was not more data.",
       fr: "Les 300 premières traces n'ont donné qu'un bruit de fond uniforme. Les 4 500 suivantes ont donné une clé. Et ce n'est pas la quantité de données qui a fait la différence.",
+    },
+    description: {
+      fr: "Les 300 premières traces n'ont donné qu'un bruit uniforme, les 4 500 suivantes une clé. Ce n'est pas la quantité de données qui a fait la différence.",
     },
     readTime: "5 min",
     body: {

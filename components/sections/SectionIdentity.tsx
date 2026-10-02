@@ -140,7 +140,7 @@ export function SectionIdentity() {
           <div>
             {"// "}{profile.handle}
             {" · "}{profile.city.toLowerCase()}
-            {tr(" · full-time from ", " · temps plein dès ")}{profile.available.toLowerCase()}
+            {tr(" · full-time from ", " · temps plein dès ")}{t(profile.available).toLowerCase()}
           </div>
           <div>{"// GRC · BLUE TEAM · DEVSECOPS"}</div>
           <div style={{ marginTop: "0.4rem" }}>

@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { NotFoundBody } from "@/components/NotFoundBody";
 
 export const metadata: Metadata = {
-  title: "404 — Not found",
-  description: "The page you requested does not exist.",
+  // `absolute`: the layout template would otherwise append the owner's name.
+  title: { absolute: "404 · NULLSEC" },
+  description: "The page you requested does not exist. La page demandée n'existe pas.",
 };
 
 // Rendered inside app/[locale]/layout (LocaleProvider present) for notFound()

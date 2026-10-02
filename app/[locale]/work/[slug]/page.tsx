@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { work, getAdjacentWork } from "@/content/work";
 import { profile } from "@/profile";
 import { LOCALES, isLocale, type Locale } from "@/lib/locale";
+import { ogBase } from "@/lib/seo";
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { WorkArticle } from "./WorkArticle";
 
@@ -10,6 +11,9 @@ import { WorkArticle } from "./WorkArticle";
 export function generateStaticParams() {
   return LOCALES.flatMap((locale) => work.map((item) => ({ locale, slug: item.slug })));
 }
+
+// Unknown slugs get the static 404 instead of an on-demand render.
+export const dynamicParams = false;
 
 export async function generateMetadata({
   params,
@@ -20,8 +24,8 @@ export async function generateMetadata({
   const l: Locale = isLocale(locale) ? locale : "en";
   const item = work.find((w) => w.slug === slug);
   if (!item) return {};
-  const title = item.title[l];
-  const description = item.excerpt[l];
+  const title = item.meta.title[l];
+  const description = item.meta.description[l];
   const base = profile.siteUrl;
   return {
     title,
@@ -35,7 +39,8 @@ export async function generateMetadata({
       },
     },
     openGraph: {
-      title: `${title} · NULLSEC`,
+      ...ogBase(l),
+      title: `${title} · ${profile.fullName}`,
       description,
       url: `${base}/${l}/work/${item.slug}`,
       // og:image comes from the per-slug opengraph-image route.

@@ -33,7 +33,9 @@ export const profile = {
   // Both PDFs compile from this file via scripts/build-cv.mjs. The historical
   // /cv.pdf URL stays French (it always was); EN gets its own file.
   cvUrl: { en: "/cv-en.pdf", fr: "/cv.pdf" },
-  available: "Sept 2028",
+  // Localized because it is read in running French text ("dès sept. 2028")
+  // and in the search snippet, not only in the CV.
+  available: { en: "Sept 2028", fr: "sept. 2028" },
   tagline: { en: "Securing what others overlook.", fr: "Protéger ce que les autres laissent filer." },
   // Resolves the hero's line instead of repeating it verbatim four viewports later.
   bio: { en: "I don't build fortresses. I find where they leak.", fr: "Je ne bâtis pas de forteresses : je cherche où elles fuient." },

@@ -118,6 +118,13 @@ body {
 }
 .hover-to-blood:hover { color: var(--color-blood); }
 
+/* ─── Global 404: both languages ship in the one static page; the pre-paint
+   script in app/not-found sets <html lang> and this shows the matching one.
+   display:none also takes the other language out of the accessibility tree. ─── */
+a.nf-en, a.nf-fr { display: inline-flex; }
+html:not([lang="fr"]) .nf-fr,
+html[lang="fr"] .nf-en { display: none; }
+
 /* ─── Article two-column grid ─── */
 .article-grid {
   display: grid;
