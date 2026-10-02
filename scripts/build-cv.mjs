@@ -20,6 +20,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const { profile } = await import(join(root, "profile.ts"));
 const { work } = await import(join(root, "content/work.ts"));
 const { toolkitDomains } = await import(join(root, "content/toolkit.ts"));
+const { clearances } = await import(join(root, "content/clearances.ts"));
 const { NodeCompiler } = require("@myriaddreamin/typst-ts-node-compiler");
 
 // ── Per-language data assembly ──────────────────────────────────────────────
@@ -106,9 +107,16 @@ function build(loc) {
       name: t(c.name),
       status: t(c.status),
     })),
-    certPreparing: en
-      ? "Certification targets: ISO/IEC 27001 Lead Implementer 2027 · CISSP 2028"
-      : "Objectifs de certification : ISO/IEC 27001 Lead Implementer 2027 · CISSP 2028",
+    // The targets come from the site's clearances, like the projects: a
+    // target taken off the site (CISSP) leaves the CV with it, instead of
+    // living on in a line typed here.
+    certPreparing: (() => {
+      const targets = clearances
+        .filter((c) => c.status === "PENDING")
+        .map((c) => `${c.cvName ?? t(c.title)} ${c.date.match(/\d{4}/)?.[0] ?? ""}`.trim());
+      if (targets.length === 0) return "";
+      return (en ? "Certification targets: " : "Objectifs de certification : ") + targets.join(" · ");
+    })(),
     // The RNCP level is dropped here only: the code identifies the diploma on
     // its own, and the extra ", level 6" pushed the degree onto a second line,
     // leaving a two-character widow. The site keeps the full label.

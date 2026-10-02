@@ -25,6 +25,9 @@ export type Clearance = {
   validates: Localized<string>; // one-line summary of what the cert covers
   radar: RadarValues;           // axis values 0–100
   score?: string;               // optional exam score for an obtained cert, e.g. "80%"
+  /** How the CV names a target (scripts/build-cv.mjs), when the display
+   *  title is too long or set in capitals. Defaults to the title. */
+  cvName?: string;
 };
 
 export const clearances: Clearance[] = [
@@ -63,6 +66,7 @@ export const clearances: Clearance[] = [
       en: "ISO/IEC 27001 LEAD IMPLEMENTER",
       fr: "ISO/IEC 27001 LEAD IMPLEMENTER",
     },
+    cvName: "ISO/IEC 27001 Lead Implementer",
     issuer: "PECB",
     credentialId: null,
     credentialUrl: null,
