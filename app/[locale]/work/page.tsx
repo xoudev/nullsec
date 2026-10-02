@@ -187,7 +187,6 @@ export default async function WorkIndexPage({
               <Link
                 href={localePath(l, `/work/${item.slug}`)}
                 className="index-row"
-                aria-label={`${item.title[l]}, ${item.year}`}
                 style={{
                   display: "flex",
                   alignItems: "flex-start",
@@ -226,17 +225,19 @@ export default async function WorkIndexPage({
                   >
                     {item.title[l]}
                   </span>
+                  {/* Reading size, in the sans: the full excerpt lives here, so
+                      it must be comfortable to read (it was 12.8 px mono). */}
                   <span
                     style={{
-                      fontFamily: "var(--font-jetbrains-mono)",
-                      fontSize: "0.8rem",
-                      color: "var(--color-ash)",
-                      lineHeight: 1.55,
-                      letterSpacing: "0.02em",
-                      maxWidth: "72ch",
+                      fontFamily: "var(--font-sans)",
+                      fontSize: "clamp(0.9375rem, 1.05vw, 1rem)",
+                      color: "rgba(242,239,232,0.68)",
+                      lineHeight: 1.6,
+                      maxWidth: "64ch",
                     }}
                   >
                     {item.excerpt[l]}
+                    <span className="sr-only">{`, ${item.year}`}</span>
                   </span>
                 </div>
 

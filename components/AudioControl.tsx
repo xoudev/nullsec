@@ -30,12 +30,15 @@ export function AudioControl() {
       type="button"
       onClick={toggleMute}
       className={`audio-control${prefersReduced ? " audio-control--force" : ""}`}
+      // The accessible name starts with the visible text, so a voice user
+      // can say what they see (WCAG 2.5.3); it used to be only the action
+      // ("Couper le son ambiant") under a button reading "[ SON ON ]". The
+      // state is in the name, so no aria-pressed on top of it.
       aria-label={
         muted
-          ? tr("Unmute ambient sound", "Rétablir le son ambiant")
-          : tr("Mute ambient sound", "Couper le son ambiant")
+          ? tr("Sound off, unmute ambient sound", "Son off, rétablir le son ambiant")
+          : tr("Sound on, mute ambient sound", "Son on, couper le son ambiant")
       }
-      aria-pressed={muted}
       style={{
         position: "fixed",
         top: "0.75rem",
@@ -54,7 +57,9 @@ export function AudioControl() {
         transition: "color 0.2s ease",
       }}
     >
-      {muted ? tr("[ SND OFF ]", "[ SON OFF ]") : tr("[ SND ON ]", "[ SON ON ]")}
+      <span aria-hidden="true">{"[ "}</span>
+      {muted ? tr("SOUND OFF", "SON OFF") : tr("SOUND ON", "SON ON")}
+      <span aria-hidden="true">{" ]"}</span>
     </button>
   );
 }

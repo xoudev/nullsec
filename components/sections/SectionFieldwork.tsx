@@ -215,7 +215,6 @@ export function SectionFieldwork() {
                 ref={(el) => { rowRefs.current[i] = el; }}
                 onMouseEnter={() => handleRowEnter(i)}
                 onMouseLeave={() => handleRowLeave(i)}
-                aria-label={`${t(item.title)}, ${item.year}`}
                 style={{
                   position: "relative",
                   zIndex: 1,
@@ -275,6 +274,9 @@ export function SectionFieldwork() {
                     }}
                   >
                     {t(item.meta.description)}
+                    {/* The link's name is its visible text (title, summary);
+                        the year, shown aria-hidden on the right, comes last. */}
+                    <span className="sr-only">{`, ${item.year}`}</span>
                   </span>
                 </div>
 
