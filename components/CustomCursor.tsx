@@ -13,15 +13,16 @@ const INTERACTIVE =
 const TARGET = `${INTERACTIVE}, [data-cursor]`;
 
 /**
- * Whether the reticle may lock around a target. Not around a tall one (a
- * whole video player, the play button laid over all of it: at least 40 % of
- * the window's height, where a project row is at most a quarter): a frame
- * that size says nothing, and the dot it hides was the only sign of where
- * the pointer was. Nor around a slider, where the point is where on it you
- * are. There the cursor keeps its small form, with the label beside it.
+ * Whether the reticle may lock around a target. Not around a surface you
+ * point within, whatever its size: a video player and the play button laid
+ * over all of it (they carry data-cursor-free), a slider, where the point
+ * is where on it you are. Nor around anything taller than a third of the
+ * window, where a project row is at most a quarter: a frame that size says
+ * nothing. The dot a lock hides was the only sign of where the pointer was;
+ * there the cursor keeps its small form, with the label beside it.
  */
 function lockable(el: Element): boolean {
-  if (!el.matches(INTERACTIVE) || el.matches("input[type='range']")) return false;
+  if (!el.matches(INTERACTIVE) || el.matches("input[type='range'], [data-cursor-free]")) return false;
   return el.getBoundingClientRect().height <= window.innerHeight * 0.35;
 }
 

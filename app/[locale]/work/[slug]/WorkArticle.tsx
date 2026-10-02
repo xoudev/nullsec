@@ -118,25 +118,27 @@ export function WorkArticle({
       </header>
 
 
-      {/* The project in motion, before the reading. */}
-      {item.video && (
-        <figure className="work-video">
-          <VideoPlayer
-            media={
-              "youtube" in item.video
-                ? { kind: "youtube", video: parseYouTube(item.video.youtube), poster: item.video.poster }
-                : { kind: "file", sources: item.video.sources, poster: item.video.poster, audio: item.video.audio }
-            }
-            title={tr(`${title}, demo`, `${title}, démo`)}
-          />
-          <figcaption>{t(item.video.caption)}</figcaption>
-        </figure>
-      )}
-
       {/* ── Two-column body ── */}
-      <div className="article-grid">
+      <div className={item.video ? "article-grid article-grid--video" : "article-grid"}>
+        {/* The project in motion: a card at the head of the side column (on
+            a phone, before the reading), not a screen-wide film; full screen
+            is one press away for the detail. */}
+        {item.video && (
+          <figure className="work-video">
+            <VideoPlayer
+              media={
+                "youtube" in item.video
+                  ? { kind: "youtube", video: parseYouTube(item.video.youtube), poster: item.video.poster }
+                  : { kind: "file", sources: item.video.sources, poster: item.video.poster, audio: item.video.audio }
+              }
+              title={tr(`${title}, demo`, `${title}, démo`)}
+            />
+            <figcaption>{t(item.video.caption)}</figcaption>
+          </figure>
+        )}
+
         {/* Body copy */}
-        <section aria-label={tr("Case study", "Étude de cas")}>
+        <section className="article-body" aria-label={tr("Case study", "Étude de cas")}>
           {/* Fast fact sheet — the 20-second read before the essay. */}
           {item.facts && item.facts.length > 0 && (
             <dl
@@ -202,6 +204,7 @@ export function WorkArticle({
           {/* Project image — small, contained, void bg so white logos read cleanly.
               No asset yet → a typographic placeholder cover generated from the
               project's own index + title (never a fabricated screenshot). */}
+          {/* The video card above stands in for the typographic cover. */}
           {item.image ? (
             <div
               style={{
@@ -231,7 +234,7 @@ export function WorkArticle({
                 }}
               />
             </div>
-          ) : (
+          ) : item.video ? null : (
             <div
               aria-hidden="true"
               style={{

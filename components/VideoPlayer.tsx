@@ -441,6 +441,8 @@ export function VideoPlayer({ media, title }: { media: VideoMedia; title: string
       data-idle={idle ? "" : undefined}
       data-playing={playing ? "" : undefined}
       data-vertical={yt?.vertical ? "" : undefined}
+      // Pointed within, not at: the cursor never locks around the player.
+      data-cursor-free=""
     >
       {media.kind === "file" ? (
         <video
@@ -502,6 +504,7 @@ export function VideoPlayer({ media, title }: { media: VideoMedia; title: string
           className="vid-big"
           onClick={toggle}
           data-cursor="play ▶"
+          data-cursor-free=""
           aria-label={
             yt
               ? tr("Play the video, from YouTube", "Lire la vidéo, depuis YouTube")
@@ -548,7 +551,8 @@ export function VideoPlayer({ media, title }: { media: VideoMedia; title: string
             {playing ? "[ ❚❚ ]" : ended ? "[ ↺ ]" : "[ ▶ ]"}
           </button>
           <span className="vid-time" aria-hidden="true">
-            {`${clock(time)} / ${clock(duration)}`}
+            {clock(time)}
+            <span className="vid-total">{` / ${clock(duration)}`}</span>
           </span>
           <span className="vid-scrub">
             <span className="vid-track" aria-hidden="true">
@@ -571,6 +575,7 @@ export function VideoPlayer({ media, title }: { media: VideoMedia; title: string
           {hasAudio && (
             <button
               type="button"
+              className="vid-sound"
               onClick={() => engine.current.mute(!muted)}
               aria-label={muted ? tr("Sound off, turn on", "Son coupé, activer") : tr("Sound on, mute", "Son actif, couper")}
             >
