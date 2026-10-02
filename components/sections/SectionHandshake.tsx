@@ -6,6 +6,7 @@ import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { profile } from "@/profile";
 import { useT } from "@/lib/i18n";
+import { section, sectionLabel } from "@/lib/sections";
 import { TWERK_BANNER, fireTwerk } from "@/components/EasterEgg";
 
 type OutputLine = {
@@ -99,8 +100,8 @@ function runCommand(raw: string, t: T, tr: Tr, history: string[] = []): OutputLi
   }
   if (bin === "ls" || bin === "ll" || bin === "dir") {
     return [
-      { type: "output", text: "identity/    fieldwork/   toolkit/     clearance/" },
-      { type: "output", text: "about/       experience/  dispatches/  off-duty/" },
+      { type: "output", text: "identity/    experience/  fieldwork/   toolkit/" },
+      { type: "output", text: "clearance/   about/       dispatches/  off-duty/" },
       { type: "output", text: "cv.pdf       pgp.txt      .well-known/" },
     ];
   }
@@ -449,7 +450,7 @@ export function SectionHandshake() {
   return (
     <section
       ref={sectionRef}
-      data-section-id="09"
+      data-section-id={section("handshake").id}
       aria-label={tr("Contact — Terminal", "Contact : terminal")}
       style={{
         backgroundColor: "var(--color-void)",
@@ -460,8 +461,6 @@ export function SectionHandshake() {
         position: "relative",
       }}
     >
-      <span aria-hidden="true" className="ghost-numeral">EOF</span>
-
       {/* Section label */}
       <div
         aria-hidden="true"
@@ -473,7 +472,7 @@ export function SectionHandshake() {
           marginBottom: "clamp(1.25rem, 2.5vw, 2rem)",
         }}
       >
-        {"09 // HANDSHAKE"}
+        {tr(sectionLabel("handshake", "en"), sectionLabel("handshake", "fr"))}
       </div>
 
       {/* Closing statement — the page's final typographic beat. The tagline

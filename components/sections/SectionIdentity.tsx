@@ -2,6 +2,7 @@
 
 import { profile } from "@/profile";
 import { useT } from "@/lib/i18n";
+import { section, sectionLabel } from "@/lib/sections";
 
 /**
  * The hero is painted straight from the HTML and never hidden.
@@ -26,7 +27,7 @@ export function SectionIdentity() {
 
   return (
     <section
-      data-section-id="01"
+      data-section-id={section("identity").id}
       aria-label={tr("Identity", "Identité")}
       style={{
         minHeight:       "100dvh",
@@ -53,17 +54,8 @@ export function SectionIdentity() {
           zIndex:        2,
         }}
       >
-        01 // IDENTITY
+        {tr(sectionLabel("identity", "en"), sectionLabel("identity", "fr"))}
       </div>
-
-      {/* Ghost numeral — bottom-right so it balances the left-anchored title */}
-      <span
-        aria-hidden="true"
-        className="ghost-numeral"
-        style={{ top: "auto", bottom: "clamp(4rem, 10vw, 8rem)" }}
-      >
-        01
-      </span>
 
       {/* The h1 is the name. It used to be the slogan, with the name only in
           an aria-label: a recruiter landing here could read "I map the blind
@@ -120,8 +112,8 @@ export function SectionIdentity() {
           {tr("I map the", "Je cartographie")}{" "}
           <span style={{ display: "block" }}>{tr("blind spots.", "les angles morts.")}</span>
         </span>
-        {/* The page's one deliberate large-scale colour moment — the violet
-            signature that pairs with the orange accents. */}
+        {/* The rule under the line, in the accent. It used to be the violet
+            of the ghost numerals: a second accent the palette never needed. */}
         <span
           aria-hidden="true"
           className="hero-rule"
@@ -129,7 +121,7 @@ export function SectionIdentity() {
             display: "block",
             height: "2px",
             width: "clamp(6rem, 20vw, 20rem)",
-            backgroundColor: "var(--color-violet)",
+            backgroundColor: "var(--color-blood)",
             marginTop: "clamp(1.25rem, 3vw, 2.5rem)",
           }}
         />

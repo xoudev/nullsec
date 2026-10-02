@@ -6,6 +6,7 @@ import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { profile } from "@/profile";
 import { useT } from "@/lib/i18n";
+import { section, sectionLabel } from "@/lib/sections";
 
 export function SectionAbout() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -36,7 +37,7 @@ export function SectionAbout() {
   return (
     <section
       ref={sectionRef}
-      data-section-id="05"
+      data-section-id={section("about").id}
       aria-label={tr("About", "À propos")}
       style={{
         backgroundColor: "var(--color-void)",
@@ -44,8 +45,6 @@ export function SectionAbout() {
         position: "relative",
       }}
     >
-      <span aria-hidden="true" className="ghost-numeral">05</span>
-
       {/* Section label */}
       <div
         aria-hidden="true"
@@ -57,7 +56,7 @@ export function SectionAbout() {
           marginBottom:  "clamp(3rem, 6vw, 5rem)",
         }}
       >
-        {"05 // ABOUT"}
+        {tr(sectionLabel("about", "en"), sectionLabel("about", "fr"))}
       </div>
 
       <div ref={contentRef}>

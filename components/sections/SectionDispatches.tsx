@@ -6,6 +6,7 @@ import { gsap } from "@/lib/gsap";
 import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useT, type Locale } from "@/lib/i18n";
+import { section, sectionLabel } from "@/lib/sections";
 import { dispatches } from "@/content/dispatches";
 
 function formatDate(iso: string, locale: Locale): string {
@@ -53,7 +54,7 @@ export function SectionDispatches() {
     <section
       ref={sectionRef}
       id="dispatches"
-      data-section-id="07"
+      data-section-id={section("dispatches").id}
       aria-label={tr("Dispatches", "Dépêches")}
       style={{
         backgroundColor: "var(--color-void)",
@@ -61,8 +62,6 @@ export function SectionDispatches() {
         position: "relative",
       }}
     >
-      <span aria-hidden="true" className="ghost-numeral">07</span>
-
       {/* Section label */}
       <div
         aria-hidden="true"
@@ -74,7 +73,7 @@ export function SectionDispatches() {
           marginBottom:  "clamp(2rem, 4vw, 3rem)",
         }}
       >
-        07 // DISPATCHES
+        {tr(sectionLabel("dispatches", "en"), sectionLabel("dispatches", "fr"))}
       </div>
 
       {/* Display line — every chapter opens the same way */}

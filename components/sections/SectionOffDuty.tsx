@@ -6,6 +6,7 @@ import { gsap } from "@/lib/gsap";
 import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useT } from "@/lib/i18n";
+import { section, sectionLabel } from "@/lib/sections";
 import { offDutyRows, offDutyEntryCount } from "@/content/offduty";
 
 const MONO = "var(--font-jetbrains-mono)";
@@ -44,7 +45,7 @@ export function SectionOffDuty() {
   return (
     <section
       ref={sectionRef}
-      data-section-id="08"
+      data-section-id={section("offduty").id}
       aria-label={tr("Off-duty: interests", "Hors service : centres d'intérêt")}
       style={{
         backgroundColor: "var(--color-void)",
@@ -52,8 +53,6 @@ export function SectionOffDuty() {
         position: "relative",
       }}
     >
-      <span aria-hidden="true" className="ghost-numeral">08</span>
-
       {/* Header */}
       <div
         style={{
@@ -65,7 +64,7 @@ export function SectionOffDuty() {
         }}
       >
         <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.65rem", color: "var(--color-blood)", letterSpacing: "0.1em" }}>
-          {"08 // OFF-DUTY"}
+          {tr(sectionLabel("offduty", "en"), sectionLabel("offduty", "fr"))}
         </span>
         <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-ash)", letterSpacing: "0.1em", whiteSpace: "nowrap" }}>
           {`${String(offDutyEntryCount).padStart(2, "0")} ${tr("ENTRIES · 00 LICENSES", "ENTRÉES · 00 PERMIS")}`}
@@ -163,7 +162,7 @@ export function SectionOffDuty() {
           letterSpacing: "0.08em",
         }}
       >
-        <span>{"// OFF-DUTY"}</span>
+        <span>{`// ${tr(section("offduty").en, section("offduty").fr)}`}</span>
         <span>{"// ENV prod.nullsec"}</span>
       </div>
     </section>
