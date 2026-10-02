@@ -228,8 +228,8 @@ export function SectionToolkit({ evidence }: { evidence: ToolkitEvidence }) {
       >
         {/* What the section holds, not a slogan (see SectionClearance). */}
         {tr(
-          `${spell(toolkitDomains.length, "en", { capital: true })} domains, from GRC to infrastructure.`,
-          `${spell(toolkitDomains.length, "fr", { capital: true })} domaines, de la GRC à l'infrastructure.`,
+          `${spell(toolkitDomains.length, "en", { capital: true })} domains, DevSecOps and GRC first.`,
+          `${spell(toolkitDomains.length, "fr", { capital: true })} domaines, DevSecOps et GRC en tête.`,
         )}
       </h2>
       <p aria-hidden="true" className="toolkit-hint">

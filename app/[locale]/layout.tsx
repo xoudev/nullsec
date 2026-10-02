@@ -34,12 +34,12 @@ export const dynamicParams = false;
 // which used to end in "· NULLSEC" twice.
 const META: Record<Locale, { title: string; description: string }> = {
   en: {
-    title: `${profile.fullName} · Cybersecurity, GRC & ISMS · NULLSEC`,
-    description: `Apprentice Assistant LISO at Arvato: GRC and ISMS, EBIOS RM risk analyses, ISO 27001 alignment. Available full-time from ${profile.available.en}.`,
+    title: `${profile.fullName} · Cybersecurity, DevSecOps & GRC · NULLSEC`,
+    description: `ISMS apprentice at Arvato: EBIOS RM risk analyses, ISO 27001 alignment. A DevSecOps and GRC profile, available full-time from ${profile.available.en}.`,
   },
   fr: {
-    title: `${profile.fullName} · Cybersécurité, GRC & SMSI · NULLSEC`,
-    description: `Assistant LISO en alternance chez Arvato : GRC et SMSI, analyses de risques EBIOS RM, alignement ISO 27001. Disponible en CDI dès ${profile.available.fr}.`,
+    title: `${profile.fullName} · Cybersécurité, DevSecOps & GRC · NULLSEC`,
+    description: `Alternant SMSI chez Arvato : analyses de risques EBIOS RM, alignement ISO 27001. Un profil DevSecOps et GRC, disponible en CDI dès ${profile.available.fr}.`,
   },
 };
 
@@ -79,9 +79,10 @@ function personJsonLd(l: Locale) {
     "@type": "Person",
     name: profile.fullName,
     givenName: profile.name,
-    jobTitle: l === "fr" ? "Assistant LISO · GRC & SMSI" : "Assistant LISO · GRC & ISMS",
+    // The title on the contract, from the same entry the Experience section shows.
+    jobTitle: current.title[l],
     worksFor: { "@type": "Organization", name: current.company },
-    knowsAbout: ["GRC", l === "fr" ? "SMSI" : "ISMS", "ISO 27001", "EBIOS RM", "NIS2", "Zero Trust"],
+    knowsAbout: ["DevSecOps", "GRC", l === "fr" ? "SMSI" : "ISMS", "ISO 27001", "EBIOS RM", "CI/CD", "NIS2", "Zero Trust"],
     url: `${profile.siteUrl}/${l}`,
     email: `mailto:${profile.email}`,
     sameAs: [profile.github, profile.linkedin],

@@ -109,7 +109,7 @@ export function SectionIdentity({ l }: { l: Locale }) {
             color:         "var(--color-blood)",
           }}
         >
-          {tr("Cybersecurity · GRC & ISMS", "Cybersécurité · GRC & SMSI")}
+          {tr("Cybersecurity · DevSecOps & GRC", "Cybersécurité · DevSecOps & GRC")}
         </span>
       </h1>
 
@@ -171,7 +171,7 @@ export function SectionIdentity({ l }: { l: Locale }) {
             {" · "}{profile.city.toLowerCase()}
             {tr(" · full-time from ", " · temps plein dès ")}{t(profile.available).toLowerCase()}
           </div>
-          <div>{tr("// apprentice assistant LISO @ arvato", "// assistant LISO en alternance @ arvato")}</div>
+          <div>{tr("// ISMS apprentice @ arvato", "// alternant SMSI @ arvato")}</div>
           {/* Primary actions — a recruiter should never have to hunt. */}
           <div
             style={{

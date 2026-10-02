@@ -19,12 +19,12 @@ async function loadFonts() {
 const HOME_COPY: Record<Locale, { line: string; role: string; alt: string }> = {
   en: {
     line: "I map the blind spots.",
-    role: "Cybersecurity · GRC & ISMS",
+    role: "Cybersecurity · DevSecOps & GRC",
     alt: "Jordan Turnaco, cybersecurity portfolio: I map the blind spots.",
   },
   fr: {
     line: "Je cartographie les angles morts.",
-    role: "Cybersécurité · GRC & SMSI",
+    role: "Cybersécurité · DevSecOps & GRC",
     alt: "Jordan Turnaco, portfolio cybersécurité : je cartographie les angles morts.",
   },
 };
