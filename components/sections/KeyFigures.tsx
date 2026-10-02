@@ -1,10 +1,9 @@
-"use client";
-
 import Link from "next/link";
 import { profile } from "@/profile";
 import { clearances } from "@/content/clearances";
 import { work } from "@/content/work";
-import { useT } from "@/lib/i18n";
+import { getT } from "@/lib/i18n-static";
+import type { Locale } from "@/lib/locale";
 
 /**
  * Five figures right under the hero, so the first scroll answers "what has
@@ -30,8 +29,8 @@ const PRODUCTS: { slug: string; name: string }[] = [
 
 const held = clearances.find((c) => c.status === "GRANTED" && c.score);
 
-export function KeyFigures() {
-  const { t, tr, lp } = useT();
+export function KeyFigures({ l }: { l: Locale }) {
+  const { t, tr, lp } = getT(l);
 
   // "80%" in the data; French sets a narrow no-break space before the sign.
   const score = held?.score ? tr(held.score, held.score.replace("%", "\u202F%")) : null;

@@ -1,42 +1,14 @@
-"use client";
-
-import { useEffect, useRef } from "react";
-import { gsap } from "@/lib/gsap";
-import { softReveal } from "@/lib/softReveal";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { profile } from "@/profile";
-import { useT } from "@/lib/i18n";
+import { getT } from "@/lib/i18n-static";
+import type { Locale } from "@/lib/locale";
 import { section, sectionLabel } from "@/lib/sections";
 
-export function SectionAbout() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const prefersReduced = useReducedMotion();
-  const { t, tr } = useT();
+export function SectionAbout({ l }: { l: Locale }) {
+  const { t, tr } = getT(l);
 
-  useEffect(() => {
-    const el = contentRef.current;
-    if (!el) return;
-    // Reduced motion: soft opacity fade-in, no upward slide.
-    if (prefersReduced) return softReveal([el]);
-    gsap.set(el, { opacity: 0, y: 40 });
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        gsap.to(el, { opacity: 1, y: 0, duration: 0.9, ease: "power2.out" });
-        observer.disconnect();
-      },
-      { threshold: 0.08, rootMargin: "0px 0px -60px 0px" }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [prefersReduced]);
 
   return (
     <section
-      ref={sectionRef}
       data-section-id={section("about").id}
       aria-label={tr("About", "À propos")}
       style={{
@@ -59,7 +31,7 @@ export function SectionAbout() {
         {tr(sectionLabel("about", "en"), sectionLabel("about", "fr"))}
       </div>
 
-      <div ref={contentRef}>
+      <div data-reveal="" style={{ "--reveal-y": "40px", "--reveal-duration": "0.9s" } as React.CSSProperties}>
         {/* Display quote */}
         <p
           aria-label={t(profile.bio)}
@@ -159,22 +131,16 @@ export function SectionAbout() {
               </div>
             ))}
 
-            {/* Ghost year */}
+            {/* Ghost year: decoration, so generated content (.ghost-year in
+                globals.css), like the dispatch ghosts. As DOM text it was
+                real text at 1.1:1, a contrast failure aria-hidden does not
+                excuse. */}
             <div
               aria-hidden="true"
-              style={{
-                marginTop:     "clamp(2rem, 4vw, 3rem)",
-                fontFamily:    "var(--font-instrument-serif)",
-                fontStyle:     "italic",
-                fontSize:      "clamp(4rem, 7vw, 7rem)",
-                lineHeight:    1,
-                color:         "rgba(107,107,107,0.12)",
-                letterSpacing: "-0.03em",
-                userSelect:    "none",
-              }}
-            >
-              {new Date().getFullYear()}
-            </div>
+              className="ghost-year"
+              data-year={String(new Date().getFullYear())}
+              style={{ marginTop: "clamp(2rem, 4vw, 3rem)" }}
+            />
           </aside>
         </div>
       </div>

@@ -1,7 +1,6 @@
-"use client";
-
 import { profile } from "@/profile";
-import { useT } from "@/lib/i18n";
+import { getT } from "@/lib/i18n-static";
+import type { Locale } from "@/lib/locale";
 import { BlindSpotScan } from "@/components/BlindSpotScan";
 import { section, sectionLabel } from "@/lib/sections";
 
@@ -23,8 +22,8 @@ import { section, sectionLabel } from "@/lib/sections";
  * that one tween kept a third of a throttled phone's main thread busy with
  * nobody touching the page.
  */
-export function SectionIdentity() {
-  const { t, tr } = useT();
+export function SectionIdentity({ l }: { l: Locale }) {
+  const { t, tr } = getT(l);
 
   return (
     <section

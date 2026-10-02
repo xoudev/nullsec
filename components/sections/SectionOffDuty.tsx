@@ -1,50 +1,17 @@
-"use client";
-
-import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { gsap } from "@/lib/gsap";
-import { softReveal } from "@/lib/softReveal";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { useT } from "@/lib/i18n";
+import { getT } from "@/lib/i18n-static";
+import type { Locale } from "@/lib/locale";
 import { section, sectionLabel } from "@/lib/sections";
 import { offDutyRows, offDutyEntryCount } from "@/content/offduty";
 
 const MONO = "var(--font-jetbrains-mono)";
 
-export function SectionOffDuty() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const prefersReduced = useReducedMotion();
-  const { t, tr } = useT();
+export function SectionOffDuty({ l }: { l: Locale }) {
+  const { t, tr } = getT(l);
 
-  // ── Scroll-reveal of the rows ──
-  useEffect(() => {
-    const rows = rowRefs.current.filter(Boolean) as HTMLElement[];
-
-    if (prefersReduced) {
-      rows.forEach((el) => gsap.set(el, { y: 0 }));
-      return softReveal(rows);
-    }
-
-    rows.forEach((el) => gsap.set(el, { opacity: 0, y: 30 }));
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const i = rows.indexOf(entry.target as HTMLElement);
-          gsap.to(entry.target, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", delay: i * 0.06 });
-          observer.unobserve(entry.target);
-        });
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -50px 0px" },
-    );
-    rows.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, [prefersReduced]);
 
   return (
     <section
-      ref={sectionRef}
       data-section-id={section("offduty").id}
       aria-label={tr("Off-duty: interests", "Hors service : centres d'intérêt")}
       style={{
@@ -92,8 +59,9 @@ export function SectionOffDuty() {
         {offDutyRows.map((row, i) => (
           <div
             key={row.image}
-            ref={(el) => { rowRefs.current[i] = el; }}
             className="offduty-row"
+            data-reveal=""
+            style={{ "--reveal-delay": `${i * 0.06}s` } as React.CSSProperties}
           >
             {/* Per-row backdrop */}
             <div className="offduty-row-bg" aria-hidden="true">
