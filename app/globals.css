@@ -857,3 +857,36 @@ section[data-section-id]:focus { outline: none; }
 @media (prefers-reduced-motion: reduce) {
   .blindspot-layer { display: none; }
 }
+
+/* ─── Route changes (View Transitions, see next.config.ts) ───────────────
+   The page cross-fades quickly; a project or dispatch title morphs from its
+   list row into the headline (lib/transitions.ts) on the house curve. The
+   cursor rides on top, live, instead of freezing in the page snapshot. ─── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.28s;
+}
+::view-transition-group(*) {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+::view-transition-group(nullsec-cursor-frame),
+::view-transition-group(nullsec-cursor-dot) {
+  animation: none;
+  z-index: 10000;
+}
+::view-transition-old(nullsec-cursor-frame),
+::view-transition-old(nullsec-cursor-dot) {
+  display: none;
+}
+::view-transition-new(nullsec-cursor-frame),
+::view-transition-new(nullsec-cursor-dot) {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

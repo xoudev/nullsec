@@ -186,6 +186,9 @@ export function CustomCursor() {
           pointerEvents: "none",
           willChange: "transform, width, height, opacity",
           opacity: 0,
+          // Its own layer during a page transition (globals.css), so it keeps
+          // following the pointer instead of freezing in the page snapshot.
+          viewTransitionName: "nullsec-cursor-frame",
         }}
       >
         <span style={{ ...corner, top: 0, left: 0, borderTopWidth: 1.5, borderLeftWidth: 1.5 }} />
@@ -228,6 +231,7 @@ export function CustomCursor() {
           pointerEvents: "none",
           willChange: "transform, opacity",
           opacity: 0,
+          viewTransitionName: "nullsec-cursor-dot",
         }}
       />
     </>

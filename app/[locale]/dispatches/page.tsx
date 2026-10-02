@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ViewTransition } from "react";
 import { notFound } from "next/navigation";
 import { dispatches } from "@/content/dispatches";
 import { profile } from "@/profile";
 import { LOCALES, isLocale, localePath, type Locale } from "@/lib/locale";
 import { ogBase } from "@/lib/seo";
 import { section, sectionLabel } from "@/lib/sections";
+import { dispatchTitleTransition } from "@/lib/transitions";
 
 /* ─── Static generation ─── */
 export function generateStaticParams() {
@@ -207,7 +209,9 @@ export default async function DispatchesIndexPage({
                     letterSpacing: "-0.01em",
                   }}
                 >
-                  {post.title[l]}
+                  <ViewTransition name={dispatchTitleTransition(post.slug)}>
+                    <span style={{ display: "inline-block" }}>{post.title[l]}</span>
+                  </ViewTransition>
                 </h2>
 
                 {/* Excerpt */}

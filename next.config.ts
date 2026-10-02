@@ -70,6 +70,12 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // React <ViewTransition> on route changes: a project or dispatch title
+  // morphs from its list row into the page's headline (lib/transitions.ts).
+  // Browsers without the API navigate exactly as before.
+  experimental: {
+    viewTransition: true,
+  },
   env: {
     NEXT_PUBLIC_BUILD_ID: buildId(),
   },

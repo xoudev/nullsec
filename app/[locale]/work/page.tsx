@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ViewTransition } from "react";
 import { notFound } from "next/navigation";
 import { orderedWork } from "@/content/work";
 import { profile } from "@/profile";
 import { LOCALES, isLocale, localePath, type Locale } from "@/lib/locale";
 import { ogBase } from "@/lib/seo";
 import { section, sectionLabel } from "@/lib/sections";
+import { workTitleTransition } from "@/lib/transitions";
 
 /* ─── Static generation ─── */
 export function generateStaticParams() {
@@ -213,18 +215,22 @@ export default async function WorkIndexPage({
 
                 {/* Title + excerpt */}
                 <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                  <span
-                    className="index-title"
-                    style={{
-                      fontFamily: "var(--font-sans)",
-                      fontSize: "clamp(1.05rem, 2.6vw, 2.1rem)",
-                      fontWeight: 400,
-                      color: "var(--color-bone)",
-                      letterSpacing: "0.04em",
-                    }}
-                  >
-                    {item.title[l]}
-                  </span>
+                  {/* Morphs into the case study's headline on navigation. */}
+                  <ViewTransition name={workTitleTransition(item.slug)}>
+                    <span
+                      className="index-title"
+                      style={{
+                        fontFamily: "var(--font-sans)",
+                        fontSize: "clamp(1.05rem, 2.6vw, 2.1rem)",
+                        fontWeight: 400,
+                        color: "var(--color-bone)",
+                        letterSpacing: "0.04em",
+                        alignSelf: "flex-start",
+                      }}
+                    >
+                      {item.title[l]}
+                    </span>
+                  </ViewTransition>
                   {/* Reading size, in the sans: the full excerpt lives here, so
                       it must be comfortable to read (it was 12.8 px mono). */}
                   <span

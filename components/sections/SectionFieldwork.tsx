@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, ViewTransition } from "react";
 import Link from "next/link";
 import { gsap } from "@/lib/gsap";
 import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useT } from "@/lib/i18n";
+import { workTitleTransition } from "@/lib/transitions";
 import { section, sectionLabel } from "@/lib/sections";
 import { orderedWork } from "@/content/work";
 
@@ -244,18 +245,24 @@ export function SectionFieldwork() {
 
                 {/* Title + excerpt column */}
                 <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                  <span
-                    ref={(el) => { titleRefs.current[i] = el; }}
-                    style={{
-                      fontFamily: "var(--font-sans)",
-                      fontSize: "clamp(1.05rem, 2.6vw, 2.1rem)",
-                      fontWeight: 400,
-                      color: "var(--color-bone)",
-                      letterSpacing: "0.04em",
-                    }}
-                  >
-                    {t(item.title)}
-                  </span>
+                  {/* Morphs into the case study's headline on navigation. */}
+                  <ViewTransition name={workTitleTransition(item.slug)}>
+                    <span
+                      ref={(el) => { titleRefs.current[i] = el; }}
+                      style={{
+                        fontFamily: "var(--font-sans)",
+                        fontSize: "clamp(1.05rem, 2.6vw, 2.1rem)",
+                        fontWeight: 400,
+                        color: "var(--color-bone)",
+                        letterSpacing: "0.04em",
+                        // A box as tight as the text, so the morph scales the
+                        // title, not a full-width strip of empty row.
+                        alignSelf: "flex-start",
+                      }}
+                    >
+                      {t(item.title)}
+                    </span>
+                  </ViewTransition>
                   {/* The short summary (meta.description, at most ~155
                       characters), not the 200 to 340 character excerpt: a list
                       is for scanning, the case study keeps the long version.
