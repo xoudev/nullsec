@@ -89,7 +89,7 @@ export default async function DispatchesIndexPage({
       id="main-content"
       tabIndex={-1}
       style={{
-        minHeight: "100dvh",
+        minHeight: "100svh",
         backgroundColor: "var(--color-void)",
         color: "var(--color-bone)",
         padding: "clamp(1.5rem, 4vw, 3rem)",
