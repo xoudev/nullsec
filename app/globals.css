@@ -346,8 +346,19 @@ section[data-section-id] { isolation: isolate; }
    so this rule MUST be gated on no-preference as well — otherwise reduced-
    motion users get no cursor at all (native hidden, custom never drawn). ─── */
 @media (prefers-reduced-motion: no-preference) and (pointer: fine) {
-  *, *::before, *::after { cursor: none; }
+  /* !important: a component's own cursor (a player's pointer over its
+     buttons) would put the system arrow under the reticle. */
+  *, *::before, *::after { cursor: none !important; }
+  /* Full screen draws one element above the page, and the reticle is not in
+     it: the system pointer comes back there, and hides while a video plays
+     untouched, as a player's does. */
+  :fullscreen, :fullscreen * { cursor: auto !important; }
+  :fullscreen :is(a, button, input[type="range"]) { cursor: pointer !important; }
+  .vid[data-idle]:fullscreen, .vid[data-idle]:fullscreen * { cursor: none !important; }
 }
+/* The reticle too steps aside over a video playing untouched (VideoPlayer
+   sets data-idle; any move clears it). */
+html:has(.vid[data-idle]:hover) .custom-cursor { opacity: 0 !important; }
 
 /* ─── Off-screen sections sleep (components/OffscreenPause.tsx) ───────────
    A looping animation the compositor cannot take still costs the main thread
@@ -1247,6 +1258,13 @@ section[data-section-id]:focus { outline: none; }
    plays. No gradient: the scrubber is a track and a fill, with a transparent
    range on top. ─── */
 .work-video { margin: 0 0 clamp(2.5rem, 5vw, 4rem); }
+/* As wide as the article's text column (.article-grid less its sidebar and
+   gap), no taller than most of the screen: a video in the article, not one
+   that fills the window. */
+@media (min-width: 768px) {
+  .work-video { max-width: calc(100% - clamp(17rem, 29%, 24rem) - clamp(5rem, 8vw, 9rem)); }
+}
+.work-video .vid { max-width: calc(70svh * 16 / 9); }
 .work-video figcaption {
   margin-top: 0.75rem;
   max-width: 70ch;
@@ -1274,7 +1292,7 @@ section[data-section-id]:focus { outline: none; }
 .vid[data-idle] { cursor: none; }
 /* YouTube: the frame, the poster over it until it plays (and once it ends),
    and the layer over both that keeps the clicks on this page. A Short
-   stands upright, no taller than most of the screen. */
+   stands upright, no taller than most of the screen either. */
 .vid-frame,
 .vid-capture {
   position: absolute;
@@ -1288,8 +1306,7 @@ section[data-section-id]:focus { outline: none; }
 .vid-capture { cursor: pointer; }
 .vid[data-vertical] {
   aspect-ratio: 9 / 16;
-  width: min(100%, calc(80svh * 9 / 16));
-  margin-inline: auto;
+  width: min(100%, calc(70svh * 9 / 16));
 }
 .vid-big {
   position: absolute;
