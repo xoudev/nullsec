@@ -8,6 +8,22 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 // not lock the reticle onto the whole page.
 const INTERACTIVE =
   "a, button, [role='button'], input, textarea, select, [tabindex]:not([tabindex='-1'])";
+// What the cursor names: an interactive target, or anything carrying a
+// data-cursor label of its own (a video, the layer over a YouTube frame).
+const TARGET = `${INTERACTIVE}, [data-cursor]`;
+
+/**
+ * Whether the reticle may lock around a target. Not around a tall one (a
+ * whole video player, the play button laid over all of it: at least 40 % of
+ * the window's height, where a project row is at most a quarter): a frame
+ * that size says nothing, and the dot it hides was the only sign of where
+ * the pointer was. Nor around a slider, where the point is where on it you
+ * are. There the cursor keeps its small form, with the label beside it.
+ */
+function lockable(el: Element): boolean {
+  if (!el.matches(INTERACTIVE) || el.matches("input[type='range']")) return false;
+  return el.getBoundingClientRect().height <= window.innerHeight * 0.35;
+}
 
 export function CustomCursor() {
   const frameRef = useRef<HTMLDivElement>(null);
@@ -33,7 +49,11 @@ export function CustomCursor() {
     let speed = 0;
     let revealed = false;
     let pressed = false;
-    let locked: Element | null = null;
+    let locked: Element | null = null; // what the reticle frames
+    let hovered: Element | null = null; // what the label names
+    // Full screen draws one element above the page, and this cursor is not
+    // in it: the system pointer stands in there (globals.css).
+    let fullscreen = false;
 
     // Animated state, lerped each frame.
     const cur = {
@@ -48,7 +68,13 @@ export function CustomCursor() {
       if (tag === "a") return (el as HTMLAnchorElement).target === "_blank" ? "open ↗" : "view →";
       if (tag === "button" || el.getAttribute("role") === "button") return "click";
       if (tag === "input" || tag === "textarea" || tag === "select") return "type";
-      return "→";
+      return ""; // a focusable box (the video player): nothing to say about it
+    };
+    const showLabel = (el: Element | null) => {
+      const text = el ? kindLabel(el) : "";
+      if (label.textContent !== text) label.textContent = text;
+      const opacity = text ? "1" : "0";
+      if (label.style.opacity !== opacity) label.style.opacity = opacity;
     };
 
     const onMove = (e: MouseEvent) => {
@@ -62,16 +88,21 @@ export function CustomCursor() {
     };
 
     const onOver = (e: MouseEvent) => {
-      const hit = (e.target as Element)?.closest(INTERACTIVE) ?? null;
-      if (hit === locked) return;
-      locked = hit;
-      wake();
-      if (hit) {
-        label.textContent = kindLabel(hit);
-        label.style.opacity = "1";
-      } else {
-        label.style.opacity = "0";
+      const el = e.target as Element | null;
+      // A frame (YouTube's) draws its own pointer, and this page gets no move
+      // while the mouse is in it: step aside rather than freeze at its edge.
+      // The next move out here brings the cursor back.
+      if (el?.tagName === "IFRAME") {
+        revealed = false;
+        wake();
+        return;
       }
+      const hit = el?.closest(TARGET) ?? null;
+      if (hit === hovered) return;
+      hovered = hit;
+      locked = hit && lockable(hit) ? hit : null;
+      showLabel(hit);
+      wake();
     };
 
     const onDown = () => { pressed = true; wake(); };
@@ -79,11 +110,24 @@ export function CustomCursor() {
     const onDocLeave = () => { revealed = false; wake(); };
     // A locked reticle follows its element through smooth scroll.
     const onScroll = () => { if (locked) wake(); };
+    const onFullscreen = () => {
+      fullscreen = document.fullscreenElement !== null;
+      hovered = locked = null;
+      showLabel(null);
+      wake();
+    };
 
     let raf = 0;
     const tick = () => {
+      // The label follows its element's own words as they change (a video's
+      // "play ▶" turns "pause" once it plays); a target taken out of the
+      // page lets the cursor go.
+      if (hovered && !hovered.isConnected) {
+        hovered = locked = null;
+        showLabel(null);
+      } else if (hovered) showLabel(hovered);
       let tx: number, ty: number, tw: number, th: number;
-      if (locked && locked.isConnected) {
+      if (locked) {
         // Re-measure every frame so the lock stays glued during smooth scroll.
         const r = locked.getBoundingClientRect();
         const pad = 8;
@@ -92,7 +136,6 @@ export function CustomCursor() {
         tw = r.width + pad * 2;
         th = r.height + pad * 2;
       } else {
-        if (locked) { locked = null; label.style.opacity = "0"; }
         const grow = 1 + speed * 0.01; // subtle reaction to pointer speed
         tx = mouse.x;
         ty = mouse.y;
@@ -110,7 +153,8 @@ export function CustomCursor() {
       cur.dotScale = lerp(cur.dotScale, locked ? 0 : 1, 0.25);
       cur.dx = lerp(cur.dx, mouse.x, 0.4);
       cur.dy = lerp(cur.dy, mouse.y, 0.4);
-      cur.opacity = lerp(cur.opacity, revealed ? 1 : 0, 0.15);
+      const shown = revealed && !fullscreen;
+      cur.opacity = lerp(cur.opacity, shown ? 1 : 0, 0.15);
 
       frame.style.transform =
         `translate(${cur.x}px, ${cur.y}px) translate(-50%, -50%) scale(${cur.press})`;
@@ -131,7 +175,7 @@ export function CustomCursor() {
         Math.abs(cur.dx - mouse.x) < 0.1 && Math.abs(cur.dy - mouse.y) < 0.1 &&
         Math.abs(cur.press - (pressed ? 0.82 : 1)) < 0.001 &&
         Math.abs(cur.dotScale - (locked ? 0 : 1)) < 0.001 &&
-        Math.abs(cur.opacity - (revealed ? 1 : 0)) < 0.002 &&
+        Math.abs(cur.opacity - (shown ? 1 : 0)) < 0.002 &&
         speed < 0.05;
       raf = settled ? 0 : requestAnimationFrame(tick);
     };
@@ -144,6 +188,7 @@ export function CustomCursor() {
     window.addEventListener("mouseup", onUp);
     document.documentElement.addEventListener("mouseleave", onDocLeave);
     window.addEventListener("scroll", onScroll, { passive: true });
+    document.addEventListener("fullscreenchange", onFullscreen);
 
     return () => {
       cancelAnimationFrame(raf);
@@ -153,6 +198,7 @@ export function CustomCursor() {
       window.removeEventListener("mouseup", onUp);
       document.documentElement.removeEventListener("mouseleave", onDocLeave);
       window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("fullscreenchange", onFullscreen);
     };
   }, [prefersReduced]);
 

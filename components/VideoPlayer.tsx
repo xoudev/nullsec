@@ -501,6 +501,7 @@ export function VideoPlayer({ media, title }: { media: VideoMedia; title: string
           type="button"
           className="vid-big"
           onClick={toggle}
+          data-cursor="play ▶"
           aria-label={
             yt
               ? tr("Play the video, from YouTube", "Lire la vidéo, depuis YouTube")
@@ -556,6 +557,7 @@ export function VideoPlayer({ media, title }: { media: VideoMedia; title: string
             <input
               type="range"
               className="vid-range"
+              data-cursor="seek"
               min={0}
               max={duration || 0}
               step={0.1}
