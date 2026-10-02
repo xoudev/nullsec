@@ -1242,9 +1242,10 @@ section[data-section-id]:focus { outline: none; }
 }
 
 /* ─── Video player (components/VideoPlayer) ──────────────────────────────
-   The browser's <video> in a hairline frame, a single large control until
-   it starts, then a mono bar that steps aside while it plays. No gradient:
-   the scrubber is a track and a fill, with a transparent range on top. ─── */
+   The browser's <video>, or YouTube's player, in a hairline frame: a single
+   large control until it starts, then a mono bar that steps aside while it
+   plays. No gradient: the scrubber is a track and a fill, with a transparent
+   range on top. ─── */
 .work-video { margin: 0 0 clamp(2.5rem, 5vw, 4rem); }
 .work-video figcaption {
   margin-top: 0.75rem;
@@ -1271,6 +1272,25 @@ section[data-section-id]:focus { outline: none; }
   background-color: var(--color-void);
 }
 .vid[data-idle] { cursor: none; }
+/* YouTube: the frame, the poster over it until it plays (and once it ends),
+   and the layer over both that keeps the clicks on this page. A Short
+   stands upright, no taller than most of the screen. */
+.vid-frame,
+.vid-capture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.vid-frame { background-color: var(--color-void); }
+.vid .vid-poster { object-fit: cover; }
+.vid-capture { cursor: pointer; }
+.vid[data-vertical] {
+  aspect-ratio: 9 / 16;
+  width: min(100%, calc(80svh * 9 / 16));
+  margin-inline: auto;
+}
 .vid-big {
   position: absolute;
   inset: 0;
@@ -1278,6 +1298,7 @@ section[data-section-id]:focus { outline: none; }
   align-items: center;
   justify-content: center;
   border: 0;
+  text-decoration: none;
   background-color: rgba(15, 15, 18, 0.35);
   font-family: var(--font-jetbrains-mono);
   font-size: 0.85rem;
@@ -1364,6 +1385,50 @@ section[data-section-id]:focus { outline: none; }
   cursor: pointer;
 }
 .vid-scrub:has(.vid-range:focus-visible) .vid-track { outline: 1px solid var(--color-blood); outline-offset: 6px; }
+/* What a YouTube video says over itself: where the player comes from, that
+   the browser wants the first tap in the frame, or that YouTube said no. */
+.vid-note,
+.vid-tap {
+  position: absolute;
+  max-width: calc(100% - 1.5rem);
+  padding: 0.35em 0.6em;
+  background-color: rgba(15, 15, 18, 0.82);
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+  pointer-events: none;
+}
+.vid-note { left: 0.75rem; bottom: 0.75rem; color: var(--color-ash); }
+.vid-tap {
+  top: 0.75rem;
+  left: 0.75rem;
+  border: 1px solid var(--color-blood);
+  color: var(--color-bone);
+}
+.vid-tap-touch { display: none; }
+@media (hover: none) {
+  .vid-tap-touch { display: inline; }
+  .vid-tap-mouse { display: none; }
+}
+.vid-error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  padding: 1rem;
+  background-color: rgba(15, 15, 18, 0.9);
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--color-ash);
+  text-align: center;
+}
+.vid-error a { color: var(--color-blood); text-decoration: none; }
+.vid-error a:hover { color: var(--color-bone); }
 @media (max-width: 479px) {
   .vid-bar { gap: 0 0.6rem; padding: 0 0.5rem; }
   .vid-wait { display: none; }

@@ -37,16 +37,27 @@ export type WorkItem = {
   ownMark?: boolean;
   /**
    * A video for the case study, played by the site's own player
-   * (components/VideoPlayer). Files under /public/media: WebM (VP9) first,
-   * MP4 (H.264) for Safari, and a poster frame. `audio` only when the video
-   * has a sound track.
+   * (components/VideoPlayer), one of two kinds:
+   * - files under /public/media: WebM (VP9) first, MP4 (H.264) for Safari,
+   *   and a poster frame; `audio` only when the video has a sound track;
+   * - a YouTube video: its link as YouTube hands it out (watch, youtu.be,
+   *   shorts; a ?t= start is kept), checked at build time. The poster is
+   *   optional: YouTube's thumbnail otherwise, at YouTube's resolution, so
+   *   a frame of the site's own looks sharper. next.config.ts opens the CSP
+   *   to YouTube's player only while some case study has one.
    */
-  video?: {
-    sources: { src: string; type: string }[];
-    poster: string;
-    caption: Localized<string>;
-    audio?: boolean;
-  };
+  video?:
+    | {
+        sources: { src: string; type: string }[];
+        poster: string;
+        caption: Localized<string>;
+        audio?: boolean;
+      }
+    | {
+        youtube: string;
+        poster?: string;
+        caption: Localized<string>;
+      };
   liveUrl?: string; // optional public / live site link
   repoUrl?: string; // optional public source repository
   /**
