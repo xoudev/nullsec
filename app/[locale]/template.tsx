@@ -30,6 +30,11 @@ export default function Template({ children }: { children: React.ReactNode }) {
       return;
     }
     if (!ref.current) return;
+    // Where the View Transitions API exists, the route change is already
+    // animated by the browser (a cross-fade, and the title morph; see
+    // next.config.ts). Fading the new page in from 0 on top of that would
+    // show it twice as faint for a moment. The GSAP fade stays the fallback.
+    if (typeof document.startViewTransition === "function") return;
     // Reduced motion still gets a soft, quicker cross-fade — opacity-only is
     // vestibular-safe, so route transitions feel intentional rather than abrupt.
     gsap.fromTo(

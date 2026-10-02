@@ -1,7 +1,9 @@
 "use client";
 
+import { ViewTransition } from "react";
 import Link from "next/link";
 import { useT } from "@/lib/i18n";
+import { dispatchTitleTransition } from "@/lib/transitions";
 import type { Dispatch } from "@/content/dispatches";
 
 export function DispatchArticle({
@@ -93,7 +95,9 @@ export function DispatchArticle({
             maxWidth: "62rem",
           }}
         >
-          {t(post.title)}
+          <ViewTransition name={dispatchTitleTransition(post.slug)}>
+            <span style={{ display: "inline-block" }}>{t(post.title)}</span>
+          </ViewTransition>
         </h1>
 
         <div

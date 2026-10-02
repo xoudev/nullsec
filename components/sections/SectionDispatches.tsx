@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, ViewTransition } from "react";
 import Link from "next/link";
 import { gsap } from "@/lib/gsap";
 import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useT, type Locale } from "@/lib/i18n";
+import { dispatchTitleTransition } from "@/lib/transitions";
 import { section, sectionLabel } from "@/lib/sections";
 import { dispatches } from "@/content/dispatches";
 
@@ -136,7 +137,9 @@ export function SectionDispatches() {
                     letterSpacing: "-0.01em",
                   }}
                 >
-                  {t(post.title)}
+                  <ViewTransition name={dispatchTitleTransition(post.slug)}>
+                    <span style={{ display: "inline-block" }}>{t(post.title)}</span>
+                  </ViewTransition>
                 </h3>
 
                 {/* Excerpt */}
