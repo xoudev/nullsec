@@ -66,7 +66,7 @@ export function SectionExperience() {
           {"06 // EXPERIENCE"}
         </span>
         <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-ash)", letterSpacing: "0.1em", whiteSpace: "nowrap" }}>
-          {`${String(profile.experience.length).padStart(2, "0")} ${tr("ROLES · 2024 — 2026", "RÔLES · 2024 – 2026")}`}
+          {`${String(profile.experience.length).padStart(2, "0")} ${tr("ROLES · SINCE 2024", "RÔLES · DEPUIS 2024")}`}
         </span>
       </div>
 
@@ -81,9 +81,10 @@ export function SectionExperience() {
           color: "var(--color-bone)",
           margin: "0 0 clamp(2.5rem, 5vw, 4rem)",
           maxWidth: "20ch",
+          textWrap: "balance",
         }}
       >
-        {tr("From shipping features to securing them.", "D'abord livrer le produit, ensuite le sécuriser.")}
+        {tr("From shipping features to securing them.", "Du développement à la GRC.")}
       </h2>
 
       {/* Entries — meta (left) + responsibilities (right) */}
@@ -133,6 +134,21 @@ export function SectionExperience() {
               >
                 {t(xp.title)}
               </h3>
+
+              {"scope" in xp && (
+                <p
+                  style={{
+                    fontFamily: MONO,
+                    fontSize: "0.8rem",
+                    color: "var(--color-ash)",
+                    letterSpacing: "0.04em",
+                    margin: "-0.35rem 0 clamp(1.1rem, 2.2vw, 1.6rem)",
+                  }}
+                >
+                  <span style={{ color: "var(--color-blood)" }}>{tr("// SCOPE ", "// PÉRIMÈTRE ")}</span>
+                  {t(xp.scope)}
+                </p>
+              )}
 
               {/* Responsibilities — inline flow, capped measure so lines stay
                   readable on very wide viewports */}

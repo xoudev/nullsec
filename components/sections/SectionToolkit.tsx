@@ -7,6 +7,7 @@ import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { toolkitDomains, toolkitEntryCount } from "@/content/toolkit";
 import { useT } from "@/lib/i18n";
+import { spell } from "@/lib/spell";
 
 // Initial clip for the bone title panel's reveal, depending on which side it sits.
 // Percent units throughout so GSAP interpolates the wipe cleanly.
@@ -212,10 +213,14 @@ export function SectionToolkit() {
           color: "var(--color-bone)",
           letterSpacing: "-0.02em",
           margin: "0 0 clamp(2.5rem, 5vw, 4rem)",
-          maxWidth: "16ch",
+          maxWidth: "20ch",
         }}
       >
-        {tr("Nothing here without a trace.", "Rien ici sans laisser de trace.")}
+        {/* What the section holds, not a slogan (see SectionClearance). */}
+        {tr(
+          `${spell(toolkitDomains.length, "en", { capital: true })} domains, from GRC to infrastructure.`,
+          `${spell(toolkitDomains.length, "fr", { capital: true })} domaines, de la GRC à l'infrastructure.`,
+        )}
       </h2>
 
       {/* Top rule */}

@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "NULLSEC — Jordan Turnaco",
     short_name: "NULLSEC",
     description:
-      "Cybersecurity portfolio — GRC, blue team detection, and zero trust.",
+      "Cybersecurity portfolio of Jordan Turnaco: GRC & ISMS, ISO 27001, EBIOS RM.",
     start_url: "/",
     display: "browser",
     background_color: "#0F0F12",

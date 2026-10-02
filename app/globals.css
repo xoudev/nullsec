@@ -395,6 +395,67 @@ section[data-section-id] { isolation: isolate; }
   .hero-rule, .hero-scroll-arrow { animation: none; }
 }
 
+/* ─── Key figures: the band right under the hero ─────────────────────────
+   Type, not cards: a serif numeral over a mono caption, between two
+   hairlines. Five across on a desktop, three on a tablet, two on a phone. ─── */
+.key-figures {
+  background-color: var(--color-void);
+  padding: clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 4vw, 3rem);
+  border-top: 1px solid rgba(138, 138, 138, 0.22);
+  border-bottom: 1px solid rgba(138, 138, 138, 0.22);
+}
+.key-figures-title {
+  margin: 0 0 clamp(1.75rem, 3.5vw, 2.75rem);
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-blood);
+}
+.key-figures-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(1.75rem, 3vw, 2.5rem) clamp(1.25rem, 3vw, 2.5rem);
+}
+@media (max-width: 1023px) {
+  .key-figures-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 599px) {
+  .key-figures-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.key-figures-value {
+  display: block;
+  font-family: var(--font-instrument-serif);
+  font-style: italic;
+  font-size: clamp(2.6rem, 4.6vw, 4.25rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  color: var(--color-bone);
+  white-space: nowrap;
+}
+.key-figures-label {
+  display: block;
+  margin-top: 0.7rem;
+  max-width: 24ch;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8rem;
+  line-height: 1.55;
+  letter-spacing: 0.02em;
+  color: var(--color-ash);
+}
+.key-figures-link {
+  color: var(--color-bone);
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 107, 26, 0.6);
+  text-underline-offset: 0.2em;
+  transition: color 0.2s ease;
+}
+.key-figures-link:hover { color: var(--color-blood); }
+
 
 /* ─── Dispatches section — full-width layout with ghost numbers ─── */
 .dispatch-row {

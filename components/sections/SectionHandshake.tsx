@@ -47,7 +47,7 @@ function neofetch(): OutputLine[] {
     "---------------",
     `host    ${profile.fullName} · ${profile.city}`,
     "role    Assistant LISO @ Arvato",
-    "focus   GRC · Blue Team · DevSecOps",
+    "focus   GRC & ISMS · ISO 27001 · EBIOS RM",
     "stack   Next.js · GSAP · Lenis · Typst",
     "shell   nullsh v1.0.0",
     "load    caffeine · 0.71 · 0.44",
@@ -182,7 +182,7 @@ function runCommand(raw: string, t: T, tr: Tr, history: string[] = []): OutputLi
     case "whoami":
       return [
         { type: "output", text: `${profile.fullName} · ${profile.city}` },
-        { type: "output", text: tr("Assistant LISO @ Arvato · Guardia · 3rd year", "Assistant LISO @ Arvato · Guardia · 3e année") },
+        { type: "output", text: tr("Assistant LISO @ Arvato · Guardia · MSc, year 1", "Assistant LISO @ Arvato · Guardia · Mastère, 1re année") },
         { type: "output", text: t(profile.bio) },
         { type: "output", text: tr(`next availability: ${profile.available.en}`, `disponible à partir de : ${profile.available.fr}`) },
       ];
@@ -190,9 +190,9 @@ function runCommand(raw: string, t: T, tr: Tr, history: string[] = []): OutputLi
     case "hire":
       return [
         { type: "output", text: tr("currently: Assistant LISO @ Arvato (apprenticeship), Oct 2025 — Sept 2028.", "en poste : Assistant LISO @ Arvato (alternance), oct. 2025 à sept. 2028.") },
-        { type: "output", text: tr("next: Mastère offensive/defensive apprenticeship, 2026 — 2028, same host company.", "ensuite : Mastère offensif/défensif en alternance, 2026 à 2028, même entreprise d'accueil.") },
+        { type: "output", text: tr("now: Mastère offensive/defensive in apprenticeship, 2026 — 2028, same host company.", "en cours : Mastère offensif/défensif en alternance, 2026 à 2028, même entreprise d'accueil.") },
         { type: "output", text: tr(`open to full-time from ${profile.available.en}. happy to talk before then.`, `ouvert à un CDI dès ${profile.available.fr}. ravi d'échanger d'ici là.`) },
-        { type: "output", text: tr("domains: GRC · Blue Team · DevSecOps.", "domaines : GRC · Blue Team · DevSecOps.") },
+        { type: "output", text: tr("domains: GRC & ISMS first (ISO 27001, EBIOS RM), then blue team and DevSecOps.", "domaines : GRC et SMSI d'abord (ISO 27001, EBIOS RM), puis blue team et DevSecOps.") },
         { type: "output", text: tr(`contact: ${profile.email}`, `contact : ${profile.email}`) },
       ];
 

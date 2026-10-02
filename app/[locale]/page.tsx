@@ -6,6 +6,7 @@ import { SectionShortcuts } from "@/components/SectionShortcuts";
 import { BootTicker } from "@/components/BootTicker";
 import { OffscreenPause } from "@/components/OffscreenPause";
 import { SectionIdentity } from "@/components/sections/SectionIdentity";
+import { KeyFigures } from "@/components/sections/KeyFigures";
 import { SectionFieldwork } from "@/components/sections/SectionFieldwork";
 
 // Below-the-fold sections load as split chunks (SSR still prerenders their
@@ -31,6 +32,7 @@ export default function Home() {
       <OffscreenPause />
       <main id="main-content" tabIndex={-1}>
         <SectionIdentity />
+        <KeyFigures />
         <SectionFieldwork />
         <SectionToolkit />
         <SectionClearance />
