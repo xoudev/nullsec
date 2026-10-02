@@ -14,11 +14,11 @@ import { profile } from "@/profile";
 export const metadata: Metadata = {
   metadataBase: new URL(profile.siteUrl),
   title: {
-    default: `NULLSEC — ${profile.fullName} · Cybersecurity portfolio`,
-    template: "%s · NULLSEC",
+    default: `${profile.fullName} · Cybersecurity, GRC & ISMS · NULLSEC`,
+    template: `%s · ${profile.fullName}`,
   },
-  description: `Cybersecurity portfolio by ${profile.fullName} — Assistant LISO in GRC, blue-team detection, and zero trust.`,
-  keywords: ["cybersecurity", "GRC", "blue team", "zero trust", "portfolio", "security engineer", "ISO 27001", "EBIOS RM", "cybersécurité", "alternance"],
+  description: `Cybersecurity portfolio of ${profile.fullName}, Assistant LISO: GRC and ISMS, EBIOS RM risk analyses, ISO 27001 alignment.`,
+  keywords: ["cybersecurity", "GRC", "ISMS", "SMSI", "ISO 27001", "EBIOS RM", "NIS2", "blue team", "zero trust", "portfolio", "cybersécurité", "alternance"],
   authors: [{ name: profile.fullName, url: profile.siteUrl }],
   creator: profile.fullName,
   robots: {

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { dispatches } from "@/content/dispatches";
 import { profile } from "@/profile";
 import { LOCALES, isLocale, localePath, type Locale } from "@/lib/locale";
+import { ogBase } from "@/lib/seo";
 
 /* ─── Static generation ─── */
 export function generateStaticParams() {
@@ -13,19 +14,21 @@ export function generateStaticParams() {
 const COPY = {
   en: {
     title: "Dispatches",
+    metaTitle: "Dispatches, field notes on security",
     heading: "Notes from the noise floor.",
     intro:
       "Short field notes on the parts of security that rarely get written down: what a control actually costs, what a certification actually tests, what the second line actually does.",
-    description: `Field notes on GRC, detection engineering and security certifications by ${profile.fullName}.`,
+    description: `Field notes by ${profile.fullName} on second-line GRC, what certifications really test, the limits of EDR and Zero Trust as a posture.`,
     aria: "Writing",
     read: "read",
   },
   fr: {
     title: "Dépêches",
+    metaTitle: "Dépêches, notes de terrain en cybersécurité",
     heading: "Des notes prises au ras du bruit.",
     intro:
       "Notes de terrain sur ce qui s'écrit rarement en sécurité : ce qu'un contrôle coûte vraiment, ce qu'une certification teste vraiment, ce que fait vraiment la seconde ligne.",
-    description: `Notes de terrain sur la GRC, l'ingénierie de détection et les certifications sécurité par ${profile.fullName}.`,
+    description: `Notes de terrain de ${profile.fullName} sur la GRC de seconde ligne, ce que testent vraiment les certifications, les limites des EDR et le Zero Trust.`,
     aria: "Écrits",
     read: "de lecture",
   },
@@ -49,7 +52,7 @@ export async function generateMetadata({
   const c = COPY[l];
   const base = profile.siteUrl;
   return {
-    title: c.title,
+    title: c.metaTitle,
     description: c.description,
     alternates: {
       canonical: `${base}/${l}/dispatches`,
@@ -59,8 +62,10 @@ export async function generateMetadata({
         "x-default": `${base}/en/dispatches`,
       },
     },
+    // og:image comes from app/[locale]/dispatches/opengraph-image.
     openGraph: {
-      title: `${c.title} · NULLSEC`,
+      ...ogBase(l),
+      title: `${c.metaTitle} · ${profile.fullName}`,
       description: c.description,
       url: `${base}/${l}/dispatches`,
     },

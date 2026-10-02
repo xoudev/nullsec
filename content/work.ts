@@ -14,6 +14,17 @@ export type WorkItem = {
   year: string;
   tags: string[];
   excerpt: Localized<string>;
+  /**
+   * What a search result shows. `title` gets " · Jordan Turnaco" from the
+   * layout template, so keep it under ~45 characters and make it say what the
+   * project is: the display title alone ("TORON") told a search page nothing.
+   * `description` is the snippet, at most ~155 characters, because Google cuts
+   * the excerpts (200 to 340) mid-sentence.
+   */
+  meta: {
+    title: Localized<string>;
+    description: Localized<string>;
+  };
   // Fast fact sheet rendered above the editorial body — a reader must get the
   // context, role and outcome in twenty seconds, then read on if interested.
   facts: WorkFact[];
@@ -73,6 +84,13 @@ export const work: WorkItem[] = [
       en: "A compliance platform built on one idea: prove it once, cover everything. One internal control is mapped to every requirement it satisfies, across every framework — so a single piece of evidence serves ISO 27001, NIS2 and a customer's security questionnaire at the same time.",
       fr: "Une plateforme de conformité bâtie sur une seule idée : prouvez une fois, couvrez tout. Un contrôle interne est rattaché à toutes les exigences qu'il satisfait, dans tous les référentiels : une même preuve sert à ISO 27001, à NIS2 et au questionnaire sécurité d'un client.",
     },
+    meta: {
+      title: { en: "Toron, ISO 27001, NIS2 and GDPR compliance", fr: "Toron, conformité ISO 27001, NIS2 et RGPD" },
+      description: {
+        en: "Compliance platform for SMEs: one piece of evidence covers ISO 27001, NIS2 and the GDPR at once. Business rules, tenant isolation, a phased roadmap.",
+        fr: "Plateforme de conformité pour PME et ETI : une même preuve couvre ISO 27001, NIS2 et le RGPD. Règles métier, isolation entre clients, feuille de route.",
+      },
+    },
     facts: [
       { label: { en: "CONTEXT", fr: "CONTEXTE" }, value: { en: "Personal product in development, for French SMEs and mid-sized companies", fr: "Produit personnel en développement, pour les PME et ETI françaises" } },
       { label: { en: "ROLE", fr: "RÔLE" }, value: { en: "Product design, functional specification, brand, architecture", fr: "Conception produit, spécification fonctionnelle, identité, architecture" } },
@@ -112,6 +130,13 @@ export const work: WorkItem[] = [
     excerpt: {
       en: "An endpoint-management platform designed around one uncomfortable fact: an RMM is an attack tool that has not been used as one yet. Kaseya proved it in 2021. Hune is built so that a compromised server still cannot push code to the fleet.",
       fr: "Une plateforme de gestion de parc conçue autour d'un constat inconfortable : un RMM est un outil d'attaque qui n'a pas encore servi comme tel. Kaseya l'a prouvé en 2021. Hune est pensé pour qu'un serveur compromis ne puisse toujours pas pousser de code sur le parc.",
+    },
+    meta: {
+      title: { en: "Hune, an RMM secure by design", fr: "Hune, un RMM sécurisé dès la conception" },
+      description: {
+        en: "Endpoint management designed against the Kaseya scenario: Ed25519 double signing, mTLS, remote access with no inbound port. A student lab project.",
+        fr: "Gestion de parc pensée contre le scénario Kaseya : double signature Ed25519, mTLS, accès distant sans aucun port entrant. Projet étudiant mené en labo.",
+      },
     },
     facts: [
       { label: { en: "CONTEXT", fr: "CONTEXTE" }, value: { en: "Student project, run in a lab at zero cost", fr: "Projet étudiant, mené en labo, à 0 €" } },
@@ -156,6 +181,13 @@ export const work: WorkItem[] = [
       en: "The platform I keep coming back to. A full-stack cybersecurity learning environment where the hard part was never writing the lessons — it was making progress feel earned and keeping a multi-tenant database honest about who is allowed to read what.",
       fr: "La plateforme sur laquelle je reviens toujours. Un environnement full-stack d'apprentissage de la cybersécurité où le plus dur n'a jamais été de rédiger les leçons, mais de faire en sorte que la progression se mérite et de tenir une base multi-tenant rigoureuse sur les droits de lecture de chacun.",
     },
+    meta: {
+      title: { en: "CyberLearn, a cybersecurity learning platform", fr: "CyberLearn, plateforme d'apprentissage cyber" },
+      description: {
+        en: "Full-stack cybersecurity learning platform: PostgreSQL row-level-security authorisation, structured DevSecOps paths and a gamification layer.",
+        fr: "Plateforme full-stack d'apprentissage de la cybersécurité : autorisation par Row Level Security PostgreSQL, parcours DevSecOps structurés, gamification.",
+      },
+    },
     facts: [
       { label: { en: "CONTEXT", fr: "CONTEXTE" }, value: { en: "Personal product, built and run solo", fr: "Produit personnel, conçu et opéré en solo" } },
       { label: { en: "ROLE", fr: "RÔLE" }, value: { en: "Architecture, full-stack development, security model", fr: "Architecture, développement full-stack, modèle de sécurité" } },
@@ -198,6 +230,13 @@ export const work: WorkItem[] = [
       en: "The site you are reading. An editorial-brutalist portfolio built under deliberate constraint — five colours, no gradients, three typefaces — where the content is typed data and the CVs are compiled from source.",
       fr: "Le site que vous êtes en train de lire. Un portfolio éditorial-brutaliste conçu sous contrainte délibérée (cinq couleurs, aucun dégradé, trois typographies), où le contenu n'est que de la donnée structurée et où les CV se compilent depuis les sources.",
     },
+    meta: {
+      title: { en: "NULLSEC, this portfolio and its compiled CVs", fr: "NULLSEC, ce portfolio et ses CV compilés" },
+      description: {
+        en: "Editorial-brutalist portfolio on Next.js 16: typed content as the single source of truth, CVs compiled in Typst from the same data, CSP and HSTS.",
+        fr: "Portfolio éditorial-brutaliste en Next.js 16 : contenu typé comme source unique de vérité, CV compilés en Typst depuis les mêmes données, CSP et HSTS.",
+      },
+    },
     facts: [
       { label: { en: "CONTEXT", fr: "CONTEXTE" }, value: { en: "Personal site, designed and built solo", fr: "Site personnel, conçu et développé en solo" } },
       { label: { en: "ROLE", fr: "RÔLE" }, value: { en: "Design system, development, content, hardening", fr: "Système de design, développement, contenu, durcissement" } },
@@ -237,6 +276,13 @@ export const work: WorkItem[] = [
       en: "A final-year architecture dossier: Zero Trust and defence in depth for a three-site supply-chain operation. The target architecture was never the hard part. Justifying every choice against a risk analysis, a sovereignty constraint and a budget was.",
       fr: "Dossier d'architecture de fin d'études : Zero Trust et défense en profondeur pour une activité logistique sur trois sites. L'architecture cible n'a jamais été le plus dur. Justifier chaque choix face à une analyse de risques, à une contrainte de souveraineté et à un budget, si.",
     },
+    meta: {
+      title: { en: "Zero Trust dossier: EBIOS RM and segmentation", fr: "Dossier Zero Trust : EBIOS RM et segmentation" },
+      description: {
+        en: "Final-year dossier: EBIOS RM analysis, 11 default-deny VLANs, a tiered hybrid AD and a SIEM baseline for a three-site supply-chain operation.",
+        fr: "Dossier de fin d'études : analyse EBIOS RM, 11 VLANs en refus par défaut, AD hybride en tiering et socle SIEM pour une activité logistique sur trois sites.",
+      },
+    },
     facts: [
       { label: { en: "CONTEXT", fr: "CONTEXTE" }, value: { en: "Final-year dossier (Guardia, RNCP 37680) — supply-chain operation, 3 sites, 150 users", fr: "Dossier de fin d'études (Guardia, RNCP 37680) : activité logistique, 3 sites, 150 utilisateurs" } },
       { label: { en: "ROLE", fr: "RÔLE" }, value: { en: "Sole author: risk analysis, target architecture, tooling comparison, costing, documentation", fr: "Auteur unique : analyse de risques, architecture cible, comparatif d'outillage, chiffrage, documentation" } },
@@ -268,6 +314,13 @@ export const work: WorkItem[] = [
     excerpt: {
       en: "Ransomware in a satellite company is not a ransomware problem. It is a question of which systems you can afford to lose, for how long — and what the answer looks like for systems where the answer is not measured in hours.",
       fr: "Un rançongiciel dans une entreprise de satellites n'est pas un problème de rançongiciel. C'est la question de savoir quels systèmes vous pouvez vous permettre de perdre, et pour combien de temps, et ce que devient cette réponse pour les systèmes où elle ne se compte plus en heures.",
+    },
+    meta: {
+      title: { en: "Crisis GRC at a satellite operator", fr: "GRC de crise chez un opérateur de satellites" },
+      description: {
+        en: "Crisis simulation at a satellite operator: 4 risk scenarios, BCP and DRP with a 6-hour RTO, a RACI matrix, and ISO 27001, NIS2 and CER applied together.",
+        fr: "Simulation de crise chez un opérateur de satellites : 4 scénarios de risque, PCA et PRA avec un RTO de 6 h, matrice RACI, ISO 27001, NIS2 et CER de front.",
+      },
     },
     facts: [
       { label: { en: "CONTEXT", fr: "CONTEXTE" }, value: { en: "School crisis simulation (Guardia): satellite operator under ransomware", fr: "Simulation de crise (Guardia) : opérateur de satellites sous rançongiciel" } },
@@ -310,6 +363,13 @@ export const work: WorkItem[] = [
       en: "Crappy Safe is not a creative name for vulnerable firmware — it is an accurate description. The password check compared characters in sequence and returned failure on the first mismatch. That single design decision turns the authentication routine into a measuring instrument.",
       fr: "« Crappy Safe » n'est pas un nom trouvé pour faire joli sur un firmware vulnérable : c'est une description exacte. La vérification du mot de passe comparait les caractères un à un et s'arrêtait sur un échec dès la première différence. Ce seul choix de conception suffit à transformer la routine d'authentification en instrument de mesure.",
     },
+    meta: {
+      title: { en: "Cryptographic audit of STM32 firmware", fr: "Audit cryptographique d'un firmware STM32" },
+      description: {
+        en: "Timing side-channel attack on STM32 firmware: the password recovered through median timing analysis, then fixed with a constant-time comparison.",
+        fr: "Attaque temporelle par canal auxiliaire sur un firmware STM32 : mot de passe récupéré par analyse sur médiane, corrigé par comparaison en temps constant.",
+      },
+    },
     facts: [
       { label: { en: "CONTEXT", fr: "CONTEXTE" }, value: { en: "Hardware security lab: timing side-channel on an STM32 target", fr: "Lab de sécurité matérielle : canal auxiliaire temporel sur cible STM32" } },
       { label: { en: "ROLE", fr: "RÔLE" }, value: { en: "Attack design, instrumentation, measurement methodology, reporting", fr: "Conception de l'attaque, instrumentation, méthodologie de mesure, rédaction" } },
@@ -342,6 +402,13 @@ export const work: WorkItem[] = [
       en: "A fantasy, Dungeons & Dragons-flavoured tower defense built in Unity — currently at pre-prototype, with my work spanning development, UI/UX, and VFX authored as code in C#.",
       fr: "Un tower-defense d'inspiration fantasy et Dungeons & Dragons, aujourd'hui au stade du pré-prototype, où j'interviens sur le développement, l'UI/UX et les VFX écrits comme du code, en C#.",
     },
+    meta: {
+      title: { en: "A fantasy tower defense in Unity", fr: "Tower defense fantasy sous Unity" },
+      description: {
+        en: "A Dungeons & Dragons-flavoured tower defense at pre-prototype stage: C# development, UI/UX and VFX authored as code.",
+        fr: "Tower defense d'inspiration Dungeons & Dragons au stade du pré-prototype : développement C#, UI/UX et VFX écrits comme du code.",
+      },
+    },
     facts: [
       { label: { en: "CONTEXT", fr: "CONTEXTE" }, value: { en: "Side project — creative engineering, small team", fr: "Projet perso, ingénierie créative, petite équipe" } },
       { label: { en: "ROLE", fr: "RÔLE" }, value: { en: "Development, UI/UX, VFX-as-code", fr: "Développement, UI/UX, VFX-as-code" } },
@@ -370,6 +437,13 @@ export const work: WorkItem[] = [
     excerpt: {
       en: "A small Proxmox homelab on a laptop — Ryzen 7, 16 GB, 512 GB NVMe — running real workloads: game servers for friends, a Wazuh stack, and a provisioning box for testing.",
       fr: "Un petit homelab Proxmox sur un ordinateur portable (Ryzen 7, 16 Go, NVMe de 512 Go) qui fait tourner de vraies charges : des serveurs de jeu pour des amis, une stack Wazuh et une machine de provisionnement pour les tests.",
+    },
+    meta: {
+      title: { en: "Proxmox homelab with Wazuh detection", fr: "Homelab Proxmox et détection Wazuh" },
+      description: {
+        en: "A Proxmox homelab running real workloads: game servers, a Wazuh detection stack, a provisioning box, segmentation and least privilege.",
+        fr: "Homelab Proxmox en fonctionnement continu : serveurs de jeu, stack de détection Wazuh, machine de provisionnement, segmentation et moindre privilège.",
+      },
     },
     facts: [
       { label: { en: "CONTEXT", fr: "CONTEXTE" }, value: { en: "Personal infrastructure, running continuously", fr: "Infrastructure personnelle, en fonctionnement continu" } },

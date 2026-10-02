@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { orderedWork } from "@/content/work";
 import { profile } from "@/profile";
 import { LOCALES, isLocale, localePath, type Locale } from "@/lib/locale";
+import { ogBase } from "@/lib/seo";
 
 /* ─── Static generation ─── */
 export function generateStaticParams() {
@@ -13,19 +14,21 @@ export function generateStaticParams() {
 const COPY = {
   en: {
     title: "Fieldwork",
+    metaTitle: "Security projects and case studies",
     heading: "Proof over promises.",
     intro:
       "Case studies from GRC, detection engineering, homelab infrastructure and a few creative builds. Each entry keeps the same shape: context, role, what shipped, and the outcome.",
-    description: `Selected security and engineering case studies by ${profile.fullName}: GRC, blue-team detection, homelab infrastructure and creative builds.`,
+    description: `Projects by ${profile.fullName}: Toron and Hune, two products designed for compliance and security, CyberLearn, GRC dossiers, a cryptographic audit, a homelab.`,
     aria: "Selected projects",
     side: "// SIDE PROJECTS · CREATIVE ENGINEERING",
   },
   fr: {
     title: "Travaux de terrain",
+    metaTitle: "Projets et études de cas cybersécurité",
     heading: "Des preuves, pas des promesses.",
     intro:
       "Études de cas en GRC, ingénierie de détection, infrastructure homelab et quelques projets créatifs. Chaque fiche suit la même trame : contexte, rôle, livrables et résultat.",
-    description: `Études de cas sécurité et ingénierie de ${profile.fullName} : GRC, détection blue team, infrastructure homelab et projets créatifs.`,
+    description: `Projets de ${profile.fullName} : Toron et Hune, deux produits de conformité et de sécurité, CyberLearn, des dossiers GRC, un audit cryptographique, un homelab.`,
     aria: "Projets sélectionnés",
     side: "// PROJETS ANNEXES · INGÉNIERIE CRÉATIVE",
   },
@@ -41,7 +44,7 @@ export async function generateMetadata({
   const c = COPY[l];
   const base = profile.siteUrl;
   return {
-    title: c.title,
+    title: c.metaTitle,
     description: c.description,
     alternates: {
       canonical: `${base}/${l}/work`,
@@ -51,8 +54,10 @@ export async function generateMetadata({
         "x-default": `${base}/en/work`,
       },
     },
+    // og:image comes from app/[locale]/work/opengraph-image.
     openGraph: {
-      title: `${c.title} · NULLSEC`,
+      ...ogBase(l),
+      title: `${c.metaTitle} · ${profile.fullName}`,
       description: c.description,
       url: `${base}/${l}/work`,
     },

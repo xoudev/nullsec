@@ -131,7 +131,7 @@ export function SectionAbout() {
                 [tr("CURRENT", "EN POSTE"),  tr("Assistant LISO @ Arvato", "Assistant LISO @ Arvato")],
                 [tr("NEXT", "ENSUITE"),      tr("MSc Offensive / Defensive — Sept 2026", "Mastère offensif / défensif, sept. 2026")],
                 [tr("FOCUS", "FOCUS"),       "GRC · Blue Team · DevSecOps"],
-                [tr("AVAILABLE", "DISPO"),   profile.available],
+                [tr("AVAILABLE", "DISPO"),   t(profile.available)],
               ] as const
             ).map(([label, value]) => (
               <div key={label} style={{ marginBottom: "clamp(1.25rem, 2vw, 1.75rem)" }}>

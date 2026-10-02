@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { dispatches, getAdjacentDispatch } from "@/content/dispatches";
 import { profile } from "@/profile";
 import { LOCALES, isLocale, type Locale } from "@/lib/locale";
+import { ogBase } from "@/lib/seo";
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { DispatchArticle } from "./DispatchArticle";
 
@@ -10,6 +11,9 @@ import { DispatchArticle } from "./DispatchArticle";
 export function generateStaticParams() {
   return LOCALES.flatMap((locale) => dispatches.map((d) => ({ locale, slug: d.slug })));
 }
+
+// Unknown slugs get the static 404 instead of an on-demand render.
+export const dynamicParams = false;
 
 export async function generateMetadata({
   params,
@@ -21,7 +25,7 @@ export async function generateMetadata({
   const post = dispatches.find((d) => d.slug === slug);
   if (!post) return {};
   const title = post.title[l];
-  const description = post.excerpt[l];
+  const description = post.description?.[l] ?? post.excerpt[l];
   const base = profile.siteUrl;
   return {
     title,
@@ -35,7 +39,8 @@ export async function generateMetadata({
       },
     },
     openGraph: {
-      title: `${title} · NULLSEC`,
+      ...ogBase(l),
+      title: `${title} · ${profile.fullName}`,
       description,
       url: `${base}/${l}/dispatches/${post.slug}`,
       type: "article",
