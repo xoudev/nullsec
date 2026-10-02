@@ -58,12 +58,14 @@ export function CustomCursor() {
       lastX = mouse.x;
       lastY = mouse.y;
       revealed = true;
+      wake();
     };
 
     const onOver = (e: MouseEvent) => {
       const hit = (e.target as Element)?.closest(INTERACTIVE) ?? null;
       if (hit === locked) return;
       locked = hit;
+      wake();
       if (hit) {
         label.textContent = kindLabel(hit);
         label.style.opacity = "1";
@@ -72,9 +74,11 @@ export function CustomCursor() {
       }
     };
 
-    const onDown = () => { pressed = true; };
-    const onUp = () => { pressed = false; };
-    const onDocLeave = () => { revealed = false; };
+    const onDown = () => { pressed = true; wake(); };
+    const onUp = () => { pressed = false; wake(); };
+    const onDocLeave = () => { revealed = false; wake(); };
+    // A locked reticle follows its element through smooth scroll.
+    const onScroll = () => { if (locked) wake(); };
 
     let raf = 0;
     const tick = () => {
@@ -118,8 +122,20 @@ export function CustomCursor() {
         `translate(${cur.dx}px, ${cur.dy}px) translate(-50%, -50%) scale(${cur.dotScale})`;
       dot.style.opacity = `${cur.opacity}`;
 
-      raf = requestAnimationFrame(tick);
+      // Sleep once everything has caught up with its target. The loop used to
+      // run every frame for the life of the tab, rewriting the same styles on
+      // a pointer that had not moved; any input or scroll wakes it again.
+      const settled =
+        Math.abs(cur.x - tx) < 0.1 && Math.abs(cur.y - ty) < 0.1 &&
+        Math.abs(cur.w - tw) < 0.1 && Math.abs(cur.h - th) < 0.1 &&
+        Math.abs(cur.dx - mouse.x) < 0.1 && Math.abs(cur.dy - mouse.y) < 0.1 &&
+        Math.abs(cur.press - (pressed ? 0.82 : 1)) < 0.001 &&
+        Math.abs(cur.dotScale - (locked ? 0 : 1)) < 0.001 &&
+        Math.abs(cur.opacity - (revealed ? 1 : 0)) < 0.002 &&
+        speed < 0.05;
+      raf = settled ? 0 : requestAnimationFrame(tick);
     };
+    const wake = () => { if (!raf) raf = requestAnimationFrame(tick); };
     raf = requestAnimationFrame(tick);
 
     window.addEventListener("mousemove", onMove);
@@ -127,6 +143,7 @@ export function CustomCursor() {
     window.addEventListener("mousedown", onDown);
     window.addEventListener("mouseup", onUp);
     document.documentElement.addEventListener("mouseleave", onDocLeave);
+    window.addEventListener("scroll", onScroll, { passive: true });
 
     return () => {
       cancelAnimationFrame(raf);
@@ -135,6 +152,7 @@ export function CustomCursor() {
       window.removeEventListener("mousedown", onDown);
       window.removeEventListener("mouseup", onUp);
       document.documentElement.removeEventListener("mouseleave", onDocLeave);
+      window.removeEventListener("scroll", onScroll);
     };
   }, [prefersReduced]);
 

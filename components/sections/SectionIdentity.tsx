@@ -1,71 +1,31 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { gsap } from "@/lib/gsap";
-import { splitChars } from "@/lib/splitText";
-import { softReveal } from "@/lib/softReveal";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { profile } from "@/profile";
 import { useT } from "@/lib/i18n";
 
-interface SectionIdentityProps {
-  booted: boolean;
-}
-
-export function SectionIdentity({ booted }: SectionIdentityProps) {
-  const sectionRef = useRef<HTMLElement>(null);
-  const line1Ref   = useRef<HTMLDivElement>(null);
-  const line2Ref   = useRef<HTMLDivElement>(null);
-  const metaRef    = useRef<HTMLDivElement>(null);
-  const arrowRef   = useRef<HTMLDivElement>(null);
-  const prefersReduced = useReducedMotion();
-  const animated = useRef(false);
+/**
+ * The hero is painted straight from the HTML and never hidden.
+ *
+ * It used to wait for the boot gate, then split both title lines into single
+ * characters and fly each one in from opacity 0, with the metadata and the
+ * call-to-action buttons held invisible until the last letter landed. Name,
+ * role and buttons were unreadable for 5 to 6.6 s, and the title was the LCP
+ * element, so 86 % of the LCP was render delay. Splitting the title into
+ * spans was also a large share of the start-up main-thread work on mobile.
+ *
+ * What remains is motion that never hides content, and all of it is CSS
+ * (app/globals.css): the rule under the title draws itself, and the scroll
+ * arrow bobs six times, then rests. The arrow used to bob through a GSAP tween
+ * with `repeat: -1`, which rewrote its style 62 times a second for as long as
+ * the tab stayed open, on mobile too where the arrow is not even displayed;
+ * that one tween kept a third of a throttled phone's main thread busy with
+ * nobody touching the page.
+ */
+export function SectionIdentity() {
   const { t, tr } = useT();
-
-  useEffect(() => {
-    if (!booted || animated.current) return;
-    if (!line1Ref.current || !line2Ref.current) return;
-    animated.current = true;
-
-    // ── Reduced motion: soft opacity fade-in, no movement ─────────
-    if (prefersReduced) {
-      const els = [line1Ref.current, line2Ref.current, metaRef.current, arrowRef.current];
-      gsap.set(els, { y: 0 }); // clear the resting translateY offsets, fade only
-      return softReveal(els);
-    }
-
-    // ── Main entrance timeline ─────────────────────────────────────
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ delay: 0.1 });
-
-      const { chars: chars1, restore: r1 } = splitChars(line1Ref.current!);
-      const { chars: chars2, restore: r2 } = splitChars(line2Ref.current!);
-
-      gsap.set([...chars1, ...chars2], { y: 80, opacity: 0 });
-
-      tl.to(chars1, {
-        y: 0, opacity: 1,
-        duration: 0.8, stagger: 0.022, ease: "power3.out",
-        onComplete: r1,
-      });
-      tl.to(chars2, {
-        y: 0, opacity: 1,
-        duration: 0.8, stagger: 0.022, ease: "power3.out",
-        onComplete: r2,
-      }, "-=0.55");
-      tl.to(metaRef.current,  { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, "-=0.3");
-      tl.to(arrowRef.current, { opacity: 1, duration: 0.4 }, "-=0.2");
-      tl.to(arrowRef.current, {
-        y: 10, duration: 0.8, ease: "power1.inOut", yoyo: true, repeat: -1,
-      });
-    });
-
-    return () => { ctx.revert(); animated.current = false; };
-  }, [booted, prefersReduced]);
 
   return (
     <section
-      ref={sectionRef}
       data-section-id="01"
       aria-label={tr("Identity", "Identité")}
       style={{
@@ -114,7 +74,6 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
         )}
       >
         <div
-          ref={line1Ref}
           aria-hidden="true"
           style={{
             fontFamily:    "var(--font-instrument-serif)",
@@ -123,13 +82,11 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
             lineHeight:    0.85,
             color:         "var(--color-bone)",
             letterSpacing: "-0.02em",
-            willChange:    "transform",
           }}
         >
           {tr("I map the", "Je cartographie")}
         </div>
         <div
-          ref={line2Ref}
           aria-hidden="true"
           style={{
             fontFamily:    "var(--font-instrument-serif)",
@@ -138,7 +95,6 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
             lineHeight:    0.85,
             color:         "var(--color-bone)",
             letterSpacing: "-0.02em",
-            willChange:    "transform",
           }}
         >
           {tr("blind spots.", "les angles morts.")}
@@ -147,6 +103,7 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
             signature that pairs with the orange accents. */}
         <div
           aria-hidden="true"
+          className="hero-rule"
           style={{
             height: "2px",
             width: "clamp(6rem, 20vw, 20rem)",
@@ -170,7 +127,6 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
         }}
       >
         <div
-          ref={metaRef}
           style={{
             position:      "relative",
             zIndex:        1,
@@ -179,8 +135,6 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
             color:         "var(--color-ash)",
             letterSpacing: "0.06em",
             lineHeight:    1.8,
-            opacity:       0,
-            transform:     "translateY(10px)",
           }}
         >
           <div>
@@ -250,15 +204,12 @@ export function SectionIdentity({ booted }: SectionIdentityProps) {
         </div>
 
         <div
-          ref={arrowRef}
           aria-hidden="true"
           className="hero-scroll-arrow"
           style={{
             fontFamily:    "var(--font-jetbrains-mono)",
             fontSize:      "clamp(1rem, 2vw, 1.5rem)",
             color:         "var(--color-ash)",
-            opacity:       0,
-            willChange:    "transform",
             paddingBottom: "0.25rem",
           }}
         >

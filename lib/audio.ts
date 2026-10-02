@@ -132,23 +132,6 @@ export async function playOnce(src: string): Promise<void> {
 }
 
 /**
- * Try each src in order and play the first one the browser can decode.
- * Use this to provide cross-browser fallbacks, e.g. playFirst("/a.mp3", "/a.wav").
- */
-export async function playFirst(...srcs: string[]): Promise<void> {
-  for (const src of srcs) {
-    if (!ctx || !gain) return;
-    const buf = await getBuffer(src);
-    if (!buf) continue;
-    const node = ctx.createBufferSource();
-    node.buffer = buf;
-    node.connect(gain);
-    node.start();
-    return; // played — stop trying
-  }
-}
-
-/**
  * Fetch, decode, and loop an ambient audio file.
  * Silent no-op if the file is missing or the context isn't ready.
  */

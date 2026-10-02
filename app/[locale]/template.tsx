@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { usePathname } from "next/navigation";
 import { gsap } from "@/lib/gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
@@ -14,34 +13,23 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 // any transform here shifts the pinned section off-screen during the tween.
 // Opacity-only avoids this entirely.
 //
-// IMPORTANT: When the Preloader is showing (first visit in session), we must
-// NOT run this fade-in. Setting opacity: 0 on this wrapper also hides all
-// position:fixed descendants (including the Preloader itself) because CSS
-// opacity composites the entire subtree — there is no way around this via
-// z-index or position:fixed. We detect the preloader state via sessionStorage
-// (same key the Preloader sets on complete) so the animation only runs on
-// subsequent navigations where no Preloader is shown.
-const SESSION_KEY = "nullsec_booted";
+// The fade runs on client-side navigations only, never on the document's
+// first load. Fading the first load in from opacity 0 hid server-rendered
+// content that was already painted, which a visitor sees as a flash and the
+// browser records as a later LCP. A module-level flag is exactly the right
+// lifetime: it survives client navigations and resets on every full load.
+let hasMountedOnce = false;
 
 export default function Template({ children }: { children: React.ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   const prefersReduced = useReducedMotion();
-  const pathname = usePathname();
-
-  // Entering the site through a detail/index page counts as booted: navigating
-  // to the home page afterwards must not raise the boot gate mid-session. The
-  // home page is the bare locale root (/en or /fr).
-  const isHome = pathname === "/en" || pathname === "/fr";
-  useEffect(() => {
-    if (!isHome) sessionStorage.setItem(SESSION_KEY, "1");
-  }, [isHome]);
 
   useEffect(() => {
+    if (!hasMountedOnce) {
+      hasMountedOnce = true;
+      return;
+    }
     if (!ref.current) return;
-    // Skip the fade when the boot sequence hasn't run yet — the Preloader is
-    // covering the page and handles its own entrance. After first boot this key
-    // is set to "1", so navigations between routes get the fade.
-    if (sessionStorage.getItem(SESSION_KEY) !== "1") return;
     // Reduced motion still gets a soft, quicker cross-fade — opacity-only is
     // vestibular-safe, so route transitions feel intentional rather than abrupt.
     gsap.fromTo(
@@ -49,7 +37,9 @@ export default function Template({ children }: { children: React.ReactNode }) {
       { opacity: 0 },
       { opacity: 1, duration: prefersReduced ? 0.3 : 0.55, ease: "power2.out" }
     );
-  }, [prefersReduced]);
+    // prefersReduced is read at mount; a change mid-page must not replay the fade.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return <div ref={ref}>{children}</div>;
 }
