@@ -47,8 +47,8 @@ function neofetch(): OutputLine[] {
     "visitor@nullsec",
     "---------------",
     `host    ${profile.fullName} · ${profile.city}`,
-    "role    Assistant LISO @ Arvato",
-    "focus   GRC & ISMS · ISO 27001 · EBIOS RM",
+    "role    ISMS apprentice @ Arvato",
+    "focus   DevSecOps & GRC · ISO 27001 · EBIOS RM",
     "stack   Next.js · GSAP · Lenis · Typst",
     "shell   nullsh v1.0.0",
     "load    caffeine · 0.71 · 0.44",
@@ -183,17 +183,17 @@ function runCommand(raw: string, t: T, tr: Tr, history: string[] = []): OutputLi
     case "whoami":
       return [
         { type: "output", text: `${profile.fullName} · ${profile.city}` },
-        { type: "output", text: tr("Assistant LISO @ Arvato · Guardia · MSc, year 1", "Assistant LISO @ Arvato · Guardia · Mastère, 1re année") },
+        { type: "output", text: tr("ISMS apprentice @ Arvato · Guardia · MSc, year 1", "Alternant SMSI @ Arvato · Guardia · Mastère, 1re année") },
         { type: "output", text: t(profile.bio) },
         { type: "output", text: tr(`next availability: ${profile.available.en}`, `disponible à partir de : ${profile.available.fr}`) },
       ];
 
     case "hire":
       return [
-        { type: "output", text: tr("currently: Assistant LISO @ Arvato (apprenticeship), Oct 2025 — Sept 2028.", "en poste : Assistant LISO @ Arvato (alternance), oct. 2025 à sept. 2028.") },
+        { type: "output", text: tr("currently: ISMS apprentice @ Arvato, Oct 2025 — Sept 2028.", "en poste : alternant SMSI @ Arvato, oct. 2025 à sept. 2028.") },
         { type: "output", text: tr("now: Mastère offensive/defensive in apprenticeship, 2026 — 2028, same host company.", "en cours : Mastère offensif/défensif en alternance, 2026 à 2028, même entreprise d'accueil.") },
         { type: "output", text: tr(`open to full-time from ${profile.available.en}. happy to talk before then.`, `ouvert à un CDI dès ${profile.available.fr}. ravi d'échanger d'ici là.`) },
-        { type: "output", text: tr("domains: GRC & ISMS first (ISO 27001, EBIOS RM), then blue team and DevSecOps.", "domaines : GRC et SMSI d'abord (ISO 27001, EBIOS RM), puis blue team et DevSecOps.") },
+        { type: "output", text: tr("domains: DevSecOps and GRC. Secure pipelines and infrastructure on one side; the ISMS, ISO 27001 and EBIOS RM on the other.", "domaines : DevSecOps et GRC. La sécurité des pipelines et de l'infrastructure d'un côté ; le SMSI, ISO 27001 et EBIOS RM de l'autre.") },
         { type: "output", text: tr(`contact: ${profile.email}`, `contact : ${profile.email}`) },
       ];
 
@@ -239,13 +239,13 @@ function runCommand(raw: string, t: T, tr: Tr, history: string[] = []): OutputLi
     case "skills": {
       const s = profile.skills;
       return [
+        { type: "output" as const, text: `devsecops      ${s.devSecOps.join(" · ")}` },
         { type: "output" as const, text: `cybersecurity  ${s.cybersecurity.slice(0, 6).join(" · ")}` },
         { type: "output" as const, text: `               ${s.cybersecurity.slice(6).join(" · ")}` },
-        { type: "output" as const, text: `offensive      ${s.offensive.join(" · ")}` },
-        { type: "output" as const, text: `dev            ${s.development.join(" · ")}` },
-        { type: "output" as const, text: `re             ${s.reverseEngineering.join(" · ")}` },
         { type: "output" as const, text: `infra          ${s.infrastructure.join(" · ")}` },
-        { type: "output" as const, text: `devsecops      ${s.devSecOps.join(" · ")}` },
+        { type: "output" as const, text: `dev            ${s.development.join(" · ")}` },
+        { type: "output" as const, text: `offensive      ${s.offensive.join(" · ")}` },
+        { type: "output" as const, text: `re             ${s.reverseEngineering.join(" · ")}` },
       ];
     }
 

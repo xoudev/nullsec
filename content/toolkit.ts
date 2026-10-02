@@ -3,6 +3,7 @@
 // `proof` is a short, truthful evidence line revealed on hover/focus; omit when
 // there is nothing concrete to point at rather than inventing one.
 // `proofHref` links to an internal case study when the skill is demonstrated there.
+// Order is the profile's: DevSecOps and GRC first, the rest after.
 
 import type { Localized } from "@/lib/i18n";
 
@@ -18,6 +19,72 @@ export type ToolkitDomain = {
 };
 
 export const toolkitDomains: ToolkitDomain[] = [
+  {
+    title: { en: "DEVSECOPS / INFRA", fr: "DEVSECOPS / INFRA" },
+    entries: [
+      {
+        label: "CI/CD",
+        proof: {
+          en: "Lint and build on every PR · NULLSEC",
+          fr: "Lint et build à chaque PR · NULLSEC",
+        },
+        proofHref: "/work/nullsec",
+      },
+      {
+        label: "CSP / HSTS",
+        proof: {
+          en: "Same-origin CSP, HSTS preload, security.txt · NULLSEC",
+          fr: "CSP limitée au domaine, HSTS preload, security.txt · NULLSEC",
+        },
+        proofHref: "/work/nullsec",
+      },
+      {
+        label: "Docker",
+        proof: {
+          en: "Docker Compose lab · Hune",
+          fr: "Lab Docker Compose · Hune",
+        },
+        proofHref: "/work/hune",
+      },
+      {
+        label: "Kubernetes",
+        proof: {
+          en: "Orchestration labs",
+          fr: "Labs d'orchestration",
+        },
+      },
+      {
+        label: "Ansible",
+        proof: {
+          en: "Provisioning automation",
+          fr: "Automatisation du provisionnement",
+        },
+      },
+      {
+        label: "Proxmox",
+        proof: {
+          en: "Homelab hypervisor",
+          fr: "Hyperviseur du homelab",
+        },
+        proofHref: "/work/homelab-proxmox",
+      },
+      {
+        label: "Linux",
+        proof: {
+          en: "CachyOS daily driver · homelab",
+          fr: "CachyOS au quotidien · homelab",
+        },
+        proofHref: "/work/homelab-proxmox",
+      },
+      {
+        label: "Git",
+        proof: {
+          en: "Version control everywhere",
+          fr: "Gestion de versions sur tous les projets",
+        },
+      },
+    ],
+  },
   {
     title: { en: "GRC / RISK", fr: "GRC / RISQUE" },
     entries: [
@@ -79,6 +146,99 @@ export const toolkitDomains: ToolkitDomain[] = [
           fr: "Durcissement niveau 1 et 2, vérifié par scanner",
         },
         proofHref: "/work/zero-trust-architecture",
+      },
+    ],
+  },
+  {
+    title: { en: "ENGINEERING / WEB", fr: "INGÉNIERIE / WEB" },
+    entries: [
+      {
+        label: "TypeScript",
+        proof: {
+          en: "CyberLearn · NULLSEC",
+          fr: "CyberLearn · NULLSEC",
+        },
+        proofHref: "/work/cyberlearn",
+      },
+      {
+        label: "Next.js",
+        proof: {
+          en: "CyberLearn · NULLSEC",
+          fr: "CyberLearn · NULLSEC",
+        },
+        proofHref: "/work/cyberlearn",
+      },
+      {
+        label: "React",
+        proof: {
+          en: "CyberLearn · NULLSEC",
+          fr: "CyberLearn · NULLSEC",
+        },
+        proofHref: "/work/cyberlearn",
+      },
+      {
+        label: "Turborepo",
+        proof: {
+          en: "CyberLearn monorepo",
+          fr: "Monorepo CyberLearn",
+        },
+        proofHref: "/work/cyberlearn",
+      },
+      {
+        label: "Supabase",
+        proof: {
+          en: "CyberLearn backend",
+          fr: "Backend CyberLearn",
+        },
+        proofHref: "/work/cyberlearn",
+      },
+      {
+        label: "PostgreSQL",
+        proof: {
+          en: "RLS hardening · CyberLearn",
+          fr: "Durcissement RLS · CyberLearn",
+        },
+        proofHref: "/work/cyberlearn",
+      },
+      {
+        label: "Prisma",
+        proof: {
+          en: "Data layer · CyberLearn",
+          fr: "Couche de données · CyberLearn",
+        },
+        proofHref: "/work/cyberlearn",
+      },
+      {
+        label: "Tailwind",
+        proof: {
+          en: "NULLSEC · CyberLearn",
+          fr: "NULLSEC · CyberLearn",
+        },
+        proofHref: "/work/nullsec",
+      },
+      {
+        label: "GSAP",
+        proof: {
+          en: "Motion · NULLSEC",
+          fr: "Animations · NULLSEC",
+        },
+        proofHref: "/work/nullsec",
+      },
+      {
+        label: "Lenis",
+        proof: {
+          en: "Smooth scroll · NULLSEC",
+          fr: "Défilement fluide · NULLSEC",
+        },
+        proofHref: "/work/nullsec",
+      },
+      {
+        label: "Typst",
+        proof: {
+          en: "CV-as-code · NULLSEC",
+          fr: "CV-as-code · NULLSEC",
+        },
+        proofHref: "/work/nullsec",
       },
     ],
   },
@@ -227,155 +387,6 @@ export const toolkitDomains: ToolkitDomain[] = [
         proof: {
           en: "Footprinting & recon",
           fr: "Prise d'empreinte et reconnaissance",
-        },
-      },
-    ],
-  },
-  {
-    title: { en: "ENGINEERING / WEB", fr: "INGÉNIERIE / WEB" },
-    entries: [
-      {
-        label: "TypeScript",
-        proof: {
-          en: "CyberLearn · NULLSEC",
-          fr: "CyberLearn · NULLSEC",
-        },
-        proofHref: "/work/cyberlearn",
-      },
-      {
-        label: "Next.js",
-        proof: {
-          en: "CyberLearn · NULLSEC",
-          fr: "CyberLearn · NULLSEC",
-        },
-        proofHref: "/work/cyberlearn",
-      },
-      {
-        label: "React",
-        proof: {
-          en: "CyberLearn · NULLSEC",
-          fr: "CyberLearn · NULLSEC",
-        },
-        proofHref: "/work/cyberlearn",
-      },
-      {
-        label: "Turborepo",
-        proof: {
-          en: "CyberLearn monorepo",
-          fr: "Monorepo CyberLearn",
-        },
-        proofHref: "/work/cyberlearn",
-      },
-      {
-        label: "Supabase",
-        proof: {
-          en: "CyberLearn backend",
-          fr: "Backend CyberLearn",
-        },
-        proofHref: "/work/cyberlearn",
-      },
-      {
-        label: "PostgreSQL",
-        proof: {
-          en: "RLS hardening · CyberLearn",
-          fr: "Durcissement RLS · CyberLearn",
-        },
-        proofHref: "/work/cyberlearn",
-      },
-      {
-        label: "Prisma",
-        proof: {
-          en: "Data layer · CyberLearn",
-          fr: "Couche de données · CyberLearn",
-        },
-        proofHref: "/work/cyberlearn",
-      },
-      {
-        label: "Tailwind",
-        proof: {
-          en: "NULLSEC · CyberLearn",
-          fr: "NULLSEC · CyberLearn",
-        },
-        proofHref: "/work/nullsec",
-      },
-      {
-        label: "GSAP",
-        proof: {
-          en: "Motion · NULLSEC",
-          fr: "Animations · NULLSEC",
-        },
-        proofHref: "/work/nullsec",
-      },
-      {
-        label: "Lenis",
-        proof: {
-          en: "Smooth scroll · NULLSEC",
-          fr: "Défilement fluide · NULLSEC",
-        },
-        proofHref: "/work/nullsec",
-      },
-      {
-        label: "Typst",
-        proof: {
-          en: "CV-as-code · NULLSEC",
-          fr: "CV-as-code · NULLSEC",
-        },
-        proofHref: "/work/nullsec",
-      },
-    ],
-  },
-  {
-    title: { en: "INFRA / DEVSECOPS", fr: "INFRA / DEVSECOPS" },
-    entries: [
-      {
-        label: "Docker",
-        proof: {
-          en: "Containerised services",
-          fr: "Services conteneurisés",
-        },
-      },
-      {
-        label: "Kubernetes",
-        proof: {
-          en: "Orchestration labs",
-          fr: "Labs d'orchestration",
-        },
-      },
-      {
-        label: "Ansible",
-        proof: {
-          en: "Provisioning automation",
-          fr: "Automatisation du provisionnement",
-        },
-      },
-      {
-        label: "CI/CD",
-        proof: {
-          en: "Secure pipelines",
-          fr: "Pipelines sécurisés",
-        },
-      },
-      {
-        label: "Proxmox",
-        proof: {
-          en: "Homelab hypervisor",
-          fr: "Hyperviseur du homelab",
-        },
-        proofHref: "/work/homelab-proxmox",
-      },
-      {
-        label: "Linux",
-        proof: {
-          en: "CachyOS daily driver · homelab",
-          fr: "CachyOS au quotidien · homelab",
-        },
-        proofHref: "/work/homelab-proxmox",
-      },
-      {
-        label: "Git",
-        proof: {
-          en: "Version control everywhere",
-          fr: "Gestion de versions sur tous les projets",
         },
       },
     ],

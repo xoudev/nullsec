@@ -53,7 +53,7 @@ export function SectionExperience({ l }: { l: Locale }) {
           textWrap: "balance",
         }}
       >
-        {tr("From shipping features to securing them.", "Du développement à la GRC.")}
+        {tr("From shipping features to securing them.", "Du développement à la GRC, sans lâcher le code.")}
       </h2>
 
       {/* Entries — meta (left) + responsibilities (right) */}

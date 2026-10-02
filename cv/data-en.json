@@ -1,6 +1,6 @@
 {
- "role": "Cybersecurity - GRC & ISMS",
- "pitch": "Assistant LISO (apprenticeship), second line of defence at Arvato: building and improving an ISMS, from EBIOS RM risk analysis to ISO 27001 compliance, policy and third-party assessment. Mastère (offensive & defensive) from Sept 2026.",
+ "role": "Cybersecurity · DevSecOps & GRC",
+ "pitch": "ISMS apprentice, second line of defence at Arvato: ISMS, EBIOS RM risk analysis, ISO 27001 compliance, policy and third-party assessment. Heading for DevSecOps and GRC; Mastère (offensive & defensive) since Sept 2026.",
  "availability": "APPRENTICE @ ARVATO UNTIL SEPT 2028 · MASTÈRE 2026-2028 · FULL-TIME FROM SEPT 2028",
  "contact": {
   "email": "jordan.turnaco.pro@gmail.com",
@@ -28,7 +28,7 @@
  },
  "experience": [
   {
-   "title": "Assistant LISO - Local Information Security Officer",
+   "title": "ISMS Apprentice",
    "company": "Arvato",
    "period": "Oct 2025 - Sept 2028",
    "focus": [
@@ -119,8 +119,16 @@
  ],
  "skills": [
   {
+   "domain": "DEVSECOPS / INFRA",
+   "items": "CI/CD · CSP / HSTS · Docker · Kubernetes · Ansible · Proxmox · Linux · Git"
+  },
+  {
    "domain": "GRC / RISK",
    "items": "EBIOS RM · ISO 27001 · NIS2 · MITRE ATT&CK · Vulnerability Mgmt (CVSS) · PSSI & Policy · Training & Awareness · CIS Benchmark"
+  },
+  {
+   "domain": "ENGINEERING / WEB",
+   "items": "TypeScript · Next.js · React · Turborepo · Supabase · PostgreSQL · Prisma · Tailwind · GSAP · Lenis · Typst"
   },
   {
    "domain": "BLUE TEAM / DEFENSE",
@@ -133,14 +141,6 @@
   {
    "domain": "OFFENSIVE / RECON",
    "items": "Burp Suite · Metasploit · Kali · Nmap · cURL · OSINT"
-  },
-  {
-   "domain": "ENGINEERING / WEB",
-   "items": "TypeScript · Next.js · React · Turborepo · Supabase · PostgreSQL · Prisma · Tailwind · GSAP · Lenis · Typst"
-  },
-  {
-   "domain": "INFRA / DEVSECOPS",
-   "items": "Docker · Kubernetes · Ansible · CI/CD · Proxmox · Linux · Git"
   },
   {
    "domain": "Languages",

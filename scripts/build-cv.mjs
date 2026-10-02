@@ -65,12 +65,12 @@ function build(loc) {
   const en = loc === "en";
 
   return ats({
-    role: en ? "Cybersecurity — GRC & ISMS" : "Cybersécurité · GRC & SMSI",
+    role: en ? "Cybersecurity · DevSecOps & GRC" : "Cybersécurité · DevSecOps & GRC",
     // Factual summary — ATS reads it first. Keyword detail lives in Skills, so
     // this stays two lines and names only the through-line.
     pitch: en
-      ? "Assistant LISO (apprenticeship), second line of defence at Arvato: building and improving an ISMS, from EBIOS RM risk analysis to ISO 27001 compliance, policy and third-party assessment. Mastère (offensive & defensive) from Sept 2026."
-      : "Assistant LISO en alternance, deuxième ligne de défense chez Arvato : construction et amélioration continue du SMSI, de l'analyse de risques EBIOS RM à la conformité ISO 27001, aux politiques et à l'évaluation des tiers. Mastère offensif et défensif dès sept. 2026.",
+      ? "ISMS apprentice, second line of defence at Arvato: ISMS, EBIOS RM risk analysis, ISO 27001 compliance, policy and third-party assessment. Heading for DevSecOps and GRC; Mastère (offensive & defensive) since Sept 2026."
+      : "Alternant SMSI, deuxième ligne de défense chez Arvato : SMSI, analyses de risques EBIOS RM, conformité ISO 27001, politiques et évaluation des tiers. Cap sur le DevSecOps et la GRC ; Mastère offensif et défensif depuis sept. 2026.",
     availability: en
       ? "APPRENTICE @ ARVATO UNTIL SEPT 2028 · MASTÈRE 2026-2028 · FULL-TIME FROM SEPT 2028"
       : "ALTERNANT @ ARVATO JUSQU'À SEPT. 2028 · MASTÈRE 2026-2028 · TEMPS PLEIN DÈS SEPT. 2028",
