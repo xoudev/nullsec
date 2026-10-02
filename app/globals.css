@@ -288,6 +288,46 @@ section[data-section-id] { isolation: isolate; }
 
 /* ─── Toolkit hint + tap targets ─── */
 .toolkit-hint-coarse { display: none; }
+
+/* Section-wide hint, once under the heading (it used to be repeated in all
+   six domains, where the evidence line now sits). */
+.toolkit-hint {
+  margin: 0 0 clamp(2rem, 4vw, 3rem);
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--color-ash);
+}
+
+/* Evidence and the hovered entry's proof share one grid cell: the slot is as
+   tall as the taller of the two, so swapping them never moves the layout. */
+.toolkit-proof-slot {
+  display: grid;
+  margin-top: clamp(0.9rem, 2vw, 1.4rem);
+}
+.toolkit-proof-slot > * {
+  grid-area: 1 / 1;
+  margin: 0;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  letter-spacing: 0.04em;
+  transition: opacity 0.18s ease, visibility 0.18s;
+}
+.toolkit-proof-slot > [data-hidden] { opacity: 0; visibility: hidden; }
+.toolkit-evidence { color: var(--color-ash); text-transform: uppercase; }
+.toolkit-entry-proof { color: rgba(242, 239, 232, 0.78); }
+.toolkit-evidence-link {
+  color: var(--color-bone);
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 107, 26, 0.6);
+  text-underline-offset: 0.2em;
+  transition: color 0.2s ease;
+}
+.toolkit-evidence-link:hover { color: var(--color-blood); }
+@media (prefers-reduced-motion: reduce) {
+  .toolkit-proof-slot > * { transition: none; }
+}
 @media (hover: none) {
   .toolkit-hint-fine { display: none; }
   .toolkit-hint-coarse { display: inline; }

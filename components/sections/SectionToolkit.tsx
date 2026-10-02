@@ -5,7 +5,9 @@ import Link from "next/link";
 import { gsap } from "@/lib/gsap";
 import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { toolkitDomains, toolkitEntryCount } from "@/content/toolkit";
+import { Fragment } from "react";
+import { toolkitDomains, toolkitEntryCount, domainEvidence } from "@/content/toolkit";
+import { work } from "@/content/work";
 import { useT } from "@/lib/i18n";
 import { section, sectionLabel } from "@/lib/sections";
 import { spell } from "@/lib/spell";
@@ -60,10 +62,10 @@ export function SectionToolkit() {
   const scrambleCancels = useRef<(() => void)[]>([]);
   const prefersReduced = useReducedMotion();
   const { t, tr, lp } = useT();
-  // Two variants of the idle hint — CSS shows the right one per input type
-  // ("hover" makes no sense on a touchscreen).
-  const hintFine = tr("// hover an entry for its proof", "// survolez une entrée pour afficher sa preuve");
-  const hintCoarse = tr("// tap an entry for its proof", "// touchez une entrée pour afficher sa preuve");
+  // Two variants of the hint, once for the whole section — CSS shows the
+  // right one per input type ("hover" makes no sense on a touchscreen).
+  const hintFine = tr("// hover a skill for its own proof", "// survolez une compétence pour voir sa preuve");
+  const hintCoarse = tr("// tap a skill for its own proof", "// touchez une compétence pour voir sa preuve");
 
   // [domainIndex, entryIndex] of the entry currently hovered/focused — drives proof reveal.
   const [active, setActive] = useState<[number, number] | null>(null);
@@ -213,7 +215,7 @@ export function SectionToolkit() {
           lineHeight: 1.0,
           color: "var(--color-bone)",
           letterSpacing: "-0.02em",
-          margin: "0 0 clamp(2.5rem, 5vw, 4rem)",
+          margin: "0 0 1.1rem",
           maxWidth: "20ch",
         }}
       >
@@ -223,6 +225,10 @@ export function SectionToolkit() {
           `${spell(toolkitDomains.length, "fr", { capital: true })} domaines, de la GRC à l'infrastructure.`,
         )}
       </h2>
+      <p aria-hidden="true" className="toolkit-hint">
+        <span className="toolkit-hint-fine">{hintFine}</span>
+        <span className="toolkit-hint-coarse">{hintCoarse}</span>
+      </p>
 
       {/* Top rule */}
       <div
@@ -365,27 +371,40 @@ export function SectionToolkit() {
                   })}
                 </ul>
 
-                {/* Proof hint — swaps to the hovered/focused entry's proof */}
-                <div
-                  aria-hidden="true"
-                  style={{
-                    marginTop: "clamp(0.9rem, 2vw, 1.4rem)",
-                    minHeight: "1.1em",
-                    fontFamily: "var(--font-jetbrains-mono)",
-                    fontSize: "0.75rem",
-                    letterSpacing: "0.04em",
-                    color: proofHint
-                      ? "rgba(242,239,232,0.78)"
-                      : "var(--color-ash)",
-                    transition: "color 0.18s ease",
-                  }}
-                >
-                  {proofHint ?? (
-                    <>
-                      <span className="toolkit-hint-fine">{hintFine}</span>
-                      <span className="toolkit-hint-coarse">{hintCoarse}</span>
-                    </>
-                  )}
+                {/* One slot, two layers stacked in the same grid cell (so the
+                    height never jumps): the domain's evidence, always visible,
+                    and the hovered/focused entry's own proof over it. The
+                    proofs used to appear only on hover: most visitors never
+                    saw that every skill is backed. */}
+                <div className="toolkit-proof-slot">
+                  <p className="toolkit-evidence" data-hidden={proofHint ? "" : undefined}>
+                    <span aria-hidden="true">{"// "}</span>
+                    {tr("proof: ", "preuves : ")}
+                    {(() => {
+                      const ev = domainEvidence(domain);
+                      const items = [
+                        ...ev.contexts.map((c) => ({ key: c, label: c, href: null as string | null })),
+                        ...ev.works.map((slug) => ({
+                          key: slug,
+                          label: t(work.find((w) => w.slug === slug)?.title ?? { en: slug, fr: slug }),
+                          href: lp(`/work/${slug}`),
+                        })),
+                      ];
+                      return items.map((it, k) => (
+                        <Fragment key={it.key}>
+                          {k > 0 && ", "}
+                          {it.href ? (
+                            <Link href={it.href} className="toolkit-evidence-link">{it.label}</Link>
+                          ) : (
+                            it.label
+                          )}
+                        </Fragment>
+                      ));
+                    })()}
+                  </p>
+                  <div aria-hidden="true" className="toolkit-entry-proof" data-hidden={proofHint ? undefined : ""}>
+                    {proofHint}
+                  </div>
                 </div>
               </div>
             </div>
