@@ -2,6 +2,7 @@
 
 import { profile } from "@/profile";
 import { useT } from "@/lib/i18n";
+import { BlindSpotScan } from "@/components/BlindSpotScan";
 import { section, sectionLabel } from "@/lib/sections";
 
 /**
@@ -39,9 +40,14 @@ export function SectionIdentity() {
         overflow:        "hidden",
       }}
     >
+      {/* The map under the headline, revealed by the pointer (or one radar
+          sweep on a phone). Decorative; see BlindSpotScan. */}
+      <BlindSpotScan />
+
       {/* Section number */}
       <div
         aria-hidden="true"
+        data-hero-label=""
         style={{
           position:      "absolute",
           top:           "clamp(1.5rem, 4vw, 3rem)",
