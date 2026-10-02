@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { profile } from "@/profile";
 import { useT } from "@/lib/i18n";
+import { CV_DOC, docPath } from "@/lib/doc-routes";
 
 const MONO = "var(--font-jetbrains-mono)";
 
@@ -14,14 +15,14 @@ const MONO = "var(--font-jetbrains-mono)";
  * handshake terminal above it on the homepage.
  */
 export function SiteFooter() {
-  const { t, tr, lp } = useT();
+  const { tr, lp } = useT();
   const pathname = usePathname();
 
   const links = [
     { label: "email", href: `mailto:${profile.email}` },
     { label: "github", href: profile.github },
     { label: "linkedin", href: profile.linkedin },
-    { label: "cv", href: t(profile.cvUrl) },
+    { label: "cv", href: lp(docPath(CV_DOC)) },
     { label: "rss", href: "/feed.xml" },
   ];
 
@@ -49,18 +50,26 @@ export function SiteFooter() {
         aria-label={tr("Contact links", "Liens de contact")}
         style={{ display: "flex", flexWrap: "wrap", gap: "0.6rem 1.5rem" }}
       >
-        {links.map(({ label, href }) => (
-          <a
-            key={label}
-            href={href}
-            target={href.startsWith("http") || href.endsWith(".pdf") ? "_blank" : undefined}
-            rel="noopener noreferrer"
-            className="hover-to-bone"
-            style={{ whiteSpace: "nowrap" }}
-          >
-            [ {label} ]
-          </a>
-        ))}
+        {links.map(({ label, href }) =>
+          // A page of the site (the CV reader): a client navigation. A file
+          // (the feed) or another site: a plain link, the latter in a new tab.
+          href.startsWith("/") && !/\.\w+$/.test(href) ? (
+            <Link key={label} href={href} className="hover-to-bone" style={{ whiteSpace: "nowrap" }}>
+              [ {label} ]
+            </Link>
+          ) : (
+            <a
+              key={label}
+              href={href}
+              target={href.startsWith("http") ? "_blank" : undefined}
+              rel="noopener noreferrer"
+              className="hover-to-bone"
+              style={{ whiteSpace: "nowrap" }}
+            >
+              [ {label} ]
+            </a>
+          ),
+        )}
       </nav>
 
       {/* Colophon — analytics is Vercel's cookieless first-party pageview

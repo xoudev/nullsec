@@ -1,8 +1,10 @@
+import Link from "next/link";
 import { profile } from "@/profile";
 import { getT } from "@/lib/i18n-static";
 import type { Locale } from "@/lib/locale";
 import { BlindSpotScan } from "@/components/BlindSpotScan";
 import { section, sectionLabel } from "@/lib/sections";
+import { CV_DOC, docPath } from "@/lib/doc-routes";
 
 /**
  * The hero is painted straight from the HTML and never hidden.
@@ -23,7 +25,7 @@ import { section, sectionLabel } from "@/lib/sections";
  * nobody touching the page.
  */
 export function SectionIdentity({ l }: { l: Locale }) {
-  const { t, tr } = getT(l);
+  const { t, tr, lp } = getT(l);
 
   return (
     <section
@@ -212,11 +214,9 @@ export function SectionIdentity({ l }: { l: Locale }) {
             >
               {tr("[ contact me ]", "[ me contacter ]")}
             </a>
-            <a
-              href={t(profile.cvUrl)}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-cursor="open ↗"
+            <Link
+              href={lp(docPath(CV_DOC))}
+              data-cursor="read →"
               style={{
                 color: "var(--color-blood)",
                 textDecoration: "none",
@@ -226,8 +226,8 @@ export function SectionIdentity({ l }: { l: Locale }) {
                 whiteSpace: "nowrap",
               }}
             >
-              {"[ CV ↗ ]"}
-            </a>
+              {"[ CV → ]"}
+            </Link>
           </div>
         </div>
 

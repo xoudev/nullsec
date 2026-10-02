@@ -4,6 +4,8 @@ import type { CurtainLabels } from "@/lib/curtain";
 import { profile } from "@/profile";
 import { work } from "@/content/work";
 import { dispatches } from "@/content/dispatches";
+import { documents, docEyebrow } from "@/lib/documents";
+import { docPath } from "@/lib/doc-routes";
 
 /**
  * Every page a link can lead to, with the line and the title the curtain
@@ -48,6 +50,9 @@ export function curtainLabels(l: Locale): CurtainLabels {
       eyebrow: `${sectionLabel("dispatches", l)} · ${day(d.date)}`,
       title: d.title[l],
     };
+  }
+  for (const d of documents()) {
+    labels[localePath(l, docPath(d.slug))] = { eyebrow: docEyebrow(d, l), title: d.title[l] };
   }
   return labels;
 }

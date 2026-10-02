@@ -6,6 +6,8 @@ import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { profile } from "@/profile";
 import { useT } from "@/lib/i18n";
+import { localePath } from "@/lib/locale";
+import { CV_DOC, docPath } from "@/lib/doc-routes";
 import { section, sectionLabel } from "@/lib/sections";
 import { TWERK_BANNER, fireTwerk } from "@/components/EasterEgg";
 
@@ -107,7 +109,7 @@ function runCommand(raw: string, t: T, tr: Tr, history: string[] = []): OutputLi
   }
   if (bin === "cat") {
     if (argv[1] === "cv.pdf") {
-      return [{ type: "output", text: tr(`binary file. open it: ${profile.siteUrl}${t(profile.cvUrl)}`, `fichier binaire. À ouvrir ici : ${profile.siteUrl}${t(profile.cvUrl)}`) }];
+      return [{ type: "output", text: tr(`binary file. read it here: ${profile.siteUrl}${localePath("en", docPath(CV_DOC))}`, `fichier binaire. À lire ici : ${profile.siteUrl}${localePath("fr", docPath(CV_DOC))}`) }];
     }
     if (argv[1] === "pgp.txt") return [{ type: "output", text: profile.pgpKey }];
     if (!argv[1]) return [{ type: "error", text: tr("usage: cat <file>", "usage : cat <fichier>") }];
@@ -207,7 +209,7 @@ function runCommand(raw: string, t: T, tr: Tr, history: string[] = []): OutputLi
 
     case "cv":
       return [
-        { type: "output", text: tr(`cv available at ${profile.siteUrl}${t(profile.cvUrl)}`, `cv consultable sur ${profile.siteUrl}${t(profile.cvUrl)}`) },
+        { type: "output", text: tr(`cv: ${profile.siteUrl}${localePath("en", docPath(CV_DOC))} (pdf: ${t(profile.cvUrl)})`, `cv consultable sur ${profile.siteUrl}${localePath("fr", docPath(CV_DOC))} (pdf : ${t(profile.cvUrl)})`) },
         { type: "output", text: tr("compiled from source — see scripts/build-cv.mjs", "compilé depuis les sources : voir scripts/build-cv.mjs") },
       ];
 
@@ -312,7 +314,7 @@ export function SectionHandshake() {
   const history = useRef<string[]>([]);
   const historyPos = useRef(-1);
   const prefersReduced = useReducedMotion();
-  const { t, tr } = useT();
+  const { t, tr, lp } = useT();
 
   // Keep the latest locale helpers reachable from effects/handlers without
   // re-running the boot sequence on locale change.
@@ -760,7 +762,7 @@ export function SectionHandshake() {
           { label: "email", href: `mailto:${profile.email}` },
           { label: "github", href: profile.github },
           { label: "linkedin", href: profile.linkedin },
-          { label: "cv", href: t(profile.cvUrl) },
+          { label: "cv", href: lp(docPath(CV_DOC)) },
         ].map(({ label, href }) => (
           <a
             key={label}

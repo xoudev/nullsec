@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useT } from "@/lib/i18n";
 import type { WorkItem } from "@/content/work";
+import { docPath, docSlug } from "@/lib/doc-routes";
 
 export function WorkArticle({
   item,
@@ -324,12 +325,9 @@ export function WorkArticle({
                 </a>
               )}
               {item.documents?.map((doc) => (
-                <a
+                <Link
                   key={doc.href}
-                  href={doc.href}
-                  type="application/pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={lp(docPath(docSlug(doc.href)))}
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
@@ -345,7 +343,7 @@ export function WorkArticle({
                     `[ pdf · ${doc.label.en.toLowerCase()}${doc.lang === "fr" ? " (fr)" : ""} · ${doc.pages} pp. → ]`,
                     `[ pdf · ${doc.label.fr.toLowerCase()}${doc.lang === "en" ? " (en)" : ""} · ${doc.pages} p. → ]`,
                   )}
-                </a>
+                </Link>
               ))}
             </div>
           )}
