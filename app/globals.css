@@ -890,3 +890,74 @@ section[data-section-id]:focus { outline: none; }
     animation: none !important;
   }
 }
+
+/* ─── Scroll reveal for the server-rendered sections (components/Reveal) ──
+   Armed by a class Reveal sets once it has run, so nothing is hidden before
+   hydration or without JavaScript; transitions only exist under
+   .reveal-ready, set two frames later, so arming itself never animates. Per element: --reveal-y (travel),
+   --reveal-delay (stagger), --reveal-duration. Same curve the GSAP reveals
+   used (power3.out). ─── */
+.reveal-ready [data-reveal] {
+  transition:
+    opacity var(--reveal-duration, 0.6s) cubic-bezier(0.215, 0.61, 0.355, 1) var(--reveal-delay, 0s),
+    transform var(--reveal-duration, 0.6s) cubic-bezier(0.215, 0.61, 0.355, 1) var(--reveal-delay, 0s);
+}
+.reveal-armed [data-reveal]:not([data-revealed]) {
+  opacity: 0;
+  transform: translateY(var(--reveal-y, 30px));
+}
+/* Reduced motion: a soft fade, no travel (what softReveal did). */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-ready [data-reveal] { transition: opacity 0.3s ease-out; }
+  .reveal-armed [data-reveal]:not([data-revealed]) { transform: none; }
+}
+
+/* ─── Fieldwork rows (server-rendered): the hover is CSS ─────────────────
+   At rest the bone wipe is clipped to nothing and also hidden (contrast
+   checkers ignore clip-path). On hover, or focus (:focus-within rather
+   than :has(): cheaper to keep up to date while the page parses), it wipes left to
+   right (the expo.inOut curve the GSAP version used) and the text darkens
+   over it. Only where there is a hover and motion is welcome. ─── */
+.fw-wipe {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-color: var(--color-bone);
+  clip-path: inset(0 100% 0 0);
+  visibility: hidden;
+  pointer-events: none;
+}
+.fw-title { color: var(--color-bone); }
+.fw-excerpt { color: rgba(242, 239, 232, 0.68); }
+.fw-index,
+.fw-tags,
+.fw-year { color: var(--color-ash); }
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .fw-wipe {
+    transition: clip-path 0.45s cubic-bezier(0.87, 0, 0.13, 1), visibility 0s linear 0.45s;
+  }
+  .fw-title,
+  .fw-excerpt,
+  .fw-tags,
+  .fw-year { transition: color 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+  .fw-index { transition: color 0.18s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+
+  .fw-row:hover .fw-wipe,
+  .fw-row:focus-within .fw-wipe {
+    clip-path: inset(0 0 0 0);
+    visibility: visible;
+    transition: clip-path 0.55s cubic-bezier(0.87, 0, 0.13, 1), visibility 0s;
+  }
+  .fw-row:hover .fw-title,
+  .fw-row:focus-within .fw-title { color: var(--color-void); }
+  .fw-row:hover .fw-excerpt,
+  .fw-row:focus-within .fw-excerpt { color: rgba(10, 10, 11, 0.75); }
+  .fw-row:hover .fw-tags,
+  .fw-row:hover .fw-year,
+  .fw-row:focus-within .fw-tags,
+  .fw-row:focus-within .fw-year { color: rgba(10, 10, 11, 0.7); }
+  /* The bright orange is 2.5:1 on bone; this darker one clears 5:1. */
+  .fw-row:hover .fw-index,
+  .fw-row:focus-within .fw-index { color: #b23e00; }
+}

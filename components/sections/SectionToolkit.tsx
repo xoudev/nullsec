@@ -6,8 +6,15 @@ import { gsap } from "@/lib/gsap";
 import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { Fragment } from "react";
-import { toolkitDomains, toolkitEntryCount, domainEvidence } from "@/content/toolkit";
-import { work } from "@/content/work";
+import { toolkitDomains, toolkitEntryCount } from "@/content/toolkit";
+import type { Localized } from "@/lib/i18n";
+
+/** Per domain: where its proofs come from (computed on the server, see
+ *  app/[locale]/page.tsx, so the case studies' text never ships here). */
+export type ToolkitEvidence = {
+  contexts: string[];
+  works: { slug: string; title: Localized<string> }[];
+}[];
 import { useT } from "@/lib/i18n";
 import { section, sectionLabel } from "@/lib/sections";
 import { spell } from "@/lib/spell";
@@ -51,7 +58,7 @@ function runScramble(el: HTMLElement, text: string): () => void {
   return () => { cancelAnimationFrame(raf); el.textContent = text; };
 }
 
-export function SectionToolkit() {
+export function SectionToolkit({ evidence }: { evidence: ToolkitEvidence }) {
   const sectionRef = useRef<HTMLElement>(null);
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
   const titleRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -381,13 +388,13 @@ export function SectionToolkit() {
                     <span aria-hidden="true">{"// "}</span>
                     {tr("proof: ", "preuves : ")}
                     {(() => {
-                      const ev = domainEvidence(domain);
+                      const ev = evidence[d] ?? { contexts: [], works: [] };
                       const items = [
                         ...ev.contexts.map((c) => ({ key: c, label: c, href: null as string | null })),
-                        ...ev.works.map((slug) => ({
-                          key: slug,
-                          label: t(work.find((w) => w.slug === slug)?.title ?? { en: slug, fr: slug }),
-                          href: lp(`/work/${slug}`),
+                        ...ev.works.map((w) => ({
+                          key: w.slug,
+                          label: t(w.title),
+                          href: lp(`/work/${w.slug}`),
                         })),
                       ];
                       return items.map((it, k) => (

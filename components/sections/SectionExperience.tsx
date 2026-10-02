@@ -1,48 +1,17 @@
-"use client";
-
-import { useEffect, useRef } from "react";
-import { gsap } from "@/lib/gsap";
-import { softReveal } from "@/lib/softReveal";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { profile } from "@/profile";
-import { useT } from "@/lib/i18n";
+import { getT } from "@/lib/i18n-static";
+import type { Locale } from "@/lib/locale";
 import { section, sectionLabel } from "@/lib/sections";
 
 const MONO = "var(--font-jetbrains-mono)";
 
-export function SectionExperience() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const entryRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const prefersReduced = useReducedMotion();
-  const { t, tr } = useT();
-
-  useEffect(() => {
-    const entries = entryRefs.current.filter(Boolean) as HTMLElement[];
-
-    if (prefersReduced) {
-      entries.forEach((el) => gsap.set(el, { y: 0 }));
-      return softReveal(entries);
-    }
-
-    entries.forEach((el) => gsap.set(el, { opacity: 0, y: 30 }));
-    const observer = new IntersectionObserver(
-      (es) => {
-        es.forEach((e) => {
-          if (!e.isIntersecting) return;
-          const i = entries.indexOf(e.target as HTMLElement);
-          gsap.to(e.target, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", delay: i * 0.08 });
-          observer.unobserve(e.target);
-        });
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -50px 0px" },
-    );
-    entries.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, [prefersReduced]);
+// Server component: the entries reveal on scroll through data-reveal
+// (components/Reveal.tsx), not through a GSAP effect of their own.
+export function SectionExperience({ l }: { l: Locale }) {
+  const { t, tr } = getT(l);
 
   return (
     <section
-      ref={sectionRef}
       data-section-id={section("experience").id}
       aria-label={tr("Experience", "Expérience")}
       style={{
@@ -94,9 +63,9 @@ export function SectionExperience() {
           return (
             <div
               key={xp.company}
-              ref={(el) => { entryRefs.current[i] = el; }}
               className="exp-entry"
-              style={{ willChange: "transform, opacity" }}
+              data-reveal=""
+              style={{ "--reveal-delay": `${i * 0.08}s` } as React.CSSProperties}
             >
               {/* Meta row — period anchored left, company anchored right */}
               <div

@@ -1,11 +1,7 @@
-"use client";
-
-import { useEffect, useRef, ViewTransition } from "react";
+import { ViewTransition } from "react";
 import Link from "next/link";
-import { gsap } from "@/lib/gsap";
-import { softReveal } from "@/lib/softReveal";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { useT, type Locale } from "@/lib/i18n";
+import { getT } from "@/lib/i18n-static";
+import type { Locale } from "@/lib/locale";
 import { dispatchTitleTransition } from "@/lib/transitions";
 import { section, sectionLabel } from "@/lib/sections";
 import { dispatches } from "@/content/dispatches";
@@ -18,42 +14,12 @@ function formatDate(iso: string, locale: Locale): string {
   });
 }
 
-export function SectionDispatches() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const itemRefs   = useRef<(HTMLLIElement | null)[]>([]);
-  const prefersReduced = useReducedMotion();
-  const { t, tr, lp, locale } = useT();
+export function SectionDispatches({ l }: { l: Locale }) {
+  const { t, tr, lp, locale } = getT(l);
 
-  // Staggered entrance via IntersectionObserver
-  useEffect(() => {
-    const items = itemRefs.current.filter(Boolean) as HTMLElement[];
-    // Reduced motion: soft opacity fade-in, no slide/stagger travel.
-    if (prefersReduced) return softReveal(items);
-    items.forEach((el) => gsap.set(el, { opacity: 0, y: 50 }));
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry, i) => {
-          if (!entry.isIntersecting) return;
-          gsap.to(entry.target, {
-            opacity: 1, y: 0,
-            duration: 0.8,
-            delay: i * 0.1,
-            ease: "power2.out",
-          });
-          observer.unobserve(entry.target);
-        });
-      },
-      { threshold: 0.1, rootMargin: "0px 0px -60px 0px" },
-    );
-
-    items.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, [prefersReduced]);
 
   return (
     <section
-      ref={sectionRef}
       id="dispatches"
       data-section-id={section("dispatches").id}
       aria-label={tr("Dispatches", "Dépêches")}
@@ -97,8 +63,13 @@ export function SectionDispatches() {
         {dispatches.map((post, i) => (
           <li
             key={post.slug}
-            ref={(el) => { itemRefs.current[i] = el; }}
-            style={{ borderTop: "1px solid rgba(107,107,107,0.2)" }}
+            data-reveal=""
+            style={{
+              borderTop: "1px solid rgba(107,107,107,0.2)",
+              "--reveal-y": "50px",
+              "--reveal-duration": "0.8s",
+              "--reveal-delay": `${Math.min(i, 3) * 0.1}s`,
+            } as React.CSSProperties}
           >
             {/* Full-width flex row: text block left, ghost number right */}
             <Link
