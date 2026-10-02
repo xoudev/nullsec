@@ -42,7 +42,7 @@ export function LanguageToggle() {
         alignItems: "center",
         gap: "0.35em",
         fontFamily: "var(--font-jetbrains-mono), monospace",
-        fontSize: "0.62rem",
+        fontSize: "0.75rem",
         letterSpacing: "0.12em",
         userSelect: "none",
         pointerEvents: "none",

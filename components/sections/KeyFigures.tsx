@@ -34,7 +34,7 @@ export function KeyFigures() {
   const { t, tr, lp } = useT();
 
   // "80%" in the data; French sets a narrow no-break space before the sign.
-  const score = held?.score ? tr(held.score, held.score.replace("%", " %")) : null;
+  const score = held?.score ? tr(held.score, held.score.replace("%", "\u202F%")) : null;
 
   const figures: { value: string; label: React.ReactNode }[] = [
     { value: "5", label: tr("EBIOS RM risk analyses at Arvato", "analyses de risques EBIOS RM chez Arvato") },

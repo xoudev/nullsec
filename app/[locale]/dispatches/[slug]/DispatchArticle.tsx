@@ -47,7 +47,7 @@ export function DispatchArticle({
           gap: "0.6rem",
           marginBottom: "clamp(4rem, 8vw, 7rem)",
           fontFamily: "var(--font-jetbrains-mono)",
-          fontSize: "0.7rem",
+          fontSize: "0.8rem",
           letterSpacing: "0.06em",
         }}
       >
@@ -69,7 +69,7 @@ export function DispatchArticle({
             display: "flex",
             gap: "1.5rem",
             fontFamily: "var(--font-jetbrains-mono)",
-            fontSize: "0.65rem",
+            fontSize: "0.75rem",
             color: "var(--color-ash)",
             letterSpacing: "0.06em",
             marginBottom: "1.25rem",
@@ -162,7 +162,7 @@ export function DispatchArticle({
           <div
             style={{
               fontFamily: "var(--font-jetbrains-mono)",
-              fontSize: "0.55rem",
+              fontSize: "0.75rem",
               color: "var(--color-ash)",
               letterSpacing: "0.15em",
               marginBottom: "0.6rem",
@@ -175,7 +175,7 @@ export function DispatchArticle({
             style={{
               display: "block",
               fontFamily: "var(--font-jetbrains-mono)",
-              fontSize: "0.72rem",
+              fontSize: "0.8rem",
               color: "var(--color-bone)",
               letterSpacing: "0.04em",
               marginBottom: "clamp(1.5rem, 2.5vw, 2rem)",
@@ -188,7 +188,7 @@ export function DispatchArticle({
           <div
             style={{
               fontFamily: "var(--font-jetbrains-mono)",
-              fontSize: "0.55rem",
+              fontSize: "0.75rem",
               color: "var(--color-ash)",
               letterSpacing: "0.15em",
               marginBottom: "0.6rem",
@@ -199,7 +199,7 @@ export function DispatchArticle({
           <div
             style={{
               fontFamily: "var(--font-jetbrains-mono)",
-              fontSize: "0.72rem",
+              fontSize: "0.8rem",
               color: "var(--color-bone)",
               letterSpacing: "0.04em",
               marginBottom: "clamp(2.5rem, 4vw, 3.5rem)",
@@ -246,7 +246,7 @@ export function DispatchArticle({
             <span
               style={{
                 fontFamily: "var(--font-jetbrains-mono)",
-                fontSize: "0.6rem",
+                fontSize: "0.75rem",
                 color: "var(--color-ash)",
                 letterSpacing: "0.08em",
               }}
@@ -283,7 +283,7 @@ export function DispatchArticle({
             <span
               style={{
                 fontFamily: "var(--font-jetbrains-mono)",
-                fontSize: "0.6rem",
+                fontSize: "0.75rem",
                 color: "var(--color-ash)",
                 letterSpacing: "0.08em",
               }}

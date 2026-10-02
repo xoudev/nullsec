@@ -30,6 +30,11 @@ export type WorkItem = {
   facts: WorkFact[];
   body: Localized<string[]>;   // paragraphs of editorial copy
   image?: string;   // optional path relative to /public — omit when no asset exists yet
+  /** The image is the project's own mark: shown in its own colours. Anything
+   *  else (third-party artwork, photos) is set in grayscale to sit inside the
+   *  four-colour palette, but greying out Toron's orange or Hune's flag erased
+   *  the identity of the very products the page is about. */
+  ownMark?: boolean;
   liveUrl?: string; // optional public / live site link
   repoUrl?: string; // optional public source repository
   /**
@@ -70,6 +75,7 @@ export const work: WorkItem[] = [
     index: "001",
     title: { en: "TORON", fr: "TORON" },
     image: "/toron.png",
+    ownMark: true,
     year: "2026",
     tags: ["ISO 27001", "NIS2", "EBIOS RM", "PostgreSQL RLS", "Better Auth", "Scaleway"],
     documents: [
@@ -117,6 +123,7 @@ export const work: WorkItem[] = [
     index: "002",
     title: { en: "HUNE", fr: "HUNE" },
     image: "/hune.png",
+    ownMark: true,
     year: "2026",
     tags: ["RMM", "mTLS", "Ed25519", "gRPC", "Apache Guacamole", "PostgreSQL RLS"],
     documents: [
@@ -174,6 +181,7 @@ export const work: WorkItem[] = [
     index: "003",
     title: { en: "CYBERLEARN", fr: "CYBERLEARN" },
     image: "/Log_blanc_large.png",
+    ownMark: true,
     liveUrl: "https://cyberlearn.fr",
     year: "2025",
     tags: ["Turborepo", "Next.js 15", "Supabase", "Prisma", "PostgreSQL RLS", "Remotion"],

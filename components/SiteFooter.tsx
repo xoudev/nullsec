@@ -39,7 +39,7 @@ export function SiteFooter() {
         alignItems: "baseline",
         gap: "1rem 2rem",
         fontFamily: MONO,
-        fontSize: "0.65rem",
+        fontSize: "0.75rem",
         color: "var(--color-ash)",
         letterSpacing: "0.06em",
       }}

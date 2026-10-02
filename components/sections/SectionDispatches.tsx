@@ -67,7 +67,7 @@ export function SectionDispatches() {
         aria-hidden="true"
         style={{
           fontFamily:    "var(--font-jetbrains-mono)",
-          fontSize:      "0.65rem",
+          fontSize:      "0.75rem",
           color:         "var(--color-blood)",
           letterSpacing: "0.1em",
           marginBottom:  "clamp(2rem, 4vw, 3rem)",
@@ -113,7 +113,7 @@ export function SectionDispatches() {
                     display:       "flex",
                     gap:           "1.5rem",
                     fontFamily:    "var(--font-jetbrains-mono)",
-                    fontSize:      "0.65rem",
+                    fontSize:      "0.75rem",
                     color:         "var(--color-ash)",
                     letterSpacing: "0.06em",
                     marginBottom:  "0.75rem",

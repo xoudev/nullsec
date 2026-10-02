@@ -295,11 +295,6 @@ section[data-section-id] { isolation: isolate; }
   .toolkit-entry { padding: 0.45rem 0.2rem; margin: -0.45rem -0.2rem; }
 }
 
-/* ─── Fieldwork excerpt: tighter on small screens but always present ─── */
-@media (max-width: 767px) {
-  .fieldwork-excerpt { font-size: 0.62rem; }
-}
-
 /* ─── Off-duty subtitle over always-on mobile imagery: lift from ash to
    near-bone so it stays readable against mid-gray artwork. ─── */
 @media (hover: none) {

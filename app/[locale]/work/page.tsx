@@ -102,7 +102,7 @@ export default async function WorkIndexPage({
           className="hover-to-bone"
           style={{
             fontFamily: "var(--font-jetbrains-mono)",
-            fontSize: "0.7rem",
+            fontSize: "0.8rem",
             letterSpacing: "0.06em",
           }}
         >
@@ -112,7 +112,7 @@ export default async function WorkIndexPage({
           aria-hidden="true"
           style={{
             fontFamily: "var(--font-jetbrains-mono)",
-            fontSize: "0.65rem",
+            fontSize: "0.75rem",
             color: "var(--color-blood)",
             letterSpacing: "0.1em",
           }}
@@ -127,7 +127,7 @@ export default async function WorkIndexPage({
           aria-hidden="true"
           style={{
             fontFamily: "var(--font-jetbrains-mono)",
-            fontSize: "0.65rem",
+            fontSize: "0.75rem",
             color: "var(--color-blood)",
             letterSpacing: "0.1em",
             marginBottom: "1.25rem",
@@ -174,7 +174,7 @@ export default async function WorkIndexPage({
                   aria-hidden="true"
                   style={{
                     fontFamily: "var(--font-jetbrains-mono)",
-                    fontSize: "0.6rem",
+                    fontSize: "0.75rem",
                     color: "var(--color-ash)",
                     letterSpacing: "0.14em",
                     padding: "clamp(2.5rem, 5vw, 4rem) 0 clamp(1rem, 2vw, 1.5rem)",
@@ -202,7 +202,7 @@ export default async function WorkIndexPage({
                   aria-hidden="true"
                   style={{
                     fontFamily: "var(--font-jetbrains-mono)",
-                    fontSize: "clamp(0.65rem, 0.9vw, 0.8rem)",
+                    fontSize: "clamp(0.75rem, 0.9vw, 0.85rem)",
                     color: "var(--color-ash)",
                     minWidth: "2.5rem",
                     letterSpacing: "0.05em",
@@ -229,7 +229,7 @@ export default async function WorkIndexPage({
                   <span
                     style={{
                       fontFamily: "var(--font-jetbrains-mono)",
-                      fontSize: "0.68rem",
+                      fontSize: "0.8rem",
                       color: "var(--color-ash)",
                       lineHeight: 1.55,
                       letterSpacing: "0.02em",
@@ -246,7 +246,7 @@ export default async function WorkIndexPage({
                   className="hidden md:flex"
                   style={{
                     fontFamily: "var(--font-jetbrains-mono)",
-                    fontSize: "0.6rem",
+                    fontSize: "0.75rem",
                     color: "var(--color-ash)",
                     letterSpacing: "0.04em",
                     gap: "0.5rem",
@@ -260,7 +260,7 @@ export default async function WorkIndexPage({
                   aria-hidden="true"
                   style={{
                     fontFamily: "var(--font-jetbrains-mono)",
-                    fontSize: "clamp(0.65rem, 0.9vw, 0.8rem)",
+                    fontSize: "clamp(0.75rem, 0.9vw, 0.85rem)",
                     color: "var(--color-ash)",
                     letterSpacing: "0.05em",
                     whiteSpace: "nowrap",
