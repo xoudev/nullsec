@@ -16,8 +16,11 @@ import { CURTAIN_LIFTED, type CurtainLabel, type CurtainLabels } from "@/lib/cur
  * GET /fr/work/toron, then 200 · 14 ms once the page is there. The figure is
  * measured: the time from router.push to the new route being on screen.
  * It is often a few milliseconds, because Next fetched the page as soon as
- * its link scrolled into view. Then the strips leave through the top, wave
- * first, and take the title with them, sliced.
+ * its link scrolled into view. The poster then holds, long enough to be
+ * read, before the strips leave through the top, wave first, and take the
+ * title with them, sliced. A click, a tap or a key on the curtain cuts the
+ * hold short, once the new page is there: a visitor going through five case
+ * studies does not have to sit through five full posters.
  *
  * Only for pages the server listed (lib/curtain-labels.ts) and plain clicks:
  * a modified click, a new tab, a download, the CV, the feed, an anchor on the
@@ -42,7 +45,7 @@ const LAYER_GAP = 60; // bone behind blood on the way in, blood behind bone on t
 const SPREAD = 130; // the wave, from the clicked column to the farthest one
 const EASE = "cubic-bezier(0.76, 0, 0.24, 1)";
 const DECODE_AT = 240; // the title starts settling while the strips land
-const HOLD = 150; // the title, fully set, before the curtain lifts
+const HOLD = 800; // the poster, fully set and the page there, before the lift
 const GIVE_UP = 8000; // no new page by then: lift the curtain anyway
 const NOISE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&*+/<=>?@[]{}";
 
@@ -225,6 +228,19 @@ export function PageTransition({ labels }: { labels: CurtainLabels }) {
     window.addEventListener("popstate", onPop);
     window.addEventListener("pageshow", onShow);
 
+    // Cutting the hold short: armed only once the new page is there, so a
+    // double click on the link that started all this cannot skip the cover.
+    let skip = () => {};
+    const skipped = new Promise<void>((resolve) => {
+      skip = resolve;
+    });
+    let skippable = false;
+    const onSkip = () => {
+      if (skippable) skip();
+    };
+    root.addEventListener("pointerdown", onSkip);
+    window.addEventListener("keydown", onSkip);
+
     const chars = run.label.title.replace(/\s/g, "").length;
     const decoder = scramble(root, DECODE_AT, Math.min(600, 240 + chars * 10));
 
@@ -256,7 +272,8 @@ export function PageTransition({ labels }: { labels: CurtainLabels }) {
         }
 
         await Promise.all([sheeted, decoder.done]);
-        await wait(HOLD);
+        skippable = true;
+        await Promise.race([wait(HOLD), skipped]);
         await nextFrame();
         await nextFrame();
         if (!alive) return;
@@ -280,6 +297,8 @@ export function PageTransition({ labels }: { labels: CurtainLabels }) {
       onPath.current = null;
       window.removeEventListener("popstate", onPop);
       window.removeEventListener("pageshow", onShow);
+      root.removeEventListener("pointerdown", onSkip);
+      window.removeEventListener("keydown", onSkip);
       delete html.dataset.curtain;
       lenisRef.current?.start();
       busy.current = false;
