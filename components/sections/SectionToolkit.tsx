@@ -7,6 +7,7 @@ import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { toolkitDomains, toolkitEntryCount } from "@/content/toolkit";
 import { useT } from "@/lib/i18n";
+import { section, sectionLabel } from "@/lib/sections";
 import { spell } from "@/lib/spell";
 
 // Initial clip for the bone title panel's reveal, depending on which side it sits.
@@ -155,7 +156,7 @@ export function SectionToolkit() {
   return (
     <section
       ref={sectionRef}
-      data-section-id="03"
+      data-section-id={section("toolkit").id}
       aria-label={tr("Toolkit: competence domains", "Outillage : domaines de compétences")}
       style={{
         backgroundColor: "var(--color-void)",
@@ -163,8 +164,6 @@ export function SectionToolkit() {
         position: "relative",
       }}
     >
-      <span aria-hidden="true" className="ghost-numeral">03</span>
-
       {/* Header row */}
       <div
         style={{
@@ -184,7 +183,7 @@ export function SectionToolkit() {
             letterSpacing: "0.1em",
           }}
         >
-          {tr("03 // TOOLKIT", "03 // OUTILLAGE")}
+          {tr(sectionLabel("toolkit", "en"), sectionLabel("toolkit", "fr"))}
         </span>
         <span
           aria-hidden="true"

@@ -9,7 +9,6 @@
   --color-void:  #0F0F12; /* soft dark background, lifted from #0A0A0B — keeps blood accent ≥4.5:1 AA */
   --color-bone:  #F2EFE8; /* off-white foreground  */
   --color-blood: #FF6B1A; /* orange — primary accent (var name kept for reach) */
-  --color-violet: #8B5CF6; /* violet — secondary accent: ghost numerals + hero rule */
   --color-ash:   #8A8A8A; /* mid-grey metadata — lifted from #707070 to clear WCAG AA (≈5.4:1 on void) */
 
   /* Font stacks — variables are injected by next/font on <html> */
@@ -241,31 +240,11 @@ html[lang="fr"] .nf-en { display: none; }
   .offduty-row:hover .offduty-title { transform: none; }
 }
 
-/* ─── Ghost section numeral — the site's signature device, systematised.
-   One oversized dimmed numeral per section (same family as the dispatch
-   ghost numbers). z-index -1 paints it under the in-flow content while the
-   section's background-color (non-stacking-context) stays behind it. ─── */
-/* Each numbered section isolates its stacking context so the z-index:-1
-   numeral paints above the section's own background (not under it). */
+/* Each numbered section is its own stacking context. It was introduced for
+   the oversized ghost numerals (z-index -1, painted over the section
+   background); those are gone, replaced by the one fixed SectionCounter, but
+   the sections' internal layering has been built on this ever since. */
 section[data-section-id] { isolation: isolate; }
-
-.ghost-numeral {
-  position: absolute;
-  top: clamp(1.5rem, 3vw, 2.5rem);
-  right: clamp(1.5rem, 4vw, 3rem);
-  z-index: -1;
-  font-family: var(--font-jetbrains-mono);
-  font-size: clamp(7rem, 15vw, 17rem);
-  line-height: 0.9;
-  color: var(--color-violet);
-  opacity: 0.15;
-  letter-spacing: -0.04em;
-  user-select: none;
-  pointer-events: none;
-}
-@media (max-width: 767px) {
-  .ghost-numeral { font-size: clamp(5rem, 24vw, 8rem); opacity: 0.13; }
-}
 
 /* ─── Terminal header: hide centred title on very narrow screens ─── */
 @media (max-width: 480px) {
@@ -480,7 +459,7 @@ section[data-section-id] { isolation: isolate; }
   font-style: italic;
   font-size: clamp(4rem, 7vw, 7rem);
   line-height: 1;
-  color: rgba(139, 92, 246, 0.16);
+  color: rgba(138, 138, 138, 0.18);
   letter-spacing: -0.03em;
   user-select: none;
 }
@@ -488,8 +467,8 @@ section[data-section-id] { isolation: isolate; }
 .dispatch-number {
   font-family: var(--font-jetbrains-mono);
   font-size: clamp(4rem, 8vw, 8rem);
-  color: var(--color-violet);
-  opacity: 0.15;
+  color: var(--color-ash);
+  opacity: 0.2;
   line-height: 1;
   flex-shrink: 0;
   letter-spacing: -0.02em;
@@ -633,7 +612,7 @@ section[data-section-id] { isolation: isolate; }
   .language-toggle,
   .custom-cursor,
   .skip-link,
-  .ghost-numeral,
+  .section-counter,
   .easter-egg,
   .site-footer {
     display: none !important;
@@ -645,3 +624,74 @@ section[data-section-id] { isolation: isolate; }
     font-size: 0.8em;
   }
 }
+
+/* ─── Section counter: one fixed "03 / 09 · TERRAIN" that opens into the
+   section index. Shown where the desktop HUD is not: under 768px, and under
+   reduced motion (SectionCounter adds --force, like .audio-control). Hidden
+   while the hero is on screen, whose own buttons sit bottom-left. ─── */
+.section-counter {
+  display: none;
+  position: fixed;
+  left: 0.75rem;
+  bottom: 0.75rem;
+  z-index: 60;
+  font-family: var(--font-jetbrains-mono), monospace;
+  transition: opacity 0.25s ease, visibility 0.25s;
+}
+@media (max-width: 767px) { .section-counter { display: block; } }
+.section-counter--force { display: block; }
+.section-counter[data-hidden] { opacity: 0; visibility: hidden; }
+
+.section-counter-button {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5em;
+  min-height: 2.75rem;
+  padding: 0.6rem 0.85rem;
+  background: rgba(15, 15, 18, 0.9);
+  border: 1px solid rgba(138, 138, 138, 0.35);
+  font: inherit;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--color-ash);
+}
+.section-counter-num { color: var(--color-blood); }
+.section-counter-name { color: var(--color-bone); }
+.section-counter-caret { font-size: 0.7em; }
+
+.section-counter-menu {
+  display: none;
+  min-width: 15rem;
+  margin-bottom: 0.5rem;
+  background: rgba(15, 15, 18, 0.97);
+  border: 1px solid rgba(138, 138, 138, 0.35);
+}
+.section-counter-menu[data-open] { display: block; }
+.section-counter-menu ol { list-style: none; margin: 0; padding: 0.35rem 0; }
+.section-counter-menu button {
+  display: flex;
+  align-items: center;
+  gap: 0.9em;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  background: none;
+  border: 0;
+  text-align: left;
+  font: inherit;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  color: var(--color-ash);
+}
+.section-counter-menu button > span { color: var(--color-blood); }
+.section-counter-menu button[aria-current],
+.section-counter-menu button:hover,
+.section-counter-menu button:focus-visible { color: var(--color-bone); }
+@media (prefers-reduced-motion: reduce) {
+  .section-counter { transition: none; }
+}
+
+/* Focus follows the counter's jumps (SectionCounter.go): the section takes
+   it so the next Tab starts there. The scroll already shows where it went;
+   an outline around a whole screen would only add noise. */
+section[data-section-id]:focus { outline: none; }

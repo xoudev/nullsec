@@ -5,6 +5,7 @@ import { dispatches } from "@/content/dispatches";
 import { profile } from "@/profile";
 import { LOCALES, isLocale, localePath, type Locale } from "@/lib/locale";
 import { ogBase } from "@/lib/seo";
+import { section, sectionLabel } from "@/lib/sections";
 
 /* ─── Static generation ─── */
 export function generateStaticParams() {
@@ -124,7 +125,7 @@ export default async function DispatchesIndexPage({
             letterSpacing: "0.1em",
           }}
         >
-          07 // DISPATCHES
+          {sectionLabel("dispatches", l)}
         </span>
       </nav>
 
@@ -140,7 +141,7 @@ export default async function DispatchesIndexPage({
             marginBottom: "1.25rem",
           }}
         >
-          {"// DISPATCHES"}
+          {`// ${section("dispatches")[l]}`}
         </div>
         <h1
           style={{

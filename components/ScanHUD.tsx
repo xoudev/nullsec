@@ -7,6 +7,7 @@ import { useLenis } from "@/hooks/useLenis";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useT } from "@/lib/i18n";
 import { profile } from "@/profile";
+import { SECTION_LIST, section } from "@/lib/sections";
 import {
   getMuted, onMuteChange, toggleMute,
   getVolume, onVolumeChange, setVolume,
@@ -36,17 +37,8 @@ import {
 const subscribeMute = (cb: () => void) => onMuteChange(() => cb());
 const subscribeVolume = (cb: () => void) => onVolumeChange(() => cb());
 
-const SECTIONS: { id: string; label: string; fr: string }[] = [
-  { id: "01", label: "IDENTITY", fr: "IDENTITÉ" },
-  { id: "02", label: "FIELDWORK", fr: "TERRAIN" },
-  { id: "03", label: "TOOLKIT", fr: "OUTILLAGE" },
-  { id: "04", label: "CLEARANCE", fr: "HABILITATIONS" },
-  { id: "05", label: "ABOUT", fr: "À PROPOS" },
-  { id: "06", label: "EXPERIENCE", fr: "EXPÉRIENCE" },
-  { id: "07", label: "DISPATCHES", fr: "DÉPÊCHES" },
-  { id: "08", label: "OFF-DUTY", fr: "HORS SERVICE" },
-  { id: "09", label: "HANDSHAKE", fr: "CONTACT" },
-];
+// Numbers and names come from the one list the whole page reads.
+const SECTIONS = SECTION_LIST;
 
 export function ScanHUD() {
   const prefersReduced = useReducedMotion();
@@ -94,9 +86,9 @@ export function ScanHUD() {
         // Strip the /en or /fr locale prefix before matching the section.
         const rest = pathname.replace(/^\/(en|fr)(?=\/|$)/, "");
         nodeRef.current.textContent = rest.startsWith("/work")
-          ? "0x02"
+          ? `0x${section("fieldwork").id}`
           : rest.startsWith("/dispatches")
-            ? "0x07"
+            ? `0x${section("dispatches").id}`
             : "0x00";
       }
       return;
@@ -314,7 +306,7 @@ export function ScanHUD() {
               onMouseOver={(e) => { e.currentTarget.style.color = "var(--color-bone)"; }}
               onMouseOut={(e) => { e.currentTarget.style.color = "var(--color-ash)"; }}
             >
-              {`// ${s.id}     ${tr(s.label, s.fr)}`}
+              {`// ${s.id}     ${tr(s.en, s.fr)}`}
             </button>
           ))}
         </nav>

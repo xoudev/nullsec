@@ -6,6 +6,7 @@ import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { profile } from "@/profile";
 import { useT } from "@/lib/i18n";
+import { section, sectionLabel } from "@/lib/sections";
 
 const MONO = "var(--font-jetbrains-mono)";
 
@@ -42,7 +43,7 @@ export function SectionExperience() {
   return (
     <section
       ref={sectionRef}
-      data-section-id="06"
+      data-section-id={section("experience").id}
       aria-label={tr("Experience", "Expérience")}
       style={{
         backgroundColor: "var(--color-void)",
@@ -50,8 +51,6 @@ export function SectionExperience() {
         position: "relative",
       }}
     >
-      <span aria-hidden="true" className="ghost-numeral">06</span>
-
       {/* Header */}
       <div
         style={{
@@ -63,7 +62,7 @@ export function SectionExperience() {
         }}
       >
         <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.65rem", color: "var(--color-blood)", letterSpacing: "0.1em" }}>
-          {"06 // EXPERIENCE"}
+          {tr(sectionLabel("experience", "en"), sectionLabel("experience", "fr"))}
         </span>
         <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.6rem", color: "var(--color-ash)", letterSpacing: "0.1em", whiteSpace: "nowrap" }}>
           {`${String(profile.experience.length).padStart(2, "0")} ${tr("ROLES · SINCE 2024", "RÔLES · DEPUIS 2024")}`}
@@ -191,7 +190,7 @@ export function SectionExperience() {
           letterSpacing: "0.08em",
         }}
       >
-        <span>{"// EXPERIENCE"}</span>
+        <span>{`// ${tr(section("experience").en, section("experience").fr)}`}</span>
         <span>{"// ENV prod.nullsec"}</span>
       </div>
     </section>

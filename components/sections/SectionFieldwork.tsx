@@ -6,6 +6,7 @@ import { gsap } from "@/lib/gsap";
 import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useT } from "@/lib/i18n";
+import { section, sectionLabel } from "@/lib/sections";
 import { orderedWork } from "@/content/work";
 
 export function SectionFieldwork() {
@@ -100,7 +101,7 @@ export function SectionFieldwork() {
     <section
       ref={sectionRef}
       id="fieldwork"
-      data-section-id="02"
+      data-section-id={section("fieldwork").id}
       aria-label={tr("Fieldwork", "Travaux de terrain")}
       style={{
         backgroundColor: "var(--color-void)",
@@ -108,8 +109,6 @@ export function SectionFieldwork() {
         position: "relative",
       }}
     >
-      <span aria-hidden="true" className="ghost-numeral">02</span>
-
       {/* Section label */}
       <div
         aria-hidden="true"
@@ -121,7 +120,7 @@ export function SectionFieldwork() {
           marginBottom: "clamp(2rem, 4vw, 3rem)",
         }}
       >
-        {"02 // FIELDWORK"}
+        {tr(sectionLabel("fieldwork", "en"), sectionLabel("fieldwork", "fr"))}
       </div>
 
       {/* Display line — every chapter opens the same way */}

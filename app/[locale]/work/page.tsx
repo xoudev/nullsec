@@ -5,6 +5,7 @@ import { orderedWork } from "@/content/work";
 import { profile } from "@/profile";
 import { LOCALES, isLocale, localePath, type Locale } from "@/lib/locale";
 import { ogBase } from "@/lib/seo";
+import { section, sectionLabel } from "@/lib/sections";
 
 /* ─── Static generation ─── */
 export function generateStaticParams() {
@@ -116,7 +117,7 @@ export default async function WorkIndexPage({
             letterSpacing: "0.1em",
           }}
         >
-          02 // FIELDWORK
+          {sectionLabel("fieldwork", l)}
         </span>
       </nav>
 
@@ -132,7 +133,7 @@ export default async function WorkIndexPage({
             marginBottom: "1.25rem",
           }}
         >
-          {"// FIELDWORK"}
+          {`// ${section("fieldwork")[l]}`}
         </div>
         <h1
           style={{

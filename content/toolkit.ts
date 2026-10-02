@@ -1,4 +1,4 @@
-// Competence domains for the Toolkit section (03).
+// Competence domains for the Toolkit section (its number: lib/sections.ts).
 // Data-driven, mirrors the "content as data" pattern used by work / dispatches.
 // `proof` is a short, truthful evidence line revealed on hover/focus; omit when
 // there is nothing concrete to point at rather than inventing one.

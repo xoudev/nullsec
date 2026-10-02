@@ -5,6 +5,7 @@ import { gsap, loadScrollTrigger } from "@/lib/gsap";
 import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useT } from "@/lib/i18n";
+import { section, sectionLabel } from "@/lib/sections";
 import { clearances } from "@/content/clearances";
 import type { ClearanceStatus } from "@/content/clearances";
 import { ClearanceRadar } from "@/components/sections/ClearanceRadar";
@@ -144,7 +145,7 @@ export function SectionClearance() {
   return (
     <section
       ref={sectionRef}
-      data-section-id="04"
+      data-section-id={section("clearance").id}
       aria-label={tr("Clearance: certifications", "Habilitations : certifications")}
       style={{
         backgroundColor: "var(--color-void)",
@@ -152,8 +153,6 @@ export function SectionClearance() {
         position: "relative",
       }}
     >
-      <span aria-hidden="true" className="ghost-numeral">04</span>
-
       {/* Section header */}
       <div style={{ marginBottom: "clamp(3rem, 6vw, 5rem)" }}>
         <div
@@ -166,7 +165,7 @@ export function SectionClearance() {
             marginBottom:  "1.25rem",
           }}
         >
-          {"04 // CLEARANCE"}
+          {tr(sectionLabel("clearance", "en"), sectionLabel("clearance", "fr"))}
         </div>
         {/* Says what the section holds, counted from the data, rather than
             one more slogan: every section used to open on one. */}

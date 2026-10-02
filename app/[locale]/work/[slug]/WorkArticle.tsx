@@ -354,7 +354,7 @@ export function WorkArticle({
             style={{
               margin: "0 0 clamp(2rem, 3vw, 2.5rem)",
               padding: "0 0 0 1.25rem",
-              borderLeft: "2px solid var(--color-violet)",
+              borderLeft: "2px solid var(--color-blood)",
               fontFamily: "var(--font-instrument-serif)",
               fontStyle: "italic",
               fontSize: "clamp(1rem, 1.3vw, 1.15rem)",
