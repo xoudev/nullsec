@@ -1677,52 +1677,493 @@ section[data-section-id]:focus { outline: none; }
   .reveal-armed [data-reveal]:not([data-revealed]) { transform: none; }
 }
 
-/* ─── Fieldwork rows (server-rendered): the hover is CSS ─────────────────
-   At rest the bone wipe is clipped to nothing and also hidden (contrast
-   checkers ignore clip-path). On hover, or focus (:focus-within rather
-   than :has(): cheaper to keep up to date while the page parses), it wipes left to
-   right (the expo.inOut curve the GSAP version used) and the text darkens
-   over it. Only where there is a hover and motion is welcome. ─── */
-.fw-wipe {
+/* ─── Fieldwork: the projects as case files (SectionFieldwork) ───────────
+   A card per project: a strip (file number, year), the picture, the title,
+   the summary, the exhibits. The picture's layers, bottom to top: the image
+   (or the typographic cover), the document's sheet, a veil (a dim and scan
+   lines), the sweep line and the corners, the shutter. The shutter slides
+   off once, as the card comes into view (armed by Reveal, like the
+   entrance it follows). Under the pointer or the focus, a line sweeps the
+   picture: --dossier-hot is how far it has gone (0% at rest, 100% once
+   swept), the veil is clipped down to it and printed artwork turns from
+   bone to blood above it, so both follow the line exactly. ─── */
+@property --dossier-hot {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 0%;
+}
+
+.dossiers-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+.dossiers-count {
+  margin: 0;
+  padding-bottom: 0.45em;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  color: var(--color-ash);
+  white-space: nowrap;
+}
+
+.dossiers {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 1.6vw, 1.5rem);
+}
+/* Two by two, an odd one out at the end takes the whole row. */
+.dossier:last-child:nth-child(odd) { grid-column: 1 / -1; }
+@media (min-width: 1024px) {
+  .dossiers { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .dossier,
+  .dossier:last-child:nth-child(odd) { grid-column: span var(--span, 4); }
+}
+
+.dossier {
+  --visual-h: clamp(11rem, 24vw, 14rem);
+  display: flex;
+  min-width: 0;
+}
+@media (min-width: 1024px) {
+  .dossier { --visual-h: clamp(12rem, 16vw, 15rem); }
+  .dossier[data-lead] { --visual-h: clamp(15rem, 21vw, 19.5rem); }
+}
+
+.dossier-link {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  color: inherit;
+  text-decoration: none;
+  background-color: var(--color-void);
+  border: 1px solid rgba(107, 107, 107, 0.28);
+  transition: border-color 0.25s ease;
+}
+.dossier-link:focus-visible { border-color: var(--color-blood); }
+
+.dossier-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  height: 2.5rem;
+  padding: 0 0.95rem;
+  border-bottom: 1px solid rgba(107, 107, 107, 0.22);
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  color: var(--color-ash);
+  white-space: nowrap;
+}
+.dossier-no { transition: color 0.25s ease; }
+.dossier-annex {
+  padding: 0.15em 0.45em;
+  border: 1px solid rgba(138, 138, 138, 0.45);
+  color: var(--color-bone);
+}
+.dossier-year { margin-left: auto; }
+
+/* ── The picture ── */
+.dossier-visual {
+  --dossier-hot: 0%;
+  --sheet-h: 95cqh;
+  position: relative;
+  display: block;
+  height: var(--visual-h);
+  container-type: size;
+  overflow: hidden;
+  background-color: var(--color-void);
+  border-bottom: 1px solid rgba(107, 107, 107, 0.22);
+}
+.dossier-media {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  display: block;
+}
+/* The project's own mark, in its own colours; left of the sheet if there
+   is one (its width, from its height: the page's proportions). */
+.dossier-visual[data-kind="mark"] .dossier-media { inset: 11% 9%; }
+.dossier[data-sheet] .dossier-visual[data-kind="mark"] .dossier-media {
+  right: calc(7cqw + var(--sheet-h) * 0.707 + 4cqw);
+}
+/* Third-party artwork and photos, printed: the grey image inverted (a white
+   ground goes dark, the ink light), screened onto void, then dyed by
+   multiplying: bone, blood above the sweep. Multiplied, void comes out
+   darker than void (and browner under blood): a last layer lifts it back,
+   so the ground and the letterboxing stay the page's own. */
+.dossier-visual[data-kind="print"] .dossier-media {
+  inset: 10% 8%;
+  isolation: isolate;
+  background-color: var(--color-void);
+}
+.dossier-visual[data-kind="print"] .dossier-media img {
+  filter: grayscale(1) contrast(1.25) invert(1);
+  mix-blend-mode: screen;
+}
+.dossier-visual[data-kind="print"] .dossier-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(var(--color-blood) var(--dossier-hot), var(--color-bone) 0);
+  mix-blend-mode: multiply;
+}
+.dossier-visual[data-kind="print"] .dossier-media::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background-color: var(--color-void);
+  mix-blend-mode: lighten;
+}
+
+/* No picture: the markers as a readout over a plan's grid, the file number
+   as an outline. */
+.dossier-type {
+  position: absolute;
+  inset: 0;
+  display: block;
+  padding: 1rem 1.1rem;
+  background-image:
+    linear-gradient(rgba(138, 138, 138, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(138, 138, 138, 0.09) 1px, transparent 1px);
+  background-size: 1.5rem 1.5rem;
+  background-position: -1px -1px;
+}
+.dossier-readout {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: rgba(242, 239, 232, 0.82);
+}
+.dossier-ghost {
+  position: absolute;
+  right: 0.4rem;
+  bottom: -0.2em;
+  font-family: var(--font-instrument-serif);
+  font-style: italic;
+  font-size: 78cqh;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(138, 138, 138, 0.55);
+  transition: -webkit-text-stroke-color 0.3s ease;
+}
+
+/* The document's first page, tucked in the file, printed on the site's
+   paper: white to bone, ink to void. */
+.dossier-sheet {
+  position: absolute;
+  z-index: 1;
+  right: 7cqw;
+  bottom: -24%;
+  height: var(--sheet-h);
+  aspect-ratio: 911 / 1288;
+  display: block;
+  isolation: isolate;
   background-color: var(--color-bone);
-  clip-path: inset(0 100% 0 0);
-  visibility: hidden;
+  outline: 1px solid rgba(15, 15, 18, 0.6);
+  transform: rotate(-5deg);
+  transform-origin: 50% 100%;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.dossier-sheet img { filter: grayscale(1) contrast(1.1); mix-blend-mode: multiply; }
+.dossier-sheet::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-void);
+  mix-blend-mode: lighten;
+}
+.dossier-sheet::before {
+  content: "PDF";
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  padding: 0.25em 0.5em;
+  background-color: var(--color-blood);
+  color: var(--color-void);
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+}
+
+.dossier-play {
+  position: absolute;
+  z-index: 3;
+  left: 0.75rem;
+  bottom: 0.75rem;
+  padding: 0.3em 0.6em;
+  background-color: rgba(15, 15, 18, 0.86);
+  color: var(--color-bone);
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.dossier-veil {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+  background-color: rgba(15, 15, 18, 0.3);
+  background-image: repeating-linear-gradient(0deg, rgba(15, 15, 18, 0.42) 0 1px, transparent 1px 3px);
+  clip-path: inset(var(--dossier-hot) 0 0 0);
+}
+.dossier-sweep {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  right: 0;
+  top: var(--dossier-hot);
+  height: 2px;
+  margin-top: -1px;
+  display: block;
+  background-color: var(--color-bone);
+  opacity: 0;
   pointer-events: none;
 }
-.fw-title { color: var(--color-bone); }
-.fw-excerpt { color: rgba(242, 239, 232, 0.68); }
-.fw-index,
-.fw-tags,
-.fw-year { color: var(--color-ash); }
+.dossier-corners {
+  position: absolute;
+  z-index: 3;
+  inset: 0.7rem;
+  display: block;
+  pointer-events: none;
+}
+.dossier-corners i {
+  position: absolute;
+  width: 0.85rem;
+  height: 0.85rem;
+  border: 0 solid var(--color-bone);
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.dossier-corners i:nth-child(1) { top: 0; left: 0; border-top-width: 2px; border-left-width: 2px; transform: translate(-0.4rem, -0.4rem); }
+.dossier-corners i:nth-child(2) { top: 0; right: 0; border-top-width: 2px; border-right-width: 2px; transform: translate(0.4rem, -0.4rem); }
+.dossier-corners i:nth-child(3) { bottom: 0; left: 0; border-bottom-width: 2px; border-left-width: 2px; transform: translate(-0.4rem, 0.4rem); }
+.dossier-corners i:nth-child(4) { bottom: 0; right: 0; border-bottom-width: 2px; border-right-width: 2px; transform: translate(0.4rem, 0.4rem); }
+/* At rest it sits below the picture. Armed, it covers it; once the card is
+   revealed it slides off, its edge a scan line, a beat after the card. */
+.dossier-shutter {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  display: block;
+  background-color: var(--color-void);
+  border-top: 2px solid var(--color-bone);
+  transform: translateY(100%);
+  pointer-events: none;
+}
+.reveal-armed .dossier[data-reveal]:not([data-revealed]) .dossier-shutter { transform: translateY(0); }
+.reveal-ready .dossier-shutter {
+  transition: transform 0.95s cubic-bezier(0.65, 0, 0.35, 1) calc(var(--reveal-delay, 0s) + 0.3s);
+}
 
+/* ── The text ── */
+.dossier-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.15rem 0.95rem 0.6rem;
+}
+.dossier-title {
+  font-family: var(--font-inter);
+  font-weight: 800;
+  font-size: clamp(1.2rem, 1.7vw, 1.6rem);
+  line-height: 1.05;
+  letter-spacing: -0.005em;
+  text-transform: uppercase;
+  color: var(--color-bone);
+}
+.dossier[data-lead] .dossier-title { font-size: clamp(1.35rem, 2.4vw, 2.2rem); }
+.dossier-summary {
+  max-width: 62ch;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: rgba(242, 239, 232, 0.7);
+}
+.dossier-tags {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--color-ash);
+}
+.dossier-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  padding: 0.85rem 0.95rem 1rem;
+}
+.dossier-exhibits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.dossier-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.3em 0.6em;
+  border: 1px solid rgba(138, 138, 138, 0.45);
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-bone);
+  white-space: nowrap;
+}
+.dossier-chip[data-live]::before {
+  content: "";
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background-color: var(--color-blood);
+}
+.dossier-open {
+  margin-left: auto;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  color: var(--color-ash);
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+.dossier-arrow {
+  display: inline-block;
+  margin-left: 0.5em;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── Under the pointer, or the focus ── */
+@media (hover: hover) {
+  .dossier-link:is(:hover, :focus-visible) { border-color: var(--color-blood); }
+  .dossier-link:is(:hover, :focus-visible) :is(.dossier-no, .dossier-open) { color: var(--color-blood); }
+  .dossier-link:is(:hover, :focus-visible) .dossier-arrow { transform: translateX(0.3rem); }
+  .dossier-link:is(:hover, :focus-visible) .dossier-visual { --dossier-hot: 100%; }
+  .dossier-link:is(:hover, :focus-visible) .dossier-corners i { opacity: 1; transform: none; }
+  .dossier-link:is(:hover, :focus-visible) .dossier-sheet { transform: translateY(-14%) rotate(-2deg); }
+  .dossier-link:is(:hover, :focus-visible) .dossier-play { background-color: var(--color-blood); color: var(--color-void); }
+  .dossier-link:is(:hover, :focus-visible) .dossier-ghost { -webkit-text-stroke-color: var(--color-blood); }
+}
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .fw-wipe {
-    transition: clip-path 0.45s cubic-bezier(0.87, 0, 0.13, 1), visibility 0s linear 0.45s;
-  }
-  .fw-title,
-  .fw-excerpt,
-  .fw-tags,
-  .fw-year { transition: color 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-  .fw-index { transition: color 0.18s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+  .dossier-visual { transition: --dossier-hot 0.5s cubic-bezier(0.65, 0, 0.35, 1); }
+  .dossier-link:is(:hover, :focus-visible) .dossier-visual { transition-duration: 0.9s; }
+  .dossier-link:is(:hover, :focus-visible) .dossier-sweep { animation: dossier-sweep 0.9s linear; }
+}
+@keyframes dossier-sweep {
+  0%, 85% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .dossier-chip[data-live]::before { animation: pt-blink 1.6s step-end infinite; }
+}
 
-  .fw-row:hover .fw-wipe,
-  .fw-row:focus-within .fw-wipe {
-    clip-path: inset(0 0 0 0);
-    visibility: visible;
-    transition: clip-path 0.55s cubic-bezier(0.87, 0, 0.13, 1), visibility 0s;
+/* ── On a phone: a row to swipe ── */
+.dossiers-rail { display: none; }
+@media (max-width: 767px) {
+  .dossiers-count { display: none; }
+  .dossiers {
+    display: flex;
+    gap: 0.875rem;
+    /* Edge to edge, the first card still on the text's line; the 4px leave
+       the focus ring room. */
+    margin: -4px calc(var(--gutter) * -1);
+    padding: 4px var(--gutter);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
   }
-  .fw-row:hover .fw-title,
-  .fw-row:focus-within .fw-title { color: var(--color-void); }
-  .fw-row:hover .fw-excerpt,
-  .fw-row:focus-within .fw-excerpt { color: rgba(10, 10, 11, 0.75); }
-  .fw-row:hover .fw-tags,
-  .fw-row:hover .fw-year,
-  .fw-row:focus-within .fw-tags,
-  .fw-row:focus-within .fw-year { color: rgba(10, 10, 11, 0.7); }
-  /* The bright orange is 2.5:1 on bone; this darker one clears 5:1. */
-  .fw-row:hover .fw-index,
-  .fw-row:focus-within .fw-index { color: #b23e00; }
+  .dossiers::-webkit-scrollbar { display: none; }
+  .dossier {
+    flex: 0 0 min(80vw, 22rem);
+    scroll-snap-align: start;
+  }
+  /* Swiped in sideways: no rise, no stagger, the shutter alone. */
+  .dossier[data-reveal] { --reveal-y: 0px !important; --reveal-delay: 0s !important; }
+  .dossier-visual { --sheet-h: 85cqh; height: auto; aspect-ratio: 16 / 10; }
+  .dossier-sheet { bottom: -20%; }
+  .dossiers-rail {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-top: 1.1rem;
+    font-family: var(--font-jetbrains-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    color: var(--color-ash);
+    text-transform: uppercase;
+  }
+  .dossiers-progress { flex: 1; }
+  .dossiers-hint { color: var(--color-bone); }
+  .dossiers-hint-arrow { display: inline-block; margin-left: 0.5em; }
+}
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+  .dossiers-hint-arrow { animation: dossiers-nudge 1.4s ease-in-out infinite alternate; }
+}
+@keyframes dossiers-nudge { to { transform: translateX(0.35rem); } }
+/* How far along the row, where the browser can tie an animation to a
+   scroller; elsewhere the bar is not drawn. */
+@supports (animation-timeline: scroll()) and (timeline-scope: none) {
+  @media (max-width: 767px) {
+    .dossiers-nav { timeline-scope: --dossiers; }
+    .dossiers { scroll-timeline: --dossiers x; }
+    .dossiers-progress {
+      position: relative;
+      height: 1px;
+      background-color: rgba(138, 138, 138, 0.35);
+    }
+    .dossiers-progress::before {
+      content: "";
+      position: absolute;
+      inset: -1px 0;
+      background-color: var(--color-blood);
+      transform-origin: left;
+      animation: dossiers-progress linear both;
+      animation-timeline: --dossiers;
+    }
+    /* At the end of the row, nothing left to swipe to. */
+    .dossiers-hint {
+      animation: dossiers-hint linear both;
+      animation-timeline: --dossiers;
+    }
+  }
+}
+@keyframes dossiers-hint {
+  0%, 90% { opacity: 1; }
+  100% { opacity: 0.25; }
+}
+@keyframes dossiers-progress {
+  from { transform: scaleX(0.12); }
+  to { transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dossier-shutter { display: none; }
+  .dossier-link,
+  .dossier-no,
+  .dossier-open,
+  .dossier-arrow,
+  .dossier-sheet,
+  .dossier-corners i,
+  .dossier-play,
+  .dossier-ghost { transition: none; }
 }

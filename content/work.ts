@@ -72,6 +72,9 @@ export type WorkItem = {
     href: string;          // path under /public, e.g. "/docs/toron-fonctionnalites.pdf"
     pages: number;
     lang?: "en" | "fr";
+    /** Its first page as an image (public/docs/covers), the sheet the
+     *  project's card on the homepage shows tucked in the file. */
+    cover?: string;
   }[];
   /**
    * Present when the project appears on the compiled CV. The CV needs a much
@@ -108,6 +111,7 @@ export const work: WorkItem[] = [
         href: "/docs/toron-fonctionnalites.pdf",
         pages: 6,
         lang: "fr",
+        cover: "/docs/covers/toron-fonctionnalites.jpg",
       },
     ],
     excerpt: {
@@ -156,6 +160,7 @@ export const work: WorkItem[] = [
         href: "/docs/hune-fonctionnalites.pdf",
         pages: 6,
         lang: "fr",
+        cover: "/docs/covers/hune-fonctionnalites.jpg",
       },
     ],
     excerpt: {
@@ -315,7 +320,7 @@ export const work: WorkItem[] = [
     },
     index: "005",
     title: { en: "ZERO TRUST ARCHITECTURE", fr: "ARCHITECTURE ZERO TRUST" },
-    image: "/ZeroTrust.png",
+    image: "/zero-trust.png",
     year: "2026",
     tags: ["EBIOS RM", "Stormshield SNS", "Proxmox VE", "Wazuh XDR", "ISO 27001", "NIS2"],
     excerpt: {
