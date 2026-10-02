@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { afterCurtain } from "@/lib/curtain";
 
 /**
  * The boot sequence, reduced to one line that never stands between a visitor
@@ -47,12 +48,19 @@ export function BootTicker() {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (seen || reduced) return;
 
+    // Arriving through the page curtain, start once it has lifted rather
+    // than run out unseen under it.
     const timers: ReturnType<typeof setTimeout>[] = [];
-    LOG_LINES.forEach((_, i) => timers.push(setTimeout(() => setLine(i), i * STEP_MS)));
-    const end = LOG_LINES.length * STEP_MS + HOLD_MS;
-    timers.push(setTimeout(() => setLeaving(true), end));
-    timers.push(setTimeout(() => setLine(-1), end + 400));
-    return () => timers.forEach(clearTimeout);
+    const cancel = afterCurtain(() => {
+      LOG_LINES.forEach((_, i) => timers.push(setTimeout(() => setLine(i), i * STEP_MS)));
+      const end = LOG_LINES.length * STEP_MS + HOLD_MS;
+      timers.push(setTimeout(() => setLeaving(true), end));
+      timers.push(setTimeout(() => setLine(-1), end + 400));
+    });
+    return () => {
+      cancel();
+      timers.forEach(clearTimeout);
+    };
   }, []);
 
   if (line < 0) return null;

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { afterCurtain } from "@/lib/curtain";
 import { useT } from "@/lib/i18n";
 
 /**
@@ -122,14 +123,20 @@ export function BlindSpotScan() {
         if ((i + 1) * ROW <= room) n.style.setProperty("--my", `${bandTop + i * ROW}px`);
         else n.dataset.phone = "off";
       });
-      layer.dataset.mode = "sweep";
       fitColumns(layer, hero);
       // Two animations run (the sweep, then the fade): wait for the last.
       const done = (e: AnimationEvent) => {
         if (e.animationName === "blindspot-fade") layer.dataset.mode = "off";
       };
       layer.addEventListener("animationend", done);
-      return () => layer.removeEventListener("animationend", done);
+      // Arriving through the page curtain, sweep once it has lifted.
+      const cancel = afterCurtain(() => {
+        layer.dataset.mode = "sweep";
+      });
+      return () => {
+        cancel();
+        layer.removeEventListener("animationend", done);
+      };
     }
 
     // Pointer: the beam follows it, one write per frame at most.

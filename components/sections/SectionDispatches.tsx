@@ -1,8 +1,6 @@
-import { ViewTransition } from "react";
 import Link from "next/link";
 import { getT } from "@/lib/i18n-static";
 import type { Locale } from "@/lib/locale";
-import { dispatchTitleTransition } from "@/lib/transitions";
 import { section, sectionLabel } from "@/lib/sections";
 import { dispatches } from "@/content/dispatches";
 
@@ -108,9 +106,7 @@ export function SectionDispatches({ l }: { l: Locale }) {
                     letterSpacing: "-0.01em",
                   }}
                 >
-                  <ViewTransition name={dispatchTitleTransition(post.slug)}>
-                    <span style={{ display: "inline-block" }}>{t(post.title)}</span>
-                  </ViewTransition>
+                  {t(post.title)}
                 </h3>
 
                 {/* Excerpt */}

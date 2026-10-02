@@ -1,10 +1,8 @@
 "use client";
 
-import { ViewTransition } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useT } from "@/lib/i18n";
-import { workTitleTransition } from "@/lib/transitions";
 import type { WorkItem } from "@/content/work";
 
 export function WorkArticle({
@@ -82,10 +80,7 @@ export function WorkArticle({
             margin: "0 0 clamp(1.5rem, 3vw, 2.5rem)",
           }}
         >
-          {/* The list row's title lands here (lib/transitions.ts). */}
-          <ViewTransition name={workTitleTransition(item.slug)}>
-            <span style={{ display: "inline-block" }}>{title}</span>
-          </ViewTransition>
+          {title}
         </h1>
 
         {/* Meta row */}
