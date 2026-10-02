@@ -6,6 +6,7 @@ import { useT } from "@/lib/i18n";
 import type { WorkItem } from "@/content/work";
 import { docPath, docSlug } from "@/lib/doc-routes";
 import { VideoPlayer } from "@/components/VideoPlayer";
+import { parseYouTube } from "@/lib/youtube";
 
 export function WorkArticle({
   item,
@@ -121,10 +122,12 @@ export function WorkArticle({
       {item.video && (
         <figure className="work-video">
           <VideoPlayer
-            sources={item.video.sources}
-            poster={item.video.poster}
+            media={
+              "youtube" in item.video
+                ? { kind: "youtube", video: parseYouTube(item.video.youtube), poster: item.video.poster }
+                : { kind: "file", sources: item.video.sources, poster: item.video.poster, audio: item.video.audio }
+            }
             title={tr(`${title}, demo`, `${title}, démo`)}
-            hasAudio={item.video.audio}
           />
           <figcaption>{t(item.video.caption)}</figcaption>
         </figure>

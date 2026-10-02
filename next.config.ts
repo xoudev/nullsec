@@ -1,5 +1,10 @@
 import type { NextConfig } from "next";
 import { execSync } from "node:child_process";
+// Relative paths, not "@/": the config loads apart from the app's build.
+// content/work.ts imports types only, which vanish when it is compiled: it
+// must stay that way for the config to load it.
+import { work } from "./content/work";
+import { YOUTUBE_ORIGIN } from "./lib/youtube";
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -24,6 +29,13 @@ function buildId(): string {
 // nonces via middleware) forces dynamic rendering of every route — a real
 // trade-off, documented here honestly rather than papered over. style-src
 // 'unsafe-inline' is required by the inline style props used throughout.
+//
+// Frames: none, unless a case study has a YouTube video. Then YouTube's
+// privacy-enhanced player, and that origin only (components/VideoPlayer,
+// loaded once play is pressed). Site-wide, not per page: the policy is the
+// one the visitor's first page brought, and the site moves between pages
+// without reloading.
+const embedsYouTube = work.some((w) => w.video && "youtube" in w.video);
 const csp = [
   "default-src 'self'",
   isDev
@@ -37,7 +49,7 @@ const csp = [
   // future <audio> refactor from being silently killed by the policy.
   "media-src 'self'",
   "object-src 'none'",
-  "frame-src 'none'",
+  embedsYouTube ? `frame-src ${YOUTUBE_ORIGIN}` : "frame-src 'none'",
   "worker-src 'self' blob:",
   "base-uri 'self'",
   "form-action 'self'",
@@ -75,6 +87,11 @@ const nextConfig: NextConfig = {
   },
   images: {
     formats: ["image/avif", "image/webp"],
+    // YouTube's thumbnails, for a YouTube video with no poster of the
+    // site's own: the image optimizer fetches them, so a visitor's browser
+    // asks YouTube for nothing before play is pressed (and img-src stays
+    // 'self').
+    remotePatterns: [{ protocol: "https", hostname: "i.ytimg.com", pathname: "/vi/**" }],
   },
   async headers() {
     return [
