@@ -67,7 +67,9 @@ export function SiteFooter() {
           count: no cookies, no cross-site or ad tracking, no consent banner.
           Kept honest so the line survives scrutiny from technical visitors. */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem 1.5rem" }}>
-        <span style={{ whiteSpace: "nowrap" }}>
+        {/* Allowed to wrap: at 360 px the French line is wider than the
+            screen, and a nowrap here widened the whole page. */}
+        <span>
           {tr("// cookieless analytics · no ad trackers", "// analytics sans cookies · sans traceurs pub")}
         </span>
         <span style={{ whiteSpace: "nowrap" }}>

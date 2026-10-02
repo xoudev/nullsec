@@ -145,8 +145,10 @@ export function SectionIdentity({ l }: { l: Locale }) {
       </p>
       </div>
 
-      {/* Bottom row: metadata + scroll arrow, in the flow */}
+      {/* Bottom row: metadata + scroll arrow, in the flow. data-hero-foot:
+          the scan measures the free space above it on a phone. */}
       <div
+        data-hero-foot=""
         style={{
           position:       "relative",
           display:        "flex",

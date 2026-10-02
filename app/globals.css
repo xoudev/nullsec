@@ -732,8 +732,9 @@ section[data-section-id] { isolation: isolate; }
 section[data-section-id]:focus { outline: none; }
 
 /* ─── Blind-spot scan (hero): a map revealed only under the scanner ──────
-   BlindSpotScan sets data-mode: "beam" (fine pointer: the mask follows it),
-   "sweep" (touch: one radar pass, then it fades) or "off". The layer is
+   BlindSpotScan sets data-mode: "beam" (a mouse: the mask follows it),
+   "sweep" (touch: one radar pass when the page opens, then it fades), "ping"
+   (touch: a disc grows from the tap, holds, fades) or "off". The layer is
    decorative; nothing in it is read or focusable. ─── */
 @property --sweep {
   syntax: "<angle>";
@@ -785,6 +786,40 @@ section[data-section-id]:focus { outline: none; }
 @keyframes blindspot-sweep { from { --sweep: -120deg; } to { --sweep: 360deg; } }
 @keyframes blindspot-fade { to { opacity: 0; } }
 
+/* Ping: the map opens out from where the finger landed, stays long enough
+   to read, then fades. --ping is registered so the radius can animate. */
+@property --ping {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+.blindspot-layer[data-mode="ping"] {
+  opacity: 1;
+  -webkit-mask-image: radial-gradient(circle at var(--px, 50%) var(--py, 40%), #000 0, #000 calc(var(--ping) - 90px), transparent var(--ping));
+  mask-image: radial-gradient(circle at var(--px, 50%) var(--py, 40%), #000 0, #000 calc(var(--ping) - 90px), transparent var(--ping));
+  animation:
+    blindspot-ping 1.5s cubic-bezier(0.22, 1, 0.36, 1) 1 both,
+    blindspot-fade 0.6s ease-in 3.8s 1 forwards;
+}
+@keyframes blindspot-ping { from { --ping: 0px; } to { --ping: 1500px; } }
+
+/* The tap itself: a square survey mark that opens out and fades. */
+.blindspot-ring {
+  position: absolute;
+  z-index: 1;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin: -0.875rem 0 0 -0.875rem;
+  border: 1px solid var(--color-blood);
+  opacity: 0;
+  pointer-events: none;
+}
+.blindspot-ring[data-on] { animation: blindspot-ring 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1 both; }
+@keyframes blindspot-ring {
+  from { opacity: 0.95; transform: scale(0.3); }
+  to   { opacity: 0;    transform: scale(7); }
+}
+
 .blindspot-legend,
 .blindspot-note {
   position: absolute;
@@ -828,34 +863,46 @@ section[data-section-id]:focus { outline: none; }
   .blindspot-legend { display: none; }
   /* [data-col] matches the desktop column rules' specificity; these come
      later, so they win on a phone. */
-  .blindspot-note[data-col] { left: var(--mx); right: auto; top: var(--my); }
-  .blindspot-note[data-col][data-phone="right"] { left: auto; right: var(--mx); }
+  .blindspot-note[data-col] { left: 6%; right: auto; top: var(--my); }
+  .blindspot-note[data-col][data-phone="right"] { left: auto; right: 6%; }
   .blindspot-note[data-phone="off"] { display: none; }
-  /* A narrow desktop window has a pointer but no measured phone band:
-     the beam then shows the grid alone. */
-  .blindspot-layer[data-mode="beam"] .blindspot-note { display: none; }
 }
 
-/* The hint only where there is a cursor to move, and motion to show. */
+/* The hint names the scanner the visitor has: the cursor (a vertical line
+   at the right edge) once a mouse is known, a finger (a line under the
+   section label) on a touch screen. BlindSpotScan sets data-input; before
+   that, and under reduced motion, there is no hint at all. */
 .blindspot-hint { display: none; }
-@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .blindspot-hint {
-    display: block;
-    position: absolute;
-    right: clamp(1.5rem, 4vw, 3rem);
-    top: 50%;
-    z-index: 2;
-    font-family: var(--font-jetbrains-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.08em;
-    color: var(--color-ash);
-    writing-mode: vertical-rl;
-    transform: translateY(-50%);
-    pointer-events: none;
-  }
+.blindspot-hint[data-input] {
+  display: block;
+  position: absolute;
+  z-index: 2;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--color-ash);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
+.blindspot-hint[data-input="mouse"] {
+  right: clamp(1.5rem, 4vw, 3rem);
+  top: 50%;
+  writing-mode: vertical-rl;
+  transform: translateY(-50%);
+}
+.blindspot-hint[data-input="touch"] {
+  left: clamp(1.5rem, 4vw, 3rem);
+  top: calc(clamp(1.5rem, 4vw, 3rem) + 1.75rem);
+}
+.blindspot-hint[data-input="mouse"] .blindspot-hint-touch,
+.blindspot-hint[data-input="touch"] .blindspot-hint-mouse { display: none; }
+/* Out of the way while a scan shows the notes it would sit on. */
+.blindspot-layer[data-mode="sweep"] ~ .blindspot-hint[data-input="touch"],
+.blindspot-layer[data-mode="ping"] ~ .blindspot-hint[data-input="touch"] { opacity: 0; }
 @media (prefers-reduced-motion: reduce) {
-  .blindspot-layer { display: none; }
+  .blindspot-layer,
+  .blindspot-ring,
+  .blindspot-hint { display: none !important; }
 }
 
 /* ─── Page curtain (components/PageTransition.tsx) ───────────────────────
