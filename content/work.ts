@@ -39,7 +39,8 @@ export type WorkItem = {
   repoUrl?: string; // optional public source repository
   /**
    * Public PDFs attached to the case study (feature specification, design
-   * system). Opened in a new tab: the CSP forbids embedding them. `lang` is the
+   * system). Read in the site's own reader, /<locale>/docs/<file name>
+   * (lib/documents.ts), which also offers the PDF itself. `lang` is the
    * document's own language when it exists in only one, so the English site can
    * say a document is in French before the reader clicks.
    */

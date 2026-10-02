@@ -1019,6 +1019,225 @@ section[data-section-id]:focus { outline: none; }
   .pt { display: none; }
 }
 
+/* ─── Document reader (app/[locale]/docs, components/DocumentViewer) ─────
+   The site's PDFs read in place: a mono toolbar that stays on screen, the
+   pages on the void with a hairline frame, and PDF.js's text layer over
+   each one so the text can be selected. Native scroll inside (the shell
+   carries data-lenis-prevent). ─── */
+.doc-article {
+  min-height: 100dvh;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  background-color: var(--color-void);
+  color: var(--color-bone);
+}
+.doc-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: clamp(2.5rem, 6vw, 5rem);
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  color: var(--color-ash);
+}
+.doc-eyebrow {
+  margin-bottom: 1.25rem;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--color-blood);
+}
+.doc-title {
+  margin: 0 0 clamp(1rem, 2vw, 1.5rem);
+  font-family: var(--font-instrument-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+.doc-raw {
+  display: inline-block;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  color: var(--color-blood);
+  text-decoration: none;
+}
+.doc-raw:hover { color: var(--color-bone); }
+
+.doc-shell { position: relative; background-color: var(--color-void); }
+.doc-shell:fullscreen {
+  overflow: auto;
+  padding: 0 clamp(1rem, 3vw, 2rem) 2rem;
+}
+.doc-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem 1.5rem;
+  padding: 0.6rem 0;
+  border-top: 1px solid rgba(138, 138, 138, 0.2);
+  border-bottom: 1px solid rgba(138, 138, 138, 0.2);
+  background-color: rgba(15, 15, 18, 0.94);
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--color-ash);
+}
+.doc-group { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 1rem; }
+.doc-toolbar button,
+.doc-toolbar a {
+  min-height: 2.75rem; /* a thumb's worth on a phone */
+  padding: 0 0.15rem;
+  border: 0;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  color: var(--color-bone);
+  text-decoration: none;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+}
+.doc-toolbar button:hover:not(:disabled),
+.doc-toolbar a:hover { color: var(--color-blood); }
+.doc-toolbar button:disabled { color: rgba(138, 138, 138, 0.5); }
+.doc-count { color: var(--color-bone); min-width: 8ch; }
+.doc-toolbar .doc-zoom { min-width: 5ch; justify-content: center; }
+.doc-toolbar .doc-zoom:disabled { color: var(--color-bone); }
+.doc-narrow { display: none; }
+/* The telemetry HUD is fixed in the top right corner from 768 px: keep the
+   stuck toolbar's controls clear of it (not in full screen, where it is
+   not shown). */
+@media (min-width: 768px) {
+  .doc-toolbar { padding-right: 9.5rem; }
+  .doc-shell:fullscreen .doc-toolbar { padding-right: 0; }
+}
+/* A phone: one row, in the flow. Stuck, it would take a fifth of the screen
+   and run under the fixed sound button; pinch zoom covers the rest. */
+@media (max-width: 639px) {
+  .doc-toolbar { position: static; flex-wrap: nowrap; gap: 0 0.6rem; }
+  .doc-group { flex-wrap: nowrap; gap: 0 0.4rem; }
+  .doc-toolbar .doc-wide { display: none; }
+  .doc-toolbar .doc-narrow { display: inline; }
+}
+
+.doc-pages {
+  overflow-x: auto;
+  padding: clamp(1.5rem, 3vw, 2.5rem) 0;
+}
+/* As wide as the widest page once zoomed past the screen, so it scrolls
+   sideways instead of being cut; centred while it fits. */
+.doc-stack {
+  width: max-content;
+  min-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+.doc-sheet { margin: 0; }
+.doc-page {
+  position: relative;
+  margin: 0 auto;
+  background-color: rgba(242, 239, 232, 0.05);
+  outline: 1px solid rgba(138, 138, 138, 0.28);
+  --scale-round-x: 1px;
+  --scale-round-y: 1px;
+}
+.doc-art { position: absolute; inset: 0; }
+.doc-art canvas { display: block; width: 100%; height: 100%; }
+.doc-sheet figcaption {
+  margin-top: 0.6rem;
+  text-align: center;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--color-ash);
+}
+.doc-status {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 34rem;
+  margin: clamp(2rem, 6vw, 4rem) auto;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--color-ash);
+}
+.doc-status a { color: var(--color-blood); }
+.doc-bar {
+  display: block;
+  height: 2px;
+  background-color: var(--color-blood);
+  transform-origin: 0 50%;
+  transition: transform 0.2s ease-out;
+}
+
+/* PDF.js's text layer (from its pdf_viewer.css, trimmed to what a reader
+   needs): transparent text runs laid over the drawing, so selection, copy
+   and screen readers get the real text. PDF.js sets the per-run variables;
+   the page sets --total-scale-factor. */
+.doc-page .textLayer {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  opacity: 1;
+  line-height: 1;
+  text-align: initial;
+  letter-spacing: normal;
+  word-spacing: normal;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+  forced-color-adjust: none;
+  transform-origin: 0 0;
+  z-index: 0;
+  --min-font-size: 1;
+  --text-scale-factor: calc(var(--total-scale-factor) * var(--min-font-size));
+  --min-font-size-inv: calc(1 / var(--min-font-size));
+}
+.doc-page .textLayer :is(span, br) {
+  position: absolute;
+  color: transparent;
+  white-space: pre;
+  cursor: text;
+  transform-origin: 0% 0%;
+  -webkit-user-select: text;
+  user-select: text;
+}
+.doc-page .textLayer > :not(.markedContent),
+.doc-page .textLayer .markedContent span:not(.markedContent) {
+  z-index: 1;
+  --font-height: 0;
+  font-size: calc(var(--text-scale-factor) * var(--font-height));
+  --scale-x: 1;
+  --rotate: 0deg;
+  transform: rotate(var(--rotate)) scaleX(var(--scale-x)) scale(var(--min-font-size-inv));
+}
+.doc-page .textLayer .markedContent { display: contents; }
+.doc-page .textLayer ::selection { background: rgba(255, 107, 26, 0.35); color: transparent; }
+.doc-page .textLayer br::selection { background: transparent; }
+.doc-page .textLayer .endOfContent {
+  display: block;
+  position: absolute;
+  inset: 100% 0 0;
+  z-index: 0;
+  cursor: default;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.doc-page .textLayer.selecting .endOfContent { top: 0; }
+@media print {
+  .doc-toolbar { display: none; }
+}
+
 /* ─── Scroll reveal for the server-rendered sections (components/Reveal) ──
    Armed by a class Reveal sets once it has run, so nothing is hidden before
    hydration or without JavaScript; transitions only exist under

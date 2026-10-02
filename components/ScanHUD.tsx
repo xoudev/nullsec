@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type Lenis from "lenis";
 import { useLenis } from "@/hooks/useLenis";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useT } from "@/lib/i18n";
-import { profile } from "@/profile";
+import { CV_DOC, docPath } from "@/lib/doc-routes";
 import { SECTION_LIST, section } from "@/lib/sections";
 import {
   getMuted, onMuteChange, toggleMute,
@@ -42,7 +43,7 @@ const SECTIONS = SECTION_LIST;
 
 export function ScanHUD() {
   const prefersReduced = useReducedMotion();
-  const { t, tr } = useT();
+  const { tr, lp } = useT();
   const pathname = usePathname();
   const muted = useSyncExternalStore(subscribeMute, getMuted, () => false);
   const vol = useSyncExternalStore(subscribeVolume, getVolume, () => 20);
@@ -180,11 +181,10 @@ export function ScanHUD() {
         {process.env.NEXT_PUBLIC_BUILD_ID ?? "local"}
       </div>
 
-      {/* Persistent CV link — pointer convenience; also keyboard-reachable. */}
-      <a
-        href={t(profile.cvUrl)}
-        target="_blank"
-        rel="noopener noreferrer"
+      {/* Persistent CV link — pointer convenience; also keyboard-reachable.
+          It opens the in-site reader (app/[locale]/docs). */}
+      <Link
+        href={lp(docPath(CV_DOC))}
         data-cursor="open ↗"
         style={{
           display: "block",
@@ -195,7 +195,7 @@ export function ScanHUD() {
         }}
       >
         {tr("// CV     [ OPEN ↗ ]", "// CV     [ OUVRIR ↗ ]")}
-      </a>
+      </Link>
 
       {/* Volume row — ASCII bar with a transparent range input on top for interaction */}
       <div
