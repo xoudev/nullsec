@@ -141,7 +141,9 @@ export function SectionFieldwork({ l }: { l: Locale }) {
                   "--reveal-delay": `${col * 0.1}s`,
                 } as React.CSSProperties}
               >
-                <Link href={lp(`/work/${item.slug}`)} className="dossier-link">
+                {/* One link, the whole card: the reticle locks around it
+                    whatever its height (components/CustomCursor). */}
+                <Link href={lp(`/work/${item.slug}`)} className="dossier-link" data-cursor-lock="">
                   <span className="dossier-strip" aria-hidden="true">
                     <span className="dossier-no">{`${tr("FILE", "DOSSIER")} ${item.index}`}</span>
                     {item.tier === "side" && <span className="dossier-annex">{tr("SIDE PROJECT", "ANNEXE")}</span>}

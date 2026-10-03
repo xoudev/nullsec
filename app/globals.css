@@ -1957,6 +1957,9 @@ section[data-section-id]:focus { outline: none; }
 .dossier-corners i:nth-child(2) { top: 0; right: 0; border-top-width: 2px; border-right-width: 2px; transform: translate(0.4rem, -0.4rem); }
 .dossier-corners i:nth-child(3) { bottom: 0; left: 0; border-bottom-width: 2px; border-left-width: 2px; transform: translate(-0.4rem, 0.4rem); }
 .dossier-corners i:nth-child(4) { bottom: 0; right: 0; border-bottom-width: 2px; border-right-width: 2px; transform: translate(0.4rem, 0.4rem); }
+/* For the keyboard: under the pointer, the cursor's own reticle locks
+   around the whole card instead. */
+.dossier-link:focus-visible .dossier-corners i { opacity: 1; transform: none; }
 /* At rest it sits below the picture (its edge too: at 100% exactly, a
    rounded row of it showed). Armed, it covers it; once the card is
    revealed it slides off, its edge a scan line, a beat after the card. */
@@ -2058,7 +2061,6 @@ section[data-section-id]:focus { outline: none; }
   .dossier-link:is(:hover, :focus-visible) :is(.dossier-no, .dossier-open) { color: var(--color-blood); }
   .dossier-link:is(:hover, :focus-visible) .dossier-arrow { transform: translateX(0.3rem); }
   .dossier-link:is(:hover, :focus-visible) .dossier-visual { --dossier-hot: 100%; }
-  .dossier-link:is(:hover, :focus-visible) .dossier-corners i { opacity: 1; transform: none; }
   .dossier-link:is(:hover, :focus-visible) .dossier-sheet { transform: translateY(-14%) rotate(-2deg); }
   .dossier-link:is(:hover, :focus-visible) .dossier-play { background-color: var(--color-blood); color: var(--color-void); }
   .dossier-link:is(:hover, :focus-visible) .dossier-ghost { -webkit-text-stroke-color: var(--color-blood); }
