@@ -209,7 +209,7 @@ export const work: WorkItem[] = [
     },
     index: "003",
     title: { en: "CYBERLEARN", fr: "CYBERLEARN" },
-    image: "/Log_blanc_large.png",
+    image: "/Log_principal_large.png",
     ownMark: true,
     liveUrl: "https://cyberlearn.fr",
     year: "2025",
