@@ -17,12 +17,16 @@ const TARGET = `${INTERACTIVE}, [data-cursor]`;
  * point within, whatever its size: a video player and the play button laid
  * over all of it (they carry data-cursor-free), a slider, where the point
  * is where on it you are. Nor around anything taller than a third of the
- * window, where a project row is at most a quarter: a frame that size says
- * nothing. The dot a lock hides was the only sign of where the pointer was;
- * there the cursor keeps its small form, with the label beside it.
+ * window: a frame that size says nothing. The dot a lock hides was the only
+ * sign of where the pointer was; there the cursor keeps its small form,
+ * with the label beside it. Unless the target says it is one whole
+ * (data-cursor-lock): a project's card, a single link however tall, where
+ * the frame says exactly that and where on it the pointer is does not
+ * matter.
  */
 function lockable(el: Element): boolean {
   if (!el.matches(INTERACTIVE) || el.matches("input[type='range'], [data-cursor-free]")) return false;
+  if (el.matches("[data-cursor-lock]")) return true;
   return el.getBoundingClientRect().height <= window.innerHeight * 0.35;
 }
 
@@ -109,7 +113,9 @@ export function CustomCursor() {
     const onDown = () => { pressed = true; wake(); };
     const onUp = () => { pressed = false; wake(); };
     const onDocLeave = () => { revealed = false; wake(); };
-    // A locked reticle follows its element through smooth scroll.
+    // A locked reticle follows its element through smooth scroll, and
+    // through a scroller's own (the project cards' row, on a narrow window):
+    // scroll does not bubble, hence the capture.
     const onScroll = () => { if (locked) wake(); };
     const onFullscreen = () => {
       fullscreen = document.fullscreenElement !== null;
@@ -188,7 +194,7 @@ export function CustomCursor() {
     window.addEventListener("mousedown", onDown);
     window.addEventListener("mouseup", onUp);
     document.documentElement.addEventListener("mouseleave", onDocLeave);
-    window.addEventListener("scroll", onScroll, { passive: true });
+    document.addEventListener("scroll", onScroll, { passive: true, capture: true });
     document.addEventListener("fullscreenchange", onFullscreen);
 
     return () => {
@@ -198,7 +204,7 @@ export function CustomCursor() {
       window.removeEventListener("mousedown", onDown);
       window.removeEventListener("mouseup", onUp);
       document.documentElement.removeEventListener("mouseleave", onDocLeave);
-      window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("scroll", onScroll, { capture: true });
       document.removeEventListener("fullscreenchange", onFullscreen);
     };
   }, [prefersReduced]);
