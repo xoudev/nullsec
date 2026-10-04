@@ -275,10 +275,13 @@ export function ClearanceRadar({ clearances, activeCertIndex, prefersReduced }: 
         ))}
       </svg>
 
-      {/* Label below radar — decorative caption, see wrapper aria-label */}
+      {/* Label below radar — decorative caption, see wrapper aria-label.
+          Two lines of room: on a phone the caption names the certification
+          in view and wraps, and the entries under it shifted with it. */}
       <div
         ref={labelRef}
         aria-hidden="true"
+        className="clearance-radar-caption"
         style={{
           fontFamily:    "var(--font-jetbrains-mono)",
           fontSize:      "0.875rem",

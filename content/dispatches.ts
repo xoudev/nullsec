@@ -8,6 +8,10 @@ export type Dispatch = {
   /** Search snippet, only where the excerpt runs past ~155 characters and
    *  Google would cut it mid-sentence. Falls back to `excerpt`. */
   description?: Partial<Localized<string>>;
+  /** The tab and search-result title, only where the heading plus the
+   *  layout's " · Jordan Turnaco" would run past the ~60 characters a result
+   *  shows. Falls back to `title`; the heading itself never changes. */
+  metaTitle?: Partial<Localized<string>>;
   readTime: string;
   body: Localized<string[]>; // paragraphs
 };
@@ -20,6 +24,7 @@ export const dispatches: Dispatch[] = [
       en: "What second-line GRC actually does all day",
       fr: "Ce que fait vraiment la GRC de seconde ligne",
     },
+    metaTitle: { fr: "Ce que fait la GRC de seconde ligne" },
     excerpt: {
       en: "The org chart says: frameworks, policies, oversight. The calendar says: translation. Between what a standard requires and what a warehouse can execute, somebody has to carry the meaning across.",
       fr: "L'organigramme dit : référentiels, politiques, supervision. L'agenda, lui, dit : traduction. Entre ce qu'exige une norme et ce qu'un entrepôt peut réellement appliquer, il faut bien que quelqu'un fasse passer le sens.",
@@ -51,6 +56,7 @@ export const dispatches: Dispatch[] = [
       en: "What a firewall certification actually tests",
       fr: "Ce qu'une certification pare-feu teste vraiment",
     },
+    metaTitle: { en: "What a firewall certification tests", fr: "Ce qu'une certification pare-feu teste" },
     excerpt: {
       en: "I passed the CSNA in March. The exam verified that I can configure a Stormshield appliance. It could not verify the thing that matters: whether a firewall run by me would still be trustworthy a year later.",
       fr: "J'ai obtenu la CSNA en mars. L'examen a vérifié que je sais configurer un boîtier Stormshield. Il ne pouvait pas vérifier l'essentiel : si un pare-feu administré par mes soins serait encore digne de confiance un an plus tard.",
@@ -112,6 +118,7 @@ export const dispatches: Dispatch[] = [
       en: "Zero Trust is a posture, not a product",
       fr: "Le Zero Trust est une posture, pas un produit",
     },
+    metaTitle: { fr: "Zero Trust : une posture, pas un produit" },
     excerpt: {
       en: "Buying a Zero Trust product does not move you toward the condition the phrase describes. Seventeen vendors will tell you otherwise.",
       fr: "Acheter un produit Zero Trust ne vous rapproche en rien de l'état que l'expression désigne. Dix-sept éditeurs vous jureront le contraire.",
@@ -139,6 +146,7 @@ export const dispatches: Dispatch[] = [
       en: "What side-channel attacks taught me about patience",
       fr: "Ce que les attaques par canal auxiliaire m'ont appris sur la patience",
     },
+    metaTitle: { en: "Side-channel attacks, a lesson in patience", fr: "Canal auxiliaire : une leçon de patience" },
     excerpt: {
       en: "The first 300 traces produced a uniform noise floor. The next 4,500 produced a key. The difference was not more data.",
       fr: "Les 300 premières traces n'ont donné qu'un bruit de fond uniforme. Les 4 500 suivantes ont donné une clé. Et ce n'est pas la quantité de données qui a fait la différence.",

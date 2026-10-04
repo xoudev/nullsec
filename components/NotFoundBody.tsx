@@ -37,7 +37,11 @@ export function NotFoundBody({ bilingual = false }: { bilingual?: boolean }) {
   } as const;
 
   return (
-    <div
+    // The page's one landmark, and the skip link's target like every other
+    // page's main.
+    <main
+      id="main-content"
+      tabIndex={-1}
       style={{
         minHeight: "100svh",
         backgroundColor: "var(--color-void)",
@@ -104,6 +108,6 @@ export function NotFoundBody({ bilingual = false }: { bilingual?: boolean }) {
           {tr("← return to NULLSEC", "← retour à NULLSEC")}
         </Link>
       )}
-    </div>
+    </main>
   );
 }

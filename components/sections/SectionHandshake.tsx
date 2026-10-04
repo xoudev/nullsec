@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { gsap } from "@/lib/gsap";
 import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
@@ -323,6 +323,42 @@ export function SectionHandshake() {
 
   const focusInput = useCallback(() => inputRef.current?.focus(), []);
 
+  // What the boot sequence will have typed: the sizing ghost under the log
+  // (see the render) holds the window at that height from the first paint.
+  const bootLines = useMemo<OutputLine[]>(
+    () => [...buildWelcome(tr), { type: "input", text: "help" }, ...runCommand("help", t, tr)],
+    [t, tr],
+  );
+
+  const renderLine = (line: OutputLine, i: number) => (
+    <div
+      key={i}
+      // Art lines (with per-segment colouring) never wrap, so their
+      // alignment survives on narrow screens; prose still wraps.
+      style={{ color: lineColor(line.type), userSelect: "text", whiteSpace: line.parts ? "pre" : "pre-wrap" }}
+    >
+      {line.type === "input" ? (
+        <span>
+          <span
+            style={{
+              color: "var(--color-blood)",
+              textShadow: "0 0 10px rgba(255,107,26,0.45)",
+            }}
+          >
+            visitor@nullsec:~$
+          </span>{" "}
+          {line.text}
+        </span>
+      ) : line.parts ? (
+        line.parts.map((p, j) => (
+          <span key={j} style={{ color: p.color }}>{p.text}</span>
+        ))
+      ) : (
+        renderWithLinks(line.text)
+      )}
+    </div>
+  );
+
   // Auto-scroll to bottom on new output
   useEffect(() => {
     if (terminalRef.current) {
@@ -616,6 +652,7 @@ export function SectionHandshake() {
           {/* Scrollable log — sits below scanline overlay */}
           <div
             ref={terminalRef}
+            className="terminal-scroll"
             role="log"
             aria-label={tr("Interactive terminal", "Terminal interactif")}
             aria-live="polite"
@@ -634,34 +671,17 @@ export function SectionHandshake() {
               zIndex: 1,
             }}
           >
-            {output.map((line, i) => (
-              <div
-                key={i}
-                // Art lines (with per-segment colouring) never wrap, so their
-                // alignment survives on narrow screens; prose still wraps.
-                style={{ color: lineColor(line.type), userSelect: "text", whiteSpace: line.parts ? "pre" : "pre-wrap" }}
-              >
-                {line.type === "input" ? (
-                  <span>
-                    <span
-                      style={{
-                        color: "var(--color-blood)",
-                        textShadow: "0 0 10px rgba(255,107,26,0.45)",
-                      }}
-                    >
-                      visitor@nullsec:~$
-                    </span>{" "}
-                    {line.text}
-                  </span>
-                ) : line.parts ? (
-                  line.parts.map((p, j) => (
-                    <span key={j} style={{ color: p.color }}>{p.text}</span>
-                  ))
-                ) : (
-                  renderWithLinks(line.text)
-                )}
+            {/* The log over a sizing ghost (.terminal-log): the boot output as
+                it will stand once typed, invisible, in the same cell. The
+                window used to grow line by line as the boot typed, pushing
+                the chips and the footer down: a layout shift of 0.22 on a
+                phone, past the 0.1 a page is held to. */}
+            <div className="terminal-log">
+              <div aria-hidden="true" className="terminal-ghost">
+                {bootLines.map(renderLine)}
               </div>
-            ))}
+              <div className="terminal-lines">{output.map(renderLine)}</div>
+            </div>
 
             {/* Input line */}
             <form

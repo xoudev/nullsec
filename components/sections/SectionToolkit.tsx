@@ -173,19 +173,12 @@ export function SectionToolkit({ evidence }: { evidence: ToolkitEvidence }) {
         position: "relative",
       }}
     >
-      {/* Header row */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          alignItems: "baseline",
-          gap: "1rem",
-          marginBottom: "clamp(2.5rem, 5vw, 4rem)",
-        }}
-      >
+      {/* Header: label, count and display line (.sec-head in globals.css
+          keeps the count out of the HUD's corner). */}
+      <div className="sec-head" style={{ rowGap: "clamp(2.5rem, 5vw, 4rem)", marginBottom: "1.1rem" }}>
         <span
           aria-hidden="true"
+          className="sec-label"
           style={{
             fontFamily: "var(--font-jetbrains-mono)",
             fontSize: "0.75rem",
@@ -198,6 +191,7 @@ export function SectionToolkit({ evidence }: { evidence: ToolkitEvidence }) {
         </span>
         <span
           aria-hidden="true"
+          className="sec-count"
           style={{
             fontFamily: "var(--font-jetbrains-mono)",
             fontSize: "0.75rem",
@@ -211,27 +205,28 @@ export function SectionToolkit({ evidence }: { evidence: ToolkitEvidence }) {
             `${toolkitEntryCount} ENTRÉES · ${String(toolkitDomains.length).padStart(2, "0")} DOMAINES`,
           )}
         </span>
-      </div>
 
-      {/* Display quote */}
-      <h2
-        style={{
-          fontFamily: "var(--font-instrument-serif)",
-          fontStyle: "italic",
-          fontSize: "clamp(2rem, 5.5vw, 4.5rem)",
-          lineHeight: 1.0,
-          color: "var(--color-bone)",
-          letterSpacing: "-0.02em",
-          margin: "0 0 1.1rem",
-          maxWidth: "20ch",
-        }}
-      >
-        {/* What the section holds, not a slogan (see SectionClearance). */}
-        {tr(
-          `${spell(toolkitDomains.length, "en", { capital: true })} domains, DevSecOps and GRC first.`,
-          `${spell(toolkitDomains.length, "fr", { capital: true })} domaines, DevSecOps et GRC en tête.`,
-        )}
-      </h2>
+        {/* Display quote */}
+        <h2
+          className="sec-title"
+          style={{
+            fontFamily: "var(--font-instrument-serif)",
+            fontStyle: "italic",
+            fontSize: "clamp(2rem, 5.5vw, 4.5rem)",
+            lineHeight: 1.0,
+            color: "var(--color-bone)",
+            letterSpacing: "-0.02em",
+            margin: 0,
+            maxWidth: "20ch",
+          }}
+        >
+          {/* What the section holds, not a slogan (see SectionClearance). */}
+          {tr(
+            `${spell(toolkitDomains.length, "en", { capital: true })} domains, DevSecOps and GRC first.`,
+            `${spell(toolkitDomains.length, "fr", { capital: true })} domaines, DevSecOps et GRC en tête.`,
+          )}
+        </h2>
+      </div>
       <p aria-hidden="true" className="toolkit-hint">
         <span className="toolkit-hint-fine">{hintFine}</span>
         <span className="toolkit-hint-coarse">{hintCoarse}</span>
