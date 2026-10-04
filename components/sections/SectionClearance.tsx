@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { gsap, loadScrollTrigger } from "@/lib/gsap";
 import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
@@ -10,6 +12,7 @@ import { clearances } from "@/content/clearances";
 import type { ClearanceStatus } from "@/content/clearances";
 import { ClearanceRadar } from "@/components/sections/ClearanceRadar";
 import { spell } from "@/lib/spell";
+import { docPath, docSlug } from "@/lib/doc-routes";
 
 // The status tag, in the page's language: "[GRANTED]" on the French site was
 // one of a dozen English labels left over from before the translation.
@@ -51,7 +54,7 @@ export function SectionClearance() {
     return () => ro.disconnect();
   }, []);
   const prefersReduced = useReducedMotion();
-  const { t, tr } = useT();
+  const { t, tr, lp } = useT();
 
   // ── Radar active cert (null = show aggregate) ───────────────────
   const [activeCertIndex, setActiveCertIndex] = useState<number | null>(null);
@@ -152,6 +155,7 @@ export function SectionClearance() {
 
   return (
     <section
+      id="clearance"
       ref={sectionRef}
       data-section-id={section("clearance").id}
       aria-label={tr("Clearance: certifications", "Habilitations : certifications")}
@@ -225,10 +229,16 @@ export function SectionClearance() {
                 ref={(el) => { entryRefs.current[i] = el; }}
                 onMouseEnter={() => handleEnter(i)}
                 onMouseLeave={handleLeave}
-                // A plate (.clearance-plate). Pending ones rest on the dim end
-                // of the pulse; the bright end is a ::before layer whose
-                // opacity the compositor animates (.clearance-pending).
-                className={isPending ? "clearance-plate clearance-pending" : "clearance-plate"}
+                className={isPending ? "clearance-pending" : undefined}
+                style={{
+                  // Pending rows rest on the dim end of the pulse; the bright
+                  // end is a ::before layer whose opacity the compositor
+                  // animates (see .clearance-pending in globals.css).
+                  borderLeft:  isPending
+                    ? "2px solid rgba(255,107,26,0.25)"
+                    : "2px solid rgba(107,107,107,0.22)",
+                  paddingLeft: "clamp(1rem, 2vw, 1.5rem)",
+                }}
               >
                 {/* Status / date / rule / level row — real data (status, score,
                     date, level), so it must reach assistive technology. */}
@@ -317,16 +327,6 @@ export function SectionClearance() {
                   )}
                 </div>
 
-                {/* The score as a bar; a target as a dashed one. */}
-                <div
-                  className="clearance-bar"
-                  aria-hidden="true"
-                  data-pending={isPending ? "" : undefined}
-                  style={{ "--fill": item.score ? item.score : "0%" } as React.CSSProperties}
-                >
-                  <i />
-                </div>
-
                 {/* What it validates, in view at all times: it used to open on
                     hover only, so on a desktop the plates said nothing. */}
                 <div className="clearance-validates">
@@ -351,27 +351,46 @@ export function SectionClearance() {
                     {tr(`// validates: ${t(item.validates)}`, `// valide : ${t(item.validates)}`)}
                   </div>
                 </div>
+
+                {/* The certificate itself, when there is one: its first page
+                    printed in the palette, like a case file's document
+                    (.dossier-sheet), and the way to read it in the site's
+                    reader. A claim with its evidence beside it. */}
+                {item.document && (
+                  <Link
+                    href={lp(docPath(docSlug(item.document.href)))}
+                    className="clearance-exhibit"
+                    data-cursor-lock=""
+                  >
+                    <span className="clearance-sheet" aria-hidden="true">
+                      <Image
+                        src={item.document.cover}
+                        alt=""
+                        fill
+                        sizes="(min-width: 768px) 11rem, 8rem"
+                        style={{ objectFit: "cover" }}
+                      />
+                    </span>
+                    <span className="clearance-exhibit-text">
+                      <span className="clearance-exhibit-label" aria-hidden="true">
+                        {tr("// EXHIBIT", "// PIÈCE")}
+                      </span>
+                      <span>
+                        {tr(
+                          `Certificate · PDF · ${item.document.pages} page${item.document.pages > 1 ? "s" : ""}`,
+                          `Certificat · PDF · ${item.document.pages} page${item.document.pages > 1 ? "s" : ""}`,
+                        )}
+                        {item.expires ? tr(` · valid to ${item.expires}`, ` · valable jusqu'en ${item.expires}`) : ""}
+                      </span>
+                      <span className="clearance-exhibit-link">
+                        {tr("[ read the certificate → ]", "[ lire le certificat → ]")}
+                      </span>
+                    </span>
+                  </Link>
+                )}
               </div>
             );
           })}
-
-          {/* The road: the credentials in order, the one in preparation
-              hollow, the line open past it. */}
-          <div className="clearance-road" role="group" aria-label={tr("Roadmap", "Feuille de route")}>
-            <div className="clearance-road-label" aria-hidden="true">
-              {tr("// ROADMAP", "// FEUILLE DE ROUTE")}
-            </div>
-            <ol className="clearance-road-rail">
-              {clearances.map((item) => (
-                <li key={item.level} className="clearance-road-node" data-status={item.status}>
-                  <span className="clearance-road-dot" aria-hidden="true" />
-                  <span className="clearance-road-date">{item.date}</span>
-                  {/* The short name: the CV's, or the title up to its separator. */}
-                  <span className="clearance-road-name">{item.cvName ?? t(item.title).split(/ [·—] /)[0]}</span>
-                </li>
-              ))}
-            </ol>
-          </div>
         </div>
 
         {/* ── Right: sticky radar ── */}

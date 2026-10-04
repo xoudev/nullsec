@@ -22,15 +22,19 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const doc = getDoc(slug);
   if (!doc) return {};
   const fr = l === "fr";
-  const isCv = !doc.project;
-  const title = isCv ? "CV" : doc.title[l];
-  const description = isCv
-    ? fr
-      ? `Le CV de ${profile.fullName}, alternant SMSI chez Arvato, à lire en ligne ou à télécharger en PDF.`
-      : `${profile.fullName}'s CV, ISMS apprentice at Arvato, to read online or download as a PDF.`
-    : fr
-      ? `${doc.title[l]} : le document du projet, ${doc.pages} pages, à lire en ligne ou à télécharger en PDF.`
-      : `${doc.title[l]}: the project's document, ${doc.pages} pages, to read online or download as a PDF.`;
+  const title = doc.kind === "cv" ? "CV" : doc.title[l];
+  const description =
+    doc.kind === "cv"
+      ? fr
+        ? `Le CV de ${profile.fullName}, alternant SMSI chez Arvato, à lire en ligne ou à télécharger en PDF.`
+        : `${profile.fullName}'s CV, ISMS apprentice at Arvato, to read online or download as a PDF.`
+      : doc.kind === "certificate"
+        ? fr
+          ? `${doc.title[l]} de ${profile.fullName}, à lire en ligne ou à télécharger en PDF.`
+          : `${profile.fullName}'s ${doc.title[l]}, to read online or download as a PDF.`
+        : fr
+          ? `${doc.title[l]} : le document du projet, ${doc.pages} pages, à lire en ligne ou à télécharger en PDF.`
+          : `${doc.title[l]}: the project's document, ${doc.pages} pages, to read online or download as a PDF.`;
   const url = `${profile.siteUrl}${localePath(l, docPath(doc.slug))}`;
   return {
     title,
@@ -71,6 +75,10 @@ export default async function DocPage({ params }: Params) {
               {doc.project.title[l].toLowerCase()}
             </Link>
           </>
+        ) : doc.crumb ? (
+          <Link href={lp(doc.crumb.href)} className="hover-to-bone">
+            {doc.crumb.label[l]}
+          </Link>
         ) : (
           <span>cv</span>
         )}

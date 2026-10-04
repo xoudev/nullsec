@@ -28,6 +28,13 @@ export type Clearance = {
   /** How the CV names a target (scripts/build-cv.mjs), when the display
    *  title is too long or set in capitals. Defaults to the title. */
   cvName?: string;
+  /** When it lapses, YYYY.MM like `date`: a certification is a dated claim. */
+  expires?: string;
+  /** The certificate itself, when it can be shown: the PDF under /public,
+   *  its page count, its first page as an image (the entry's exhibit, under
+   *  public/docs/covers) and its language when it has only one. Read in the
+   *  site's reader, /<locale>/docs/<file name> (lib/documents.ts). */
+  document?: { href: string; pages: number; cover: string; lang?: "en" | "fr" };
 };
 
 export const clearances: Clearance[] = [
@@ -47,6 +54,14 @@ export const clearances: Clearance[] = [
       fr: "sécurité réseau Stormshield, administration des pare-feu, gestion des politiques de filtrage",
     },
     score: "80%",
+    // Issued 2026-05-19, three years.
+    expires: "2029.05",
+    document: {
+      href: "/docs/certificat-csna.pdf",
+      pages: 1,
+      cover: "/docs/covers/certificat-csna.jpg",
+      lang: "en",
+    },
     radar: {
       GOVERNANCE: 20,
       NETWORK:    80,

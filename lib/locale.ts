@@ -24,5 +24,6 @@ export function isLocale(v: string | undefined): v is Locale {
 /** Prefix an app-absolute path with the locale segment. */
 export function localePath(locale: Locale, path: string): string {
   if (!path.startsWith("/")) return path; // hash / mailto / external — untouched
+  if (path.startsWith("/#")) return `/${locale}${path.slice(1)}`; // the home page, at an anchor
   return `/${locale}${path === "/" ? "" : path}`;
 }

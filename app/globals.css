@@ -792,81 +792,75 @@ html:has(.vid[data-idle]:hover) .custom-cursor { opacity: 0 !important; }
   }
 }
 
-/* ─── Clearance: the credentials as plates, and the road ──────────────── */
-.clearance-plate {
-  border: 1px solid rgba(107, 107, 107, 0.28);
-  padding: clamp(1rem, 2vw, 1.5rem) clamp(1rem, 2.2vw, 1.6rem);
-}
-.clearance-plate.clearance-pending { border-color: rgba(255, 107, 26, 0.35); }
+/* What a certification validates, in view at all times (SectionClearance):
+   it used to open on hover only. */
 .clearance-validates { margin-top: 0.6rem; }
-/* The score, filled; a target, dashed. */
-.clearance-bar {
-  position: relative;
-  height: 2px;
-  margin: 0.9rem 0 0.2rem;
-  background-color: rgba(107, 107, 107, 0.25);
-}
-.clearance-bar i {
-  position: absolute;
-  inset: 0;
-  width: var(--fill, 0%);
-  background-color: var(--color-blood);
-}
-.clearance-bar[data-pending] { background: repeating-linear-gradient(90deg, rgba(255, 107, 26, 0.5) 0 6px, transparent 6px 12px); }
-.clearance-bar[data-pending] i { display: none; }
-.clearance-road { margin-top: clamp(2rem, 4vw, 3rem); }
-.clearance-road-label {
-  margin-bottom: 1rem;
-  font-family: var(--font-jetbrains-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  color: var(--color-ash);
-}
-.clearance-road-rail {
-  list-style: none;
-  margin: 0;
-  padding: 0 1.5rem 0 0;
-  position: relative;
+
+/* The certificate itself, when the entry has one (SectionClearance): its
+   first page printed in the palette, the same print as a case file's
+   document (.dossier-sheet), beside what it is and the way to read it. */
+.clearance-exhibit {
   display: flex;
-  gap: clamp(2rem, 6vw, 5rem);
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(0.9rem, 2vw, 1.4rem);
+  margin-top: 1.1rem;
+  color: inherit;
+  text-decoration: none;
 }
-.clearance-road-rail::before {
+.clearance-sheet {
+  position: relative;
+  flex: 0 0 auto;
+  width: clamp(8rem, 16vw, 11rem);
+  aspect-ratio: 842 / 595;
+  display: block;
+  isolation: isolate;
+  background-color: var(--color-bone);
+  outline: 1px solid rgba(15, 15, 18, 0.6);
+  transform: rotate(-1.5deg);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.clearance-sheet img { filter: grayscale(1) contrast(1.15); mix-blend-mode: multiply; }
+.clearance-sheet::after {
   content: "";
   position: absolute;
-  left: 0;
-  right: 0;
-  top: 4px;
-  height: 1px;
-  background: repeating-linear-gradient(90deg, rgba(107, 107, 107, 0.45) 0 6px, transparent 6px 10px);
+  inset: 0;
+  background-color: var(--color-void);
+  mix-blend-mode: lighten;
 }
-.clearance-road-rail::after {
-  content: "→";
+.clearance-sheet::before {
+  content: "PDF";
   position: absolute;
-  right: 0;
-  top: -0.5em;
-  font-family: var(--font-jetbrains-mono);
-  font-size: 0.8rem;
-  color: var(--color-ash);
-}
-.clearance-road-node {
-  position: relative;
-  padding-top: 1.1rem;
-  font-family: var(--font-jetbrains-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-}
-.clearance-road-dot {
-  position: absolute;
+  z-index: 1;
   top: 0;
   left: 0;
-  width: 9px;
-  height: 9px;
-  background-color: var(--color-ash);
+  padding: 0.25em 0.5em;
+  background-color: var(--color-blood);
+  color: var(--color-void);
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
 }
-.clearance-road-node[data-status="GRANTED"] .clearance-road-dot { background-color: var(--color-blood); }
-.clearance-road-node[data-status="PENDING"] .clearance-road-dot { background-color: transparent; border: 1px solid var(--color-blood); }
-.clearance-road-date { display: block; color: var(--color-bone); }
-.clearance-road-name { display: block; margin-top: 0.2rem; color: var(--color-ash); }
+.clearance-exhibit:is(:hover, :focus-visible) .clearance-sheet { transform: rotate(0) translateY(-3px); }
+/* Beside the sheet where there is room for a line of it, under the sheet on
+   a phone. */
+.clearance-exhibit-text {
+  flex: 1 1 14rem;
+  min-width: 0;
+  display: grid;
+  gap: 0.35rem;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--color-ash);
+}
+.clearance-exhibit-label { color: var(--color-blood); letter-spacing: 0.1em; }
+.clearance-exhibit-link { color: var(--color-bone); white-space: nowrap; transition: color 0.2s ease; }
+.clearance-exhibit:is(:hover, :focus-visible) .clearance-exhibit-link { color: var(--color-blood); }
+@media (prefers-reduced-motion: reduce) {
+  .clearance-sheet,
+  .clearance-exhibit-link { transition: none; }
+}
 
 /* ─── Clearance section — PENDING pulse ─── */
 /* The pulse used to animate border-left-color, which only the main thread
@@ -2318,20 +2312,8 @@ section[data-section-id]:focus { outline: none; }
   line-height: 1.5;
   color: var(--color-bone);
 }
-.about-story { display: grid; gap: clamp(1.5rem, 3vw, 2.25rem); }
-.about-part {
-  padding-top: clamp(1.1rem, 2.5vw, 1.5rem);
-  border-top: 1px solid rgba(107, 107, 107, 0.2);
-}
-.about-part-head {
-  margin: 0 0 0.75rem;
-  font-family: var(--font-jetbrains-mono);
-  font-weight: 400;
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
-  color: var(--color-blood);
-}
-.about-part-text {
+.about-story { display: grid; gap: 1.9rem; }
+.about-text {
   margin: 0;
   max-width: 62ch;
   font-family: var(--font-sans);
@@ -2356,7 +2338,7 @@ section[data-section-id]:focus { outline: none; }
   }
   .about-fact { display: block; }
   .about-ghost { grid-area: ghost; display: block; margin-top: clamp(1rem, 2vw, 2rem); }
-  .about-part-text { line-height: 1.82; }
+  .about-text { line-height: 1.82; }
 }
 
 @media (prefers-reduced-motion: reduce) {
