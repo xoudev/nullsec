@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { gsap, loadScrollTrigger } from "@/lib/gsap";
 import { softReveal } from "@/lib/softReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
@@ -10,6 +12,7 @@ import { clearances } from "@/content/clearances";
 import type { ClearanceStatus } from "@/content/clearances";
 import { ClearanceRadar } from "@/components/sections/ClearanceRadar";
 import { spell } from "@/lib/spell";
+import { docPath, docSlug } from "@/lib/doc-routes";
 
 // The status tag, in the page's language: "[GRANTED]" on the French site was
 // one of a dozen English labels left over from before the translation.
@@ -36,7 +39,6 @@ export function SectionClearance() {
   const sectionRef    = useRef<HTMLElement>(null);
   const entryRefs     = useRef<(HTMLDivElement | null)[]>([]);
   const ruleRefs      = useRef<(HTMLSpanElement | null)[]>([]);
-  const validateRefs  = useRef<(HTMLDivElement | null)[]>([]);
   const radarColRef   = useRef<HTMLDivElement>(null);
 
   // The radar column sticks centred in the window, unless that would put its
@@ -52,7 +54,7 @@ export function SectionClearance() {
     return () => ro.disconnect();
   }, []);
   const prefersReduced = useReducedMotion();
-  const { t, tr } = useT();
+  const { t, tr, lp } = useT();
 
   // ── Radar active cert (null = show aggregate) ───────────────────
   const [activeCertIndex, setActiveCertIndex] = useState<number | null>(null);
@@ -84,14 +86,6 @@ export function SectionClearance() {
 
   // ── GSAP: initial states + scroll reveal ────────────────────────
   useEffect(() => {
-    const isMobile = window.innerWidth < 768;
-
-    validateRefs.current.forEach((el) => {
-      if (!el) return;
-      gsap.set(el, isMobile || prefersReduced
-        ? { height: "auto", opacity: 1 }
-        : { height: 0,      opacity: 0 });
-    });
 
     if (prefersReduced) {
       // Soft opacity fade-in for the clearance entries — no horizontal slide.
@@ -148,25 +142,20 @@ export function SectionClearance() {
     return () => { isMounted = false; ctx?.revert(); };
   }, [prefersReduced]);
 
-  // ── Hover: validates expand/collapse + radar update (desktop) ────
+  // ── Hover: the radar follows the plate under the pointer (desktop) ──
   const handleEnter = (i: number) => {
     if (window.innerWidth < 768) return;
     setActiveCertIndex(i);
-    if (prefersReduced) return;
-    const el = validateRefs.current[i];
-    if (el) gsap.to(el, { height: "auto", opacity: 1, duration: 0.3, ease: "power2.out" });
   };
 
-  const handleLeave = (i: number) => {
+  const handleLeave = () => {
     if (window.innerWidth < 768) return;
     setActiveCertIndex(null);
-    if (prefersReduced) return;
-    const el = validateRefs.current[i];
-    if (el) gsap.to(el, { height: 0, opacity: 0, duration: 0.2, ease: "power2.in" });
   };
 
   return (
     <section
+      id="clearance"
       ref={sectionRef}
       data-section-id={section("clearance").id}
       aria-label={tr("Clearance: certifications", "Habilitations : certifications")}
@@ -239,7 +228,7 @@ export function SectionClearance() {
                 key={i}
                 ref={(el) => { entryRefs.current[i] = el; }}
                 onMouseEnter={() => handleEnter(i)}
-                onMouseLeave={() => handleLeave(i)}
+                onMouseLeave={handleLeave}
                 className={isPending ? "clearance-pending" : undefined}
                 style={{
                   // Pending rows rest on the dim end of the pulse; the bright
@@ -338,11 +327,9 @@ export function SectionClearance() {
                   )}
                 </div>
 
-                {/* Validates — animated reveal on desktop hover, always visible on mobile */}
-                <div
-                  ref={(el) => { validateRefs.current[i] = el; }}
-                  style={{ overflow: "hidden" }}
-                >
+                {/* What it validates, in view at all times: it used to open on
+                    hover only, so on a desktop the plates said nothing. */}
+                <div className="clearance-validates">
                   {/* The visible copy is collapsed and animated, so it is hidden
                       from assistive tech and the text is exposed here instead.
                       This used to be an aria-label on the wrapper, which is
@@ -364,6 +351,43 @@ export function SectionClearance() {
                     {tr(`// validates: ${t(item.validates)}`, `// valide : ${t(item.validates)}`)}
                   </div>
                 </div>
+
+                {/* The certificate itself, when there is one: its first page
+                    printed in the palette, like a case file's document
+                    (.dossier-sheet), and the way to read it in the site's
+                    reader. A claim with its evidence beside it. */}
+                {item.document && (
+                  <Link
+                    href={lp(docPath(docSlug(item.document.href)))}
+                    className="clearance-exhibit"
+                    data-cursor-lock=""
+                  >
+                    <span className="clearance-sheet" aria-hidden="true">
+                      <Image
+                        src={item.document.cover}
+                        alt=""
+                        fill
+                        sizes="(min-width: 768px) 11rem, 8rem"
+                        style={{ objectFit: "cover" }}
+                      />
+                    </span>
+                    <span className="clearance-exhibit-text">
+                      <span className="clearance-exhibit-label" aria-hidden="true">
+                        {tr("// EXHIBIT", "// PIÈCE")}
+                      </span>
+                      <span>
+                        {tr(
+                          `Certificate · PDF · ${item.document.pages} page${item.document.pages > 1 ? "s" : ""}`,
+                          `Certificat · PDF · ${item.document.pages} page${item.document.pages > 1 ? "s" : ""}`,
+                        )}
+                        {item.expires ? tr(` · valid to ${item.expires}`, ` · valable jusqu'en ${item.expires}`) : ""}
+                      </span>
+                      <span className="clearance-exhibit-link">
+                        {tr("[ read the certificate → ]", "[ lire le certificat → ]")}
+                      </span>
+                    </span>
+                  </Link>
+                )}
               </div>
             );
           })}

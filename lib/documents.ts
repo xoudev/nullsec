@@ -2,6 +2,7 @@ import type { Locale, Localized } from "@/lib/locale";
 import { CV_DOC, docSlug } from "@/lib/doc-routes";
 import { profile } from "@/profile";
 import { work } from "@/content/work";
+import { clearances } from "@/content/clearances";
 
 /**
  * Every document the reader can open, built from the content that already
@@ -11,6 +12,7 @@ import { work } from "@/content/work";
  */
 export type DocEntry = {
   slug: string;
+  kind: "cv" | "project" | "certificate";
   /** The PDF, per locale (the CV has one per language). */
   src: Localized<string>;
   title: Localized<string>;
@@ -20,12 +22,16 @@ export type DocEntry = {
   lang?: Locale;
   /** The case study it belongs to, for the way back. */
   project?: { slug: string; title: Localized<string> };
+  /** The way back for a document with no case study: the section it is
+   *  shown in, as the breadcrumb names and links it. */
+  crumb?: { label: Localized<string>; href: string };
 };
 
 export function documents(): DocEntry[] {
   const docs: DocEntry[] = [
     {
       slug: CV_DOC,
+      kind: "cv",
       src: profile.cvUrl,
       title: { en: "Curriculum vitae", fr: "Curriculum vitæ" },
       // scripts/build-cv.mjs lays the CV out on a single A4 page.
@@ -36,6 +42,7 @@ export function documents(): DocEntry[] {
     for (const d of w.documents ?? []) {
       docs.push({
         slug: docSlug(d.href),
+        kind: "project",
         src: { en: d.href, fr: d.href },
         title: { en: `${w.title.en} · ${d.label.en}`, fr: `${w.title.fr} · ${d.label.fr}` },
         pages: d.pages,
@@ -43,6 +50,21 @@ export function documents(): DocEntry[] {
         project: { slug: w.slug, title: w.title },
       });
     }
+  }
+  // The certificates shown in the clearance section.
+  for (const c of clearances) {
+    const d = c.document;
+    if (!d) continue;
+    const short = { en: c.title.en.split(/ [·—] /)[0], fr: c.title.fr.split(/ [·—] /)[0] };
+    docs.push({
+      slug: docSlug(d.href),
+      kind: "certificate",
+      src: { en: d.href, fr: d.href },
+      title: { en: `${short.en} · Certificate`, fr: `${short.fr} · Certificat` },
+      pages: d.pages,
+      lang: d.lang,
+      crumb: { label: { en: "clearance", fr: "habilitations" }, href: "/#clearance" },
+    });
   }
   return docs;
 }

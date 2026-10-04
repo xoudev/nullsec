@@ -792,6 +792,76 @@ html:has(.vid[data-idle]:hover) .custom-cursor { opacity: 0 !important; }
   }
 }
 
+/* What a certification validates, in view at all times (SectionClearance):
+   it used to open on hover only. */
+.clearance-validates { margin-top: 0.6rem; }
+
+/* The certificate itself, when the entry has one (SectionClearance): its
+   first page printed in the palette, the same print as a case file's
+   document (.dossier-sheet), beside what it is and the way to read it. */
+.clearance-exhibit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(0.9rem, 2vw, 1.4rem);
+  margin-top: 1.1rem;
+  color: inherit;
+  text-decoration: none;
+}
+.clearance-sheet {
+  position: relative;
+  flex: 0 0 auto;
+  width: clamp(8rem, 16vw, 11rem);
+  aspect-ratio: 842 / 595;
+  display: block;
+  isolation: isolate;
+  background-color: var(--color-bone);
+  outline: 1px solid rgba(15, 15, 18, 0.6);
+  transform: rotate(-1.5deg);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.clearance-sheet img { filter: grayscale(1) contrast(1.15); mix-blend-mode: multiply; }
+.clearance-sheet::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-void);
+  mix-blend-mode: lighten;
+}
+.clearance-sheet::before {
+  content: "PDF";
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  padding: 0.25em 0.5em;
+  background-color: var(--color-blood);
+  color: var(--color-void);
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+}
+.clearance-exhibit:is(:hover, :focus-visible) .clearance-sheet { transform: rotate(0) translateY(-3px); }
+/* Beside the sheet where there is room for a line of it, under the sheet on
+   a phone. */
+.clearance-exhibit-text {
+  flex: 1 1 14rem;
+  min-width: 0;
+  display: grid;
+  gap: 0.35rem;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--color-ash);
+}
+.clearance-exhibit-label { color: var(--color-blood); letter-spacing: 0.1em; }
+.clearance-exhibit-link { color: var(--color-bone); white-space: nowrap; transition: color 0.2s ease; }
+.clearance-exhibit:is(:hover, :focus-visible) .clearance-exhibit-link { color: var(--color-blood); }
+@media (prefers-reduced-motion: reduce) {
+  .clearance-sheet,
+  .clearance-exhibit-link { transition: none; }
+}
+
 /* ─── Clearance section — PENDING pulse ─── */
 /* The pulse used to animate border-left-color, which only the main thread
    can do: a style recalc and a repaint on every frame, for as long as the tab
@@ -2121,11 +2191,15 @@ section[data-section-id]:focus { outline: none; }
   .dossier-chip[data-live]::before { animation: pt-blink 1.6s step-end infinite; }
 }
 
-/* ── On a phone: a row to swipe ── */
+/* ── On a phone: a row to swipe (the homepage), or a stack (the index) ── */
 .dossiers-rail { display: none; }
 @media (max-width: 767px) {
   .dossiers-count { display: none; }
-  .dossiers {
+  .dossiers-nav[data-layout="stack"] .dossiers { grid-template-columns: minmax(0, 1fr); }
+  .dossiers-nav[data-layout="stack"] .dossier:last-child:nth-child(odd) { grid-column: auto; }
+}
+@media (max-width: 767px) {
+  .dossiers-nav:not([data-layout="stack"]) .dossiers {
     display: flex;
     gap: 0.875rem;
     /* Edge to edge, the first card still on the text's line; the 4px leave
@@ -2138,13 +2212,13 @@ section[data-section-id]:focus { outline: none; }
     scroll-padding-inline: var(--gutter);
     scrollbar-width: none;
   }
-  .dossiers::-webkit-scrollbar { display: none; }
-  .dossier {
+  .dossiers-nav:not([data-layout="stack"]) .dossiers::-webkit-scrollbar { display: none; }
+  .dossiers-nav:not([data-layout="stack"]) .dossier {
     flex: 0 0 min(80vw, 22rem);
     scroll-snap-align: start;
   }
   /* Swiped in sideways: no rise, no stagger, the shutter alone. */
-  .dossier[data-reveal] { --reveal-y: 0px !important; --reveal-delay: 0s !important; }
+  .dossiers-nav:not([data-layout="stack"]) .dossier[data-reveal] { --reveal-y: 0px !important; --reveal-delay: 0s !important; }
   .dossier-visual { --sheet-h: 85cqh; height: auto; aspect-ratio: 16 / 10; }
   .dossier-sheet { bottom: -20%; }
   .dossiers-rail {
@@ -2200,6 +2274,71 @@ section[data-section-id]:focus { outline: none; }
 @keyframes dossiers-progress {
   from { transform: scaleX(0.12); }
   to { transform: scaleX(1); }
+}
+
+/* ─── About: the sheet, then the story in three parts ─────────────────── */
+.about-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2.5rem, 5vw, 4rem);
+}
+.about-facts {
+  order: -1;
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+  padding: clamp(1.1rem, 2.5vw, 1.5rem) 0 0;
+  border-top: 1px solid rgba(107, 107, 107, 0.2);
+}
+/* On a phone, a line per fact: the label, then the value beside it. */
+.about-fact {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  column-gap: 0.75rem;
+  align-items: baseline;
+}
+.about-fact dt {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: var(--color-ash);
+  margin-bottom: 0.35rem;
+}
+.about-fact dd {
+  margin: 0;
+  font-family: var(--font-jetbrains-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  color: var(--color-bone);
+}
+.about-story { display: grid; gap: 1.9rem; }
+.about-text {
+  margin: 0;
+  max-width: 62ch;
+  font-family: var(--font-sans);
+  font-size: clamp(1rem, 1.15vw, 1.1rem);
+  line-height: 1.7;
+  color: rgba(242, 239, 232, 0.82);
+}
+.about-ghost { display: none; }
+@media (min-width: 768px) {
+  .about-grid {
+    grid-template-columns: minmax(0, 2fr) minmax(14rem, 1fr);
+    grid-template-areas: "story facts" "story ghost";
+    column-gap: clamp(3rem, 6vw, 6rem);
+    align-items: start;
+  }
+  .about-story { grid-area: story; }
+  .about-facts {
+    grid-area: facts;
+    order: 0;
+    gap: clamp(1.25rem, 2vw, 1.75rem);
+    padding-top: clamp(1.1rem, 2.5vw, 1.5rem);
+  }
+  .about-fact { display: block; }
+  .about-ghost { grid-area: ghost; display: block; margin-top: clamp(1rem, 2vw, 2rem); }
+  .about-text { line-height: 1.82; }
 }
 
 @media (prefers-reduced-motion: reduce) {
