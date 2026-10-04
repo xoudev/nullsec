@@ -118,6 +118,12 @@ export const profile = {
       // The size of the job, which the bullets alone do not give. Never the
       // site names: those stay internal.
       scope: { en: "4 sites · 300+ employees", fr: "4 sites · plus de 300 collaborateurs" },
+      // The same facts as the scope and the bullets, as figures for the
+      // section's strip. Never a site name, never a business unit.
+      highlights: {
+        en: [["5", "EBIOS RM analyses"], ["28", "scenarios in one of them"], ["4", "sites"], ["300+", "employees"]],
+        fr: [["5", "analyses EBIOS RM"], ["28", "scénarios dans l'une d'elles"], ["4", "sites"], ["300+", "collaborateurs"]],
+      },
       focus: {
         en: [
           "5 EBIOS RM risk analyses across five business units, one covering 28 risk scenarios",

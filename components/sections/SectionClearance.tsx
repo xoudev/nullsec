@@ -36,7 +36,6 @@ export function SectionClearance() {
   const sectionRef    = useRef<HTMLElement>(null);
   const entryRefs     = useRef<(HTMLDivElement | null)[]>([]);
   const ruleRefs      = useRef<(HTMLSpanElement | null)[]>([]);
-  const validateRefs  = useRef<(HTMLDivElement | null)[]>([]);
   const radarColRef   = useRef<HTMLDivElement>(null);
 
   // The radar column sticks centred in the window, unless that would put its
@@ -84,14 +83,6 @@ export function SectionClearance() {
 
   // ── GSAP: initial states + scroll reveal ────────────────────────
   useEffect(() => {
-    const isMobile = window.innerWidth < 768;
-
-    validateRefs.current.forEach((el) => {
-      if (!el) return;
-      gsap.set(el, isMobile || prefersReduced
-        ? { height: "auto", opacity: 1 }
-        : { height: 0,      opacity: 0 });
-    });
 
     if (prefersReduced) {
       // Soft opacity fade-in for the clearance entries — no horizontal slide.
@@ -148,21 +139,15 @@ export function SectionClearance() {
     return () => { isMounted = false; ctx?.revert(); };
   }, [prefersReduced]);
 
-  // ── Hover: validates expand/collapse + radar update (desktop) ────
+  // ── Hover: the radar follows the plate under the pointer (desktop) ──
   const handleEnter = (i: number) => {
     if (window.innerWidth < 768) return;
     setActiveCertIndex(i);
-    if (prefersReduced) return;
-    const el = validateRefs.current[i];
-    if (el) gsap.to(el, { height: "auto", opacity: 1, duration: 0.3, ease: "power2.out" });
   };
 
-  const handleLeave = (i: number) => {
+  const handleLeave = () => {
     if (window.innerWidth < 768) return;
     setActiveCertIndex(null);
-    if (prefersReduced) return;
-    const el = validateRefs.current[i];
-    if (el) gsap.to(el, { height: 0, opacity: 0, duration: 0.2, ease: "power2.in" });
   };
 
   return (
@@ -239,17 +224,11 @@ export function SectionClearance() {
                 key={i}
                 ref={(el) => { entryRefs.current[i] = el; }}
                 onMouseEnter={() => handleEnter(i)}
-                onMouseLeave={() => handleLeave(i)}
-                className={isPending ? "clearance-pending" : undefined}
-                style={{
-                  // Pending rows rest on the dim end of the pulse; the bright
-                  // end is a ::before layer whose opacity the compositor
-                  // animates (see .clearance-pending in globals.css).
-                  borderLeft:  isPending
-                    ? "2px solid rgba(255,107,26,0.25)"
-                    : "2px solid rgba(107,107,107,0.22)",
-                  paddingLeft: "clamp(1rem, 2vw, 1.5rem)",
-                }}
+                onMouseLeave={handleLeave}
+                // A plate (.clearance-plate). Pending ones rest on the dim end
+                // of the pulse; the bright end is a ::before layer whose
+                // opacity the compositor animates (.clearance-pending).
+                className={isPending ? "clearance-plate clearance-pending" : "clearance-plate"}
               >
                 {/* Status / date / rule / level row — real data (status, score,
                     date, level), so it must reach assistive technology. */}
@@ -338,11 +317,19 @@ export function SectionClearance() {
                   )}
                 </div>
 
-                {/* Validates — animated reveal on desktop hover, always visible on mobile */}
+                {/* The score as a bar; a target as a dashed one. */}
                 <div
-                  ref={(el) => { validateRefs.current[i] = el; }}
-                  style={{ overflow: "hidden" }}
+                  className="clearance-bar"
+                  aria-hidden="true"
+                  data-pending={isPending ? "" : undefined}
+                  style={{ "--fill": item.score ? item.score : "0%" } as React.CSSProperties}
                 >
+                  <i />
+                </div>
+
+                {/* What it validates, in view at all times: it used to open on
+                    hover only, so on a desktop the plates said nothing. */}
+                <div className="clearance-validates">
                   {/* The visible copy is collapsed and animated, so it is hidden
                       from assistive tech and the text is exposed here instead.
                       This used to be an aria-label on the wrapper, which is
@@ -367,6 +354,24 @@ export function SectionClearance() {
               </div>
             );
           })}
+
+          {/* The road: the credentials in order, the one in preparation
+              hollow, the line open past it. */}
+          <div className="clearance-road" role="group" aria-label={tr("Roadmap", "Feuille de route")}>
+            <div className="clearance-road-label" aria-hidden="true">
+              {tr("// ROADMAP", "// FEUILLE DE ROUTE")}
+            </div>
+            <ol className="clearance-road-rail">
+              {clearances.map((item) => (
+                <li key={item.level} className="clearance-road-node" data-status={item.status}>
+                  <span className="clearance-road-dot" aria-hidden="true" />
+                  <span className="clearance-road-date">{item.date}</span>
+                  {/* The short name: the CV's, or the title up to its separator. */}
+                  <span className="clearance-road-name">{item.cvName ?? t(item.title).split(/ [·—] /)[0]}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
 
         {/* ── Right: sticky radar ── */}
