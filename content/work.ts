@@ -16,7 +16,8 @@ export type WorkItem = {
   excerpt: Localized<string>;
   /**
    * What a search result shows. `title` gets " · Jordan Turnaco" from the
-   * layout template, so keep it under ~45 characters and make it say what the
+   * layout template, so keep it within 43 characters (60 in all, what a search
+   * result shows) and make it say what the
    * project is: the display title alone ("TORON") told a search page nothing.
    * `description` is the snippet, at most ~155 characters, because Google cuts
    * the excerpts (200 to 340) mid-sentence.
@@ -219,7 +220,7 @@ export const work: WorkItem[] = [
       fr: "La plateforme sur laquelle je reviens toujours. Un environnement full-stack d'apprentissage de la cybersécurité où le plus dur n'a jamais été de rédiger les leçons, mais de faire en sorte que la progression se mérite et de tenir une base multi-tenant rigoureuse sur les droits de lecture de chacun.",
     },
     meta: {
-      title: { en: "CyberLearn, a cybersecurity learning platform", fr: "CyberLearn, plateforme d'apprentissage cyber" },
+      title: { en: "CyberLearn, cybersecurity learning platform", fr: "CyberLearn, apprendre la cybersécurité" },
       description: {
         en: "Full-stack cybersecurity learning platform: PostgreSQL row-level-security authorisation, structured DevSecOps paths and a gamification layer.",
         fr: "Plateforme full-stack d'apprentissage de la cybersécurité : autorisation par Row Level Security PostgreSQL, parcours DevSecOps structurés, gamification.",
@@ -280,7 +281,7 @@ export const work: WorkItem[] = [
       fr: "Le site que vous êtes en train de lire. Un portfolio éditorial-brutaliste conçu sous contrainte délibérée (quatre couleurs, aucun dégradé, trois typographies), où le contenu n'est que de la donnée structurée et où les CV se compilent depuis les sources.",
     },
     meta: {
-      title: { en: "NULLSEC, this portfolio and its compiled CVs", fr: "NULLSEC, ce portfolio et ses CV compilés" },
+      title: { en: "NULLSEC, portfolio and compiled CVs", fr: "NULLSEC, ce portfolio et ses CV compilés" },
       description: {
         en: "Editorial-brutalist portfolio on Next.js 16: typed content as the single source of truth, CVs compiled in Typst from the same data, CSP and HSTS.",
         fr: "Portfolio éditorial-brutaliste en Next.js 16 : contenu typé comme source unique de vérité, CV compilés en Typst depuis les mêmes données, CSP et HSTS.",
@@ -328,7 +329,7 @@ export const work: WorkItem[] = [
       fr: "Dossier d'architecture de fin d'études : Zero Trust et défense en profondeur pour une activité logistique sur trois sites. L'architecture cible n'a jamais été le plus dur. Justifier chaque choix face à une analyse de risques, à une contrainte de souveraineté et à un budget, si.",
     },
     meta: {
-      title: { en: "Zero Trust dossier: EBIOS RM and segmentation", fr: "Dossier Zero Trust : EBIOS RM et segmentation" },
+      title: { en: "Zero Trust: EBIOS RM and segmentation", fr: "Zero Trust : EBIOS RM et segmentation" },
       description: {
         en: "Final-year dossier: EBIOS RM analysis, 11 default-deny VLANs, a tiered hybrid AD and a SIEM baseline for a three-site supply-chain operation.",
         fr: "Dossier de fin d'études : analyse EBIOS RM, 11 VLANs en refus par défaut, AD hybride en tiering et socle SIEM pour une activité logistique sur trois sites.",
@@ -367,7 +368,7 @@ export const work: WorkItem[] = [
       fr: "Un rançongiciel dans une entreprise de satellites n'est pas un problème de rançongiciel. C'est la question de savoir quels systèmes vous pouvez vous permettre de perdre, et pour combien de temps, et ce que devient cette réponse pour les systèmes où elle ne se compte plus en heures.",
     },
     meta: {
-      title: { en: "Crisis GRC at a satellite operator", fr: "GRC de crise chez un opérateur de satellites" },
+      title: { en: "Crisis GRC at a satellite operator", fr: "GRC de crise, opérateur de satellites" },
       description: {
         en: "Crisis simulation at a satellite operator: 4 risk scenarios, BCP and DRP with a 6-hour RTO, a RACI matrix, and ISO 27001, NIS2 and CER applied together.",
         fr: "Simulation de crise chez un opérateur de satellites : 4 scénarios de risque, PCA et PRA avec un RTO de 6 h, matrice RACI, ISO 27001, NIS2 et CER de front.",

@@ -28,7 +28,9 @@ export async function generateMetadata({
   const description = post.description?.[l] ?? post.excerpt[l];
   const base = profile.siteUrl;
   return {
-    title,
+    // The heading, unless it would run the tab title past what a search
+    // result shows once the layout adds the owner's name.
+    title: post.metaTitle?.[l] ?? title,
     description,
     alternates: {
       canonical: `${base}/${l}/dispatches/${post.slug}`,

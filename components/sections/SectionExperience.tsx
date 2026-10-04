@@ -20,41 +20,33 @@ export function SectionExperience({ l }: { l: Locale }) {
         position: "relative",
       }}
     >
-      {/* Header */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          alignItems: "baseline",
-          gap: "1rem",
-          marginBottom: "clamp(2rem, 4vw, 3rem)",
-        }}
-      >
-        <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.75rem", color: "var(--color-blood)", letterSpacing: "0.1em", whiteSpace: "nowrap" }}>
+      {/* Header: label, count and display line (.sec-head in globals.css
+          keeps the count out of the HUD's corner). */}
+      <div className="sec-head" style={{ rowGap: "clamp(2rem, 4vw, 3rem)", marginBottom: "clamp(2.5rem, 5vw, 4rem)" }}>
+        <span aria-hidden="true" className="sec-label" style={{ fontFamily: MONO, fontSize: "0.75rem", color: "var(--color-blood)", letterSpacing: "0.1em", whiteSpace: "nowrap" }}>
           {tr(sectionLabel("experience", "en"), sectionLabel("experience", "fr"))}
         </span>
-        <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: "0.75rem", color: "var(--color-ash)", letterSpacing: "0.1em", whiteSpace: "nowrap" }}>
+        <span aria-hidden="true" className="sec-count" style={{ fontFamily: MONO, fontSize: "0.75rem", color: "var(--color-ash)", letterSpacing: "0.1em", whiteSpace: "nowrap" }}>
           {`${String(profile.experience.length).padStart(2, "0")} ${tr("ROLES · SINCE 2024", "RÔLES · DEPUIS 2024")}`}
         </span>
+        {/* Display line */}
+        <h2
+          className="sec-title"
+          style={{
+            fontFamily: "var(--font-instrument-serif)",
+            fontStyle: "italic",
+            fontSize: "clamp(1.8rem, 4.5vw, 3.5rem)",
+            lineHeight: 1.05,
+            letterSpacing: "-0.02em",
+            color: "var(--color-bone)",
+            margin: 0,
+            maxWidth: "20ch",
+            textWrap: "balance",
+          }}
+        >
+          {tr("From shipping features to securing them.", "Du développement à la GRC, sans lâcher le code.")}
+        </h2>
       </div>
-
-      {/* Display line */}
-      <h2
-        style={{
-          fontFamily: "var(--font-instrument-serif)",
-          fontStyle: "italic",
-          fontSize: "clamp(1.8rem, 4.5vw, 3.5rem)",
-          lineHeight: 1.05,
-          letterSpacing: "-0.02em",
-          color: "var(--color-bone)",
-          margin: "0 0 clamp(2.5rem, 5vw, 4rem)",
-          maxWidth: "20ch",
-          textWrap: "balance",
-        }}
-      >
-        {tr("From shipping features to securing them.", "Du développement à la GRC, sans lâcher le code.")}
-      </h2>
 
       {/* Entries — meta (left) + responsibilities (right) */}
       <div>

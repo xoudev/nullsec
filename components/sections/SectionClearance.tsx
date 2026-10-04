@@ -37,6 +37,20 @@ export function SectionClearance() {
   const entryRefs     = useRef<(HTMLDivElement | null)[]>([]);
   const ruleRefs      = useRef<(HTMLSpanElement | null)[]>([]);
   const validateRefs  = useRef<(HTMLDivElement | null)[]>([]);
+  const radarColRef   = useRef<HTMLDivElement>(null);
+
+  // The radar column sticks centred in the window, unless that would put its
+  // top under the HUD: its measured half height sets the floor of its sticky
+  // top (.clearance-radar-col in globals.css).
+  useEffect(() => {
+    const col = radarColRef.current;
+    if (!col || !("ResizeObserver" in window)) return;
+    const ro = new ResizeObserver(() => {
+      col.style.setProperty("--radar-half", `${Math.round(col.offsetHeight / 2)}px`);
+    });
+    ro.observe(col);
+    return () => ro.disconnect();
+  }, []);
   const prefersReduced = useReducedMotion();
   const { t, tr } = useT();
 
@@ -162,48 +176,50 @@ export function SectionClearance() {
         position: "relative",
       }}
     >
-      {/* Section header */}
-      <div style={{ marginBottom: "clamp(3rem, 6vw, 5rem)" }}>
-        <div
-          aria-hidden="true"
-          style={{
-            fontFamily:    "var(--font-jetbrains-mono)",
-            fontSize:      "0.75rem",
-            color:         "var(--color-blood)",
-            letterSpacing: "0.1em",
-            marginBottom:  "1.25rem",
-          }}
-        >
-          {tr(sectionLabel("clearance", "en"), sectionLabel("clearance", "fr"))}
-        </div>
-        {/* Says what the section holds, counted from the data, rather than
-            one more slogan: every section used to open on one. */}
-        <h2
-          style={{
-            fontFamily:    "var(--font-instrument-serif)",
-            fontStyle:     "italic",
-            fontSize:      "clamp(2rem, 5vw, 4rem)",
-            fontWeight:    400,
-            lineHeight:    1.05,
-            color:         "var(--color-bone)",
-            letterSpacing: "-0.02em",
-            margin:        0,
-          }}
-        >
-          {tr(
-            `${spell(HELD, "en", { capital: true })} certification${HELD > 1 ? "s" : ""} held,`,
-            `${spell(HELD, "fr", { feminine: true, capital: true })} certification${HELD > 1 ? "s" : ""} obtenue${HELD > 1 ? "s" : ""},`,
-          )}
-          <br />
-          {tr(
-            `${spell(PENDING, "en")} in preparation.`,
-            `${spell(PENDING, "fr", { feminine: true })} en préparation.`,
-          )}
-        </h2>
-      </div>
-
-      {/* Two-column grid: entries left, radar right */}
+      {/* The grid: title and entries left, radar right (areas in globals.css). */}
       <div className="clearance-grid">
+        {/* Section header: the grid's left column, over the entries, so the
+              radar beside it starts level with the title (and clear of the HUD:
+              .clearance-radar-col in globals.css). */}
+        <div className="clearance-head" style={{ marginBottom: "clamp(3rem, 6vw, 5rem)" }}>
+          <div
+            aria-hidden="true"
+            style={{
+              fontFamily:    "var(--font-jetbrains-mono)",
+              fontSize:      "0.75rem",
+              color:         "var(--color-blood)",
+              letterSpacing: "0.1em",
+              marginBottom:  "1.25rem",
+            }}
+          >
+            {tr(sectionLabel("clearance", "en"), sectionLabel("clearance", "fr"))}
+          </div>
+          {/* Says what the section holds, counted from the data, rather than
+              one more slogan: every section used to open on one. */}
+          <h2
+            style={{
+              fontFamily:    "var(--font-instrument-serif)",
+              fontStyle:     "italic",
+              fontSize:      "clamp(2rem, 5vw, 4rem)",
+              fontWeight:    400,
+              lineHeight:    1.05,
+              color:         "var(--color-bone)",
+              letterSpacing: "-0.02em",
+              margin:        0,
+            }}
+          >
+            {tr(
+              `${spell(HELD, "en", { capital: true })} certification${HELD > 1 ? "s" : ""} held,`,
+              `${spell(HELD, "fr", { feminine: true, capital: true })} certification${HELD > 1 ? "s" : ""} obtenue${HELD > 1 ? "s" : ""},`,
+            )}
+            <br />
+            {tr(
+              `${spell(PENDING, "en")} in preparation.`,
+              `${spell(PENDING, "fr", { feminine: true })} en préparation.`,
+            )}
+          </h2>
+        </div>
+
 
         {/* ── Left: cert entries ── */}
         <div
@@ -354,7 +370,7 @@ export function SectionClearance() {
         </div>
 
         {/* ── Right: sticky radar ── */}
-        <div className="clearance-radar-col">
+        <div className="clearance-radar-col" ref={radarColRef}>
           <ClearanceRadar
             clearances={clearances}
             activeCertIndex={activeCertIndex}

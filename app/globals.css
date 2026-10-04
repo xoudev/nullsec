@@ -170,6 +170,26 @@ html[lang="fr"] .nf-en { display: none; }
   .toolkit-cell { min-height: 0; }
 }
 
+/* ─── Section head: label, count, display line ───────────────────────────
+   On a phone the count shares the label's line; from 768px it moves down to
+   the display line's baseline, at the right. The top right corner is the
+   HUD's, and a count kept there sat under it whenever a section was scrolled
+   to its top, which is exactly what the HUD's own index does. ─── */
+.sec-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "label count" "title title";
+  column-gap: 1rem;
+  align-items: baseline;
+}
+.sec-label { grid-area: label; }
+.sec-count { grid-area: count; }
+.sec-title { grid-area: title; }
+@media (min-width: 768px) {
+  .sec-head { grid-template-areas: "label label" "title count"; align-items: end; }
+  .sec-count { padding-bottom: 0.45em; }
+}
+
 /* ─── Experience — timeline entries (period | content) ─── */
 .exp-entry {
   padding: clamp(2rem, 4vw, 3.25rem) 0;
@@ -428,6 +448,13 @@ section[data-section-id] { isolation: isolate; }
   .terminal-header-title { display: none; }
 }
 
+/* ─── Terminal log over its sizing ghost (SectionHandshake): the ghost is
+   the boot output as it will stand once typed, invisible, in the same grid
+   cell, so the window has its final height from the first paint. ─── */
+.terminal-log { display: grid; }
+.terminal-log > * { grid-area: 1 / 1; min-width: 0; }
+.terminal-ghost { visibility: hidden; pointer-events: none; }
+
 /* ─── Terminal input focus: a blinking block cursor at the end of the typed
    text (the canonical terminal focus cue) — no coloured underline. ─── */
 .terminal-cursor {
@@ -449,6 +476,11 @@ section[data-section-id] { isolation: isolate; }
 .terminal-chips { display: none; }
 @media (hover: none) {
   .terminal-frame { flex: 0 1 auto; max-height: 24rem; }
+  /* The log scrolls within the window: the frame's 24rem less its 2.5rem
+     bar and its borders. Its height never resolved from the frame's
+     maximum alone, so nothing inside scrolled and whatever a chip printed
+     past the window's bottom edge was out of reach. */
+  .terminal-scroll { max-height: calc(21.5rem - 2px); }
   .terminal-chips {
     display: flex;
     flex-wrap: wrap;
@@ -726,25 +758,36 @@ html:has(.vid[data-idle]:hover) .custom-cursor { opacity: 0 !important; }
 .clearance-grid {
   display: grid;
   grid-template-columns: 3fr 2fr;
-  gap: clamp(3rem, 5vw, 5rem);
+  grid-template-areas: "head radar" "entries radar";
+  column-gap: clamp(3rem, 5vw, 5rem);
   align-items: start;
 }
-
+.clearance-head { grid-area: head; }
+.clearance-entries-col { grid-area: entries; }
+/* Beside the title, a little below it, and clear of the HUD (167px tall)
+   when the section is scrolled to its top. Then it follows the scroll,
+   centred in the window where that keeps it clear, its half height measured
+   by SectionClearance (--radar-half). It used to be pulled up by half its
+   height at all times, which put the radar's top under the HUD. */
 .clearance-radar-col {
+  grid-area: radar;
   position: sticky;
-  top: 50vh;
-  transform: translateY(-50%);
+  top: max(185px, calc(50vh - var(--radar-half, 280px)));
+  /* 2.5rem, or whatever puts the column's top at 170px once the section's
+     own top padding (clamp(5rem, 9vw, 8rem), SectionClearance) is counted:
+     on a narrow window that padding alone is not enough. */
+  padding-top: max(2.5rem, calc(170px - clamp(5rem, 9vw, 8rem)));
 }
 
 @media (max-width: 767px) {
   .clearance-grid {
     grid-template-columns: 1fr;
+    grid-template-areas: "head" "radar" "entries";
   }
-  .clearance-entries-col { order: 2; }
+  .clearance-radar-caption { min-height: 2lh; }
   .clearance-radar-col {
-    order: 1;
     position: static;
-    transform: none;
+    padding-top: 0;
     margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
   }
 }
