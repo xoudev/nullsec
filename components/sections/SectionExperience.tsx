@@ -48,70 +48,96 @@ export function SectionExperience({ l }: { l: Locale }) {
         </h2>
       </div>
 
-      {/* The roles as a log along one rail: the current one in full, in
-          figures then in entries; the two before it in a line each. */}
-      <ol className="exp-list">
+      {/* Entries — meta (left) + responsibilities (right) */}
+      <div>
         {profile.experience.map((xp, i) => {
           const current = i === 0;
-          const focus = t<readonly string[]>(xp.focus);
           return (
-            <li
-              key={i}
-              className="exp-item"
-              data-current={current ? "" : undefined}
+            <div
+              key={xp.company}
+              className="exp-entry"
               data-reveal=""
               style={{ "--reveal-delay": `${i * 0.08}s` } as React.CSSProperties}
             >
-              {i === 1 && (
-                <span className="exp-divider" aria-hidden="true">
-                  {tr("// BEFORE: DEVELOPMENT", "// AVANT : LE DÉVELOPPEMENT")}
+              {/* Meta row — period anchored left, company anchored right */}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "baseline",
+                  flexWrap: "wrap",
+                  gap: "0.5rem 1.5rem",
+                  marginBottom: "clamp(0.85rem, 1.8vw, 1.25rem)",
+                }}
+              >
+                <span style={{ fontFamily: MONO, fontSize: "0.75rem", color: "var(--color-ash)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                  {t(xp.period)}
+                  {current && (
+                    <span style={{ color: "var(--color-blood)", marginLeft: "0.9rem" }}>{tr("// CURRENT", "// EN COURS")}</span>
+                  )}
                 </span>
-              )}
-              {/* The node on the rail; the current role's one pulses. */}
-              <span className="exp-node" aria-hidden="true" />
-              <span className="exp-period">
-                {t(xp.period)}
-                {current && <span className="exp-current">{tr("// CURRENT", "// EN COURS")}</span>}
-              </span>
-              <div className="exp-what">
-                <span className="exp-company">{xp.company}</span>
-                <h3 className="exp-title">{t(xp.title)}</h3>
-                {"scope" in xp && (
-                  <p className="exp-scope">
-                    <span>{tr("// SCOPE ", "// PÉRIMÈTRE ")}</span>
-                    {t(xp.scope)}
-                  </p>
-                )}
-                {"highlights" in xp && (
-                  <ul className="exp-stats" aria-label={tr("In figures", "En chiffres")}>
-                    {t<readonly (readonly [string, string])[]>(xp.highlights).map(([n, label]) => (
-                      <li key={label}>
-                        <span className="exp-stat-n">{n}</span>
-                        <span className="exp-stat-l">{label}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                {current ? (
-                  <ol className="exp-log">
-                    {focus.map((f, j) => (
-                      <li key={f}>
-                        <span className="exp-idx" aria-hidden="true">
-                          {String(j + 1).padStart(2, "0")}
-                        </span>
-                        {f}
-                      </li>
-                    ))}
-                  </ol>
-                ) : (
-                  <p className="exp-brief">{focus.join("  ·  ")}</p>
-                )}
+                <span style={{ fontFamily: MONO, fontSize: "0.75rem", color: "var(--color-blood)", letterSpacing: "0.08em" }}>
+                  {xp.company}
+                </span>
               </div>
-            </li>
+
+              {/* Big serif title — spans the row */}
+              <h3
+                style={{
+                  fontFamily: "var(--font-instrument-serif)",
+                  fontSize: "clamp(1.9rem, 4.2vw, 3.3rem)",
+                  fontWeight: 400,
+                  lineHeight: 1.05,
+                  letterSpacing: "-0.015em",
+                  color: "var(--color-bone)",
+                  margin: "0 0 clamp(1.1rem, 2.2vw, 1.6rem)",
+                }}
+              >
+                {t(xp.title)}
+              </h3>
+
+              {"scope" in xp && (
+                <p
+                  style={{
+                    fontFamily: MONO,
+                    fontSize: "0.8rem",
+                    color: "var(--color-ash)",
+                    letterSpacing: "0.04em",
+                    margin: "-0.35rem 0 clamp(1.1rem, 2.2vw, 1.6rem)",
+                  }}
+                >
+                  <span style={{ color: "var(--color-blood)" }}>{tr("// SCOPE ", "// PÉRIMÈTRE ")}</span>
+                  {t(xp.scope)}
+                </p>
+              )}
+
+              {/* Responsibilities — inline flow, capped measure so lines stay
+                  readable on very wide viewports */}
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.55rem 1.75rem", maxWidth: "110ch" }}>
+                {t<readonly string[]>(xp.focus).map((f) => (
+                  <span
+                    key={f}
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "baseline",
+                      gap: "0.5rem",
+                      fontFamily: MONO,
+                      fontSize: "clamp(0.8rem, 0.9vw, 0.875rem)",
+                      color: "rgba(242,239,232,0.72)",
+                      letterSpacing: "0.02em",
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    <span aria-hidden="true" style={{ width: 4, height: 4, borderRadius: "50%", backgroundColor: "var(--color-blood)", flexShrink: 0, transform: "translateY(-0.1em)" }} />
+                    {f}
+                  </span>
+                ))}
+              </div>
+            </div>
           );
         })}
-      </ol>
-      <div style={{ borderTop: "1px solid rgba(107,107,107,0.2)", height: 0 }} />
+        <div style={{ borderTop: "1px solid rgba(107,107,107,0.2)", height: 0 }} />
+      </div>
 
       {/* Footer */}
       <div
